@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <link rel="stylesheet" href="http://code.jquery.com/qunit/git/qunit.css" type="text/css" media="screen"/>
+    <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../js/executeScript_content.js"></script>
+    <script type="text/javascript" src="qunit.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            test("domReplaceTest", function() {
+                var node = document.getElementById("domReplaceTest");
+                domReplace(node, "ready", "gotowy");
+                equal($(node).text(), "Are you ready(gotowy) to test?");
+            });
+
+            test("domReplaceTestWithNestedNode", function() {
+                var node = document.getElementById("domReplaceTestWithNestedNode");
+                domReplace(node, "ready", "gotowy");
+                equal($(node).text(), "Are you ready(gotowy) to test?");
+            });
+
+            test("domReplaceTestWithCaseSensitive", function() {
+                var node = document.getElementById("domReplaceTestWithCaseSensitive");
+                domReplace(node, "ready", "gotowy");
+                equal($(node).text(), "Are you Ready(gotowy) to test?");
+            });
+
+            test("domReplaceTestWithIFrame", function() {
+                var node = document.getElementById("domReplaceTestWithIFrame");
+                domReplace(node, "ready", "gotowy");
+                equal($(node).text(), "Are you ready(gotowy) to test? Are you ready to test?");
+            });
+
+            test("appendTranslationToSubtitlesTest", function() {
+                var node = document.getElementById("appendTranslationToSubtitlesTest");
+                appendTranslationToSubtitles(node, "ready", "gotowy");
+                console.log()
+                equal($(node).html().split("\n")[0], "<pre>Are you ready to test");
+                equal($(node).html().split("\n")[1], "&lt;font color=\"yellow\"&gt;ready = gotowy&lt;/font&gt;</pre>");
+            });
+
+            test("appendTranslationToSubtitlesTestWithCaseInsensitive", function() {
+                var node = document.getElementById("appendTranslationToSubtitlesTestWithCaseInsensitive");
+                appendTranslationToSubtitles(node, "ready", "gotowy");
+                console.log()
+                equal($(node).html().split("\n")[0], "<pre>Are you Ready to test");
+                equal($(node).html().split("\n")[1], "&lt;font color=\"yellow\"&gt;ready = gotowy&lt;/font&gt;</pre>");
+            });
+
+        });
+    </script>
+
+</head>
+<body>
+<h1 id="qunit-header">QUnit example</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="qunit-fixture">test markup, will be hidden</div>
+
+<div id="domReplaceTest">Are you ready to test?</div>
+<div id="domReplaceTestWithNestedNode">Are you <b>ready</b> to test?</div>
+<div id="domReplaceTestWithCaseSensitive">Are you Ready to test?</div>
+<div id="domReplaceTestWithIFrame">Are you ready to test? <iframe>Are you ready to test?</iframe></div>
+<div id="appendTranslationToSubtitlesTest">Are you ready to test</div>
+<div id="appendTranslationToSubtitlesTestWithCaseInsensitive">Are you Ready to test</div>
+
+</body>
+</html>

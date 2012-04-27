@@ -1,0 +1,21 @@
+{
+    "name": "English word translator",
+    "version": "1.2",
+    "description": "Simple plugin to translate words on page and in subtitles.",
+    "options_page": "options.html",
+    "update_url": "http://188.40.66.81/english_translator/updates.xml",
+    "browser_action": {
+        "default_icon": "favicon.png",
+        "popup": "popup.html"
+    },
+    "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*" , "file:///*"],
+      "js": ["js/jquery-1.7.1.min.js","js/run_at_content.js"],
+      "run_at": "document_end"
+    }
+  ],
+    "permissions": [
+        "tabs", "http://*/*","https://*/*" , "file:///*" ,"background_page"
+    ]
+}

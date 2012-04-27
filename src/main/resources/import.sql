@@ -1,0 +1,1 @@
+INSERT INTO user VALUES(1, 1, '123456', 'ROLE_USER', 'user@gmail.com');

@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+        >
+
+    <g:HTMLPanel styleName="row">
+        <div class="span8">
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable"
+                   id="words"></table>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder> 

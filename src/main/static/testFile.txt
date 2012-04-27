@@ -1,0 +1,8 @@
+houses
+cars
+dogs
+animals
+trains
+dinners
+windows
+flowers

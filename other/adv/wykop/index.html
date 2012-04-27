@@ -1,0 +1,72 @@
+<html>
+<head>
+    <title>Szybka nauka słówek użytych w filmach/artykułach</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet" href="style.css" media="all">
+</head>
+<body>
+<pre>
+<h1>Szybka nauka słówek użytych w filmach/artykułach cz2.</h1>
+
+Dwa lata temu na <a href="http://www.wykop.pl/link/308658/szybka-nauka-slowek-uzytych-w-filmach/">wykopie</a> pokazała się pierwsza wersja aplikacji, do szybkiej nauki słówek. Padło wtedy wiele pomysłów,
+jak należałoby udoskonalić ten pomysł. W taki oto sposób powstał plugin do Chrome, który w sposób łatwy i przyjemy tłumaczy
+słówka zawarte w angielskich napisach oraz artykułach. Poniżej screen z filmu:
+
+<img src="2halfmen.png" height="400" width="600"/> <a
+        href="http://www.nytimes.com/2012/03/14/opinion/why-i-am-leaving-goldman-sachs.html"><img src="nyt.png"
+                                                                                                  height="400"
+                                                                                                  width="400"/></a>
+
+
+<h2>Instrukcja obsługi:</h2>
+Po zainstalowaniu wtyczki musimy jeszcze w ustawieniach zaznaczyc, że chcemy aby wtyczka miala dostep do naych lokalnych plików. Jest to niezbędne jeżeli chcemy tłumaczyc napisy z naszego dysku.
+
+<img src="accessToLocalFiles.png"/>
+
+Następnie należy wczytać stronę lub napisy, które chcemy przetłumaczyć i kliknąć w biało czerwoną flagę:
+
+<img src="chrome.png"/>
+
+Program automatycznie przetłumaczy wybrane słowa. Następnie przetłumaczony tekst kopiujemy do pliku i używamy go w naszym ulubionym serialu/filmie.
+
+<h2>Jak to dziala: </h2>
+Algorytm w kolejnych krokach:
+    1. Napisy/Zawartosc strony przesyłana jest na serwer.
+    2. Odfiltrowywane są słowa ze stop listy: <a href="http://pl.wikipedia.org/wiki/Stop_listy">Stop listy</a>
+    3. W zależności od ustawien wtyczki odfiltrowywane są słowa spoza zakresu częstotliwośi wystepowania w języku
+    angielskim.
+    Ten punkt jest dosyc problematyczny. Dlatego postaram sie go rozjaśnić. Posiadam baze angielskich słów wraz z nadaną
+    częstotliwościa wystepowania w języku angielskim. Np.:
+    <i>
+        listen - 92
+        gatekeeper - 72
+        way - 97
+        talk - 95
+    </i>
+    Ustawienia sa MIN = 5, MAX = 90. Minimalny zakres wynosi: <font color="red">0</font>, a maksymalny <font
+        color="red">100</font>.
+    Dalej przechodzi tylko słowo "gatekeeper", ponieważ miesci się w zakresie częstotliwości, który jest ustawieniach
+    wtyczki.
+    4. Słowa są tłumaczona na język polski.
+    5. Do napisów wstawiane są polskie słowa, tak jak na screenshocie powyżej.
+
+<h2>Download: </h2>
+Wersja 1.1: <a href="http://188.40.66.81/english_translator/english_translator.crx">English translator</a>
+
+<h2>Pomysly na udoskonalenie pluginu w przyszłości:</h2>
+- dodanie phrasal verbs oraz idiomów.
+- zapamiętywanie słówek.
+- własna lista wykluczeń(exclude list).
+- learning mode - nauka słówek przed filmem/artykułem.
+- interaktywne uczenie: wysylanie smsem/mailem partii raz na dzien.
+- subtitles dla zaawansowanych - czyli wymazujemy cały tekst i na dole pokazuje sie tylko słowo ktorego nie znamy wraz z tlumaczeniem.
+- nowe jezyki: niemiecki, hiszpanski
+
+
+<iframe src="https://docs.google.com/a/zimnicki.biz/spreadsheet/embeddedform?formkey=dDk5ZXZpT3V6QkZ6RDhWY0NmdkNSY2c6MQ"
+        width="760" height="623" frameborder="0" marginheight="0" marginwidth="0">Loading...
+</iframe>
+</pre>
+</body>
+</html>
+

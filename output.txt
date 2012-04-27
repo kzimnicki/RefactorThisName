@@ -1,0 +1,180 @@
+document.body.innerText
+"Stack Exchange log in | careers(careers) | chat | meta | about | faq
+
+
+Stack Overflow
+Questions
+Tags
+Users
+Badges
+Unanswered
+Ask Question
+Chrome Extension - Get entire(entire) text content of the current tab
+
+up vote(vote)
+1
+down vote
+favorite(favorite)
+share(share) [g+]
+share [fb]
+share [tw]
+I'm developing(developing) an extension where i need to get the entire text content on the current tab. Now i've a plugin which retrieves selected text from the current tab. So, in essence i'm looking for the ctrl-A version of it :). This is what i've done so far taking the hint from @Derek.
+
+This is in my event(event) handler(this is just one, there are other listeners too for onUpdated etc):
+
+chrome.tabs.onSelectionChanged.addListener(function(tabId,changeInfo,tab){  
+chrome.tabs.getSelected(null,function(tab){
+chrome.tabs.sendRequest(tab.id, {method: "getSelection"}, function(function) (response) {
+  selectedtext(selectedtext) = response.data;
+});
+chrome.tabs.sendRequest(tab.id, {method: "getText"}, function (response) {
+  alltext(alltext) = response.data;
+});
+});
+});
+This is what i've written(written) in the content script:
+
+chrome.extension.onRequest.addListener(function(request, sender(sender), sendResponse) {
+if (request.method == "getSelection")
+  sendResponse({data: window.getSelection().toString()});
+else if (request.method == "getText")
+  sendResponse({data: document.body.innerText});
+else 
+  sendResponse({});
+});
+However the document.body.innerText is returning(returning) undefined. I need the entire text of the current tab in alltext. Can someone help me out on this? Thanks.
+
+html(html) text google-chrome-extension
+link|improve this question(question)
+edited(edited) Dec 14 '11 at 9:20
+
+asked(asked) Dec 14 '11 at 4:09
+
+ananthv(ananthv)
+163
+feedback(feedback)
+1 Answeractiveoldestvotes
+up vote
+1
+down vote
+You can use document.body.innerText or document.all[0].innerText to do it in the content(content) script.
+It will(will) get all the text content in the page, without any HTML code.
+
+Or you can use document.all[0].outerHTML to get the HTML of the whole page.
+
+Example
+
+In the Content Script
+
+function getText(){
+    return(return) document.body.innerText
+}
+function getHTML(){
+    return document.body.outerHTML
+}
+console.log(getText());             //Gives you all the text(text) on the page
+console.log(getHTML());             //Gives you the whole HTML of the page
+Added
+
+So you want the content script(script) to return the text to the popup. You can use:
+
+chrome.tabs.getSelected to get the tab selected(selected),
+chrome.tabs.send(send)Request to send(send) request to the content script,
+and chrome.extension.onRequest.addListener to listen(listen) to requests.
+Popup page
+
+chrome.tabs.getSelected(null, function(tab) {
+    chrome.tabs.sendRequest(tab.id, {method: "getText"}, function(response) {
+        if(response.method=="getText"){
+            alltext = response.data;
+        }
+    });
+});
+Content Script
+
+chrome.extension.onRequest.addListener(
+    function(request, sender, sendResponse) {
+        if(request.method == "getText"){
+            sendResponse({data: document.all[0].innerText, methd: "getText"}); //same as innerText
+        }
+    }
+);
+This should work(work).
+
+link|improve this answer(answer)
+edited Jan 14 at 16:13
+
+Stals
+12810
+answered(answered) Dec 14 '11 at 4:18
+
+Derek
+1,317412
+thanks @derek for the quick(quick) reply... but i'm not able to call this from inside popup.html where i need the text... sorry if this is something trivial that i'm messing up, i'm still kind of a novice... – ananthv Dec 14 '11 at 5:53
+i should also mention(mention) that i need it from the current tab that has been selected/opened... – ananthv Dec 14 '11 at 6:39
+If you think my answer is helpful(helpful), you can select my answer as the best answer. Thanks. – Derek Dec 17 '11 at 3:27
+feedback
+Your Answer
+
+ 
+log in	or
+Name
+
+Email
+
+Home Page
+
+
+Not the answer you're looking for? Browse other questions(questions) tagged html text google-chrome-extension or ask your own question.
+tagged(tagged)
+html × 80245
+text × 4943
+google-chrome-extension × 2126
+asked
+2 months(months) ago
+viewed(viewed)
+201 times(times)
+active(active)
+1 month(month) ago
+
+Senior C# .NET Software Developer
+Symplectic
+London
+Software Engineer - Session Manager
+Interactive Intelligence
+Indianapolis, IN
+Mobile Application Development Engineer 
+Framehawk
+San Francisco, CA; New York, NY
+Related
+Getting current(current) window on a popup (google chrome extension)
+Chrome extension: Attaching current tab to popup(popup) and then going through its DOM
+Chrome Extension - Get Tab Preview Images
+Function not defined(defined) creating a Chrome Extension Content Script
+chrome(chrome) extension connection issues
+Chrome extension(extension) problem getting tab url
+Get Complete URL of Tab in Chrome Extension
+Message passing(passing) Background.html -> Content Script
+chrome extension : How to get key events(events)
+How can I get the current tab URL for chrome extension?
+Obtaining “this” tab ID from content script in Chrome extension?
+Establish a communication(communication) link between content script and background page
+In Chrome extension, content scripts(scripts) can't affect inside the iframe?
+how to get current tabId from background(background) page
+can i access(access) content of an iframe in javascript that is part of google chrome extension?
+How to get a paragraph(paragraph) from the active tab with chrome extension?
+Add event listener(listener) to only 1 tab in Chrome extension
+Forcing a sequence(sequence) within a google chrome extension to fill in specific text boxes
+How to close(close) the current extension tab?
+Chrome extension
+Chrome extension: Copy text
+Traversing the site(site) document from the selected text
+Get html from a selected tab
+Where is the documentation(documentation) for the chrome extension API tab method, “getSelected”?
+Send Selected Text and current URL to remote(remote) site Chrome Extensions
+question feed(feed)
+about | faq | blog(blog) | chat | data | podcast | shop | legal | advertising info | mobile | contact us | feedback
+■ stackoverflow.com  ■ api/apps  ■ careers  ■ serverfault.com  ■ superuser.com  ■ meta(meta)  ■ area 51  ■ webapps  ■ gaming  ■ ubuntu  ■ webmasters  ■ cooking  ■ game development  ■ math  ■ photography  ■ stats  ■ tex  ■ english  ■ theoretical cs  ■ programmers  ■ unix  ■ apple  ■ wordpress  ■ physics  ■ home improvement  ■ gis  ■ electronics  ■ android  ■ security  ■ bicycles  ■ dba  ■ drupal  ■ sharepoint  ■ scifi & fantasy  ■ user experience 
+rev 2012.2.17.1113
+site design(design) / logo © 2012 stack exchange inc; user contributions licensed under cc-wiki with attribution required"
+

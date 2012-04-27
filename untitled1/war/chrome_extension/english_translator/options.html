@@ -1,0 +1,47 @@
+<style>
+</style>
+<script src='js/jquery-1.7.1.min.js'></script>
+<script>
+    $(document).ready(function() {
+        load();
+    });
+
+    function save() {
+        window.localStorage.min = $("#min").val();
+        window.localStorage.max = $("#max").val();
+         window.localStorage.login = $("#login").val();
+        window.localStorage.pass= $("#pass").val();
+        alert("Saved!");
+
+    }
+    ;
+    function load() {
+        if (window.localStorage.min) {
+            $('#min').val(window.localStorage.min);
+        }
+        if (window.localStorage.max) {
+            $('#max').val(window.localStorage.max);
+        }
+         if (window.localStorage.login) {
+            $('#login').val(window.localStorage.login);
+        }
+         if (window.localStorage.pass) {
+            $('#pass').val(window.localStorage.pass);
+        }
+    }
+
+</script>
+<body>
+<form>
+    MIN: <br/>
+    <input id="min" type="text" value="5"/> <br/>
+    MAX: <br/>
+    <input id="max" type="text" value="90"/> <br/>
+    Login: <br/>
+    <input id="login" type="text"/><br/>
+    Haslo: <br/>
+    <input id="pass" type="password"/>  <br/>
+    <input id="button" type="button" value="Save!" onClick="save();"/>
+</form>
+
+</body>

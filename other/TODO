@@ -1,0 +1,76 @@
+Pierwszy Release:
+- Jezeli uzywamy localStorage to wprowadzic jakis swoj prefix. np. etMax
+- Underscore.js - przeczytac i wprowadzic do projektu.
+- Przyjrzec sie TESTNG i moze na nim popisac testy.
+- Youtube caption.http://video.google.com/timedtext?lang=en&v=XcT4yYu_TTs
+- w optionsach dodac mozliwosci zmiany czcionki.
+- czasami tlumaczy nawiasami dla .txt, moznaby wtedy zapytac czy sa to napisy ?
+- konfiguracja, mozna sobie ustawic jaki font bedzie wstawiony.
+- przyklady dla roznej konfiguracji.
+- include words
+- rozbic na serwisy, jeden do zapisow odczytow z dysku, drugi do wyluskiwania slow.
+- Poukladac przyciski
+- Problem z kodowaniem
+- Delikatnie zmienic options, maly opisik, aby bylo wiadomo co i jak.
+- Zmienic nazwe i zapisac na githubie.
+- Pons.de tlumaczy slowa, ktorych nie dał rady przedłumaczyć Google translate and Microsoft. Ale moze korzystac z innych slow i szukac synonimów WORDNET!!! http://webapps.stackexchange.com/questions/9156/database-of-english-synonyms
+- wywalic for var in loop http://stackoverflow.com/questions/3010840/loop-through-array-in-javascript
+
+
+Przetestowac:
+
+Drugi Release:
+- OpenNLP
+http://www.nltk.org/
+- Refactoring - server side
+- - wysyłanie obiektów jsona przerobionych na obiekt.
+- - odbieranie obiektów jsonowych
+- - dodanie springa
+- - dodanie tomcata
+- - deployowanie aplikacji na tomcacie
+- - napisanie prostej aplikacji z webserwisami
+- - przetestowanie roznych wariacji
+- - przepiecie mojej aplikacji na webservice.
+- - dostosowanie klienta
+- - - proba wyrzucenia stringow i jazda tylko na obiektach
+- - - jquery
+
+Nazwy:
+- Memen.to
+- meaning
+sugge.st
+choo.se
+whisper - szeptac.d
+
+
+
+Bledy:
+Jak jest jedno slowo to wezmie literke, a nie slowo.
+Przy zbyt duze ilosci strzalów jest sorry, nie moge  wtedy google translate tłumaczyc. Przetestowac ile strzalow mozna oddac zanim nastapi sorry :)
+Zrobic ostrzeżenie dla ramek plywajacych.
+
+Exceptiony
+2012-03-18 21:40:48.225::WARN:  org.mortbay.jetty.EofException
+java.lang.NullPointerException
+        at java.io.StringReader.<init>(StringReader.java:33)
+        at WordExtractor.createDocument(WordExtractor.java:118)
+        at WordExtractor.analyseText(WordExtractor.java:54)
+        at SimpleHandler.oldFunction(SimpleHandler.java:81)
+        at SimpleHandler.handle(SimpleHandler.java:41)
+        at org.mortbay.jetty.handler.HandlerList.handle(HandlerList.java:49)
+        at org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+        at org.mortbay.jetty.Server.handle(Server.java:324)
+        at org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:535)
+        at org.mortbay.jetty.HttpConnection$RequestHandler.content(HttpConnection.java:880)
+        at org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:747)
+        at org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:212)
+        at org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:404)
+        at org.mortbay.jetty.bio.SocketConnector$Connection.run(SocketConnector.java:228)
+        at org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:520)
+
+
+
+
+ NAZ
+
+

@@ -1,0 +1,29 @@
+curl -H "Accept: application/json" -X  GET http://localhost:8881/app/test.json
+curl -H "Accept: application/json" -X POST http://localhost:8881/app/test2.json?value=2
+
+
+JSON OBJECT:
+            {"minFrequency":1,"maxFrequency":888,"text":"dsadas","textUrl":null}
+
+
+curl -v -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"minFrequency":1,"maxFrequency":888,"text":"dsadas","textUrl":null}'  http://localhost:8881/app/test3.json
+
+
+//Extract Words
+curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"minFrequency":1,"maxFrequency":100,"text":"cat something wrong house","textUrl":null}'  http://localhost:8881/app/extractWords
+
+curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"car":"samochod","hause":"dom"}'  http://localhost:8881/app/saveTranslatedWords
+
+
+curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '["car","samochod","hause"]'  http://localhost:8881/app/saveExcludedWords
+
+curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"username":"user@gmail.com", "password": "123456"}'  http://localhost:8881/app/login
+
+##  Authentykacja
+
+"Basic dXNlckBnbWFpbC5jb206MTIzNDU2"
+curl -i --user "user@gmail.com:123456" -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"minFrequency":1,"maxFrequency":100,"text":"cat something wrong house","textUrl":null}'  http://localhost:8881/app/extractWords
+
+
+
+ curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"username":"user@gmail.com", "password": "123456"}'  http://localhost:8881/app/register

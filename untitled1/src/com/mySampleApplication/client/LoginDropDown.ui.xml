@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+        >
+
+
+    <g:HTMLPanel>
+
+        <form class="well form-inline" action="">
+            <fieldset>
+                <g:TextBox ui:field="username" styleName="input-small">user@gmail.com</g:TextBox>
+                <g:PasswordTextBox ui:field="password" styleName="input-small">123456</g:PasswordTextBox>
+                <g:Button ui:field="login" styleName="btn btn-primary">Log-In</g:Button>
+                <g:Button ui:field="register" styleName="btn btn-danger">Register</g:Button>
+            </fieldset>
+        </form>
+        <g:Label ui:field="dropDownText">Not logged in</g:Label>
+    </g:HTMLPanel>
+</ui:UiBinder> 
