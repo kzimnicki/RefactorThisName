@@ -4,13 +4,13 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * User: kzimnick
  * Date: 23.04.12
  * Time: 12:52
  */
-@Entity
 public class Word extends EntityObject {
     @NotBlank
     @Column(unique = true)

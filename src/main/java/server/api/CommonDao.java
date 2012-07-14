@@ -3,6 +3,7 @@ package server.api;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.type.Type;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
@@ -58,6 +59,20 @@ public class CommonDao extends HibernateDaoSupport {
 			query.addScalar(names[i], basicTypes[i]);
 		}
 		return query.list();
+	}
+
+
+	public void executeSQL(String sqlQuery) {
+		SQLQuery query = getSession().createSQLQuery(sqlQuery);
+		query.executeUpdate();
+	}
+
+    public void executeHQL(String query,String name ,String value) {
+        Query hqlQuery = getSession().createQuery(query);
+        if(name != null){
+            hqlQuery.setString(name, value);
+        }
+        hqlQuery.executeUpdate();
 	}
 
 	public List getByHQL(String queryString, String[] paramNames, Object[] values) {

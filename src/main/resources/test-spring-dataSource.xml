@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+  
+   <bean id="appDataSource" name="dateSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>    
+        <property name="url" value="jdbc:mysql://localhost:3306/testEnglishTranslator"/>
+        <property name="username" value="${jdbc.login}"/>
+        <property name="password" value="${jdbc.password}"/>
+   </bean>
+   
+    
+   <bean id="jdbcTemplate" name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg ref="appDataSource"></constructor-arg>
+   </bean>
+  
+  <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+    <property name="locations">
+      <list>
+        <value>classpath:hibernate.properties</value>
+      </list>
+    </property>
+  </bean>
+
+</beans>

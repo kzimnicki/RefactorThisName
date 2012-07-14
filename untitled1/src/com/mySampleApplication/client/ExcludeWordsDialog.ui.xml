@@ -6,7 +6,7 @@
     <g:HTMLPanel styleName="row">
         <div class="span8">
             <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable"
-                   id="words"></table>
+                   id="excludedWords"></table>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder> 

@@ -31,10 +31,22 @@ function appendTranslationToSubtitles(node, oldstring, newString) {
     var content = node.innerText;
     var contentLines = content.split("\n");
     var results = [];
+    var buffor = ""; //for phrasal verbs in second line
     for (var i = 0; i < contentLines.length; i++) {
-        if (contentLines[i].search(new RegExp('\\b' + oldstring + '\\b', "i")) != -1) {
+        if (oldstring.split(" ").length > 1) { //phrasal verb
+            var phrasalVerbRegexp = oldstring.replace(" ", "(.*?)");
+            console.log(phrasalVerbRegexp);
+            if (contentLines[i].search(new RegExp('\\b' + phrasalVerbRegexp + '\\b', "i")) != -1) {
+                contentLines[i] = contentLines[i] + '\n<font color="yellow">' + oldstring + ' = ' + newString + '</font>';
+            } else if (((buffor + " " + contentLines[i]).search(new RegExp('\\b' + phrasalVerbRegexp + '\\b', "i"))) != -1){
+                contentLines[i] = contentLines[i] + '\n<font color="yellow">' + oldstring + ' = ' + newString + '</font>';
+            }
+        } else if (contentLines[i].search(new RegExp('\\b' + oldstring + '\\b', "i")) != -1) {
+            buffor = buffor = contentLines[i];
             contentLines[i] = contentLines[i] + '\n<font color="yellow">' + oldstring + ' = ' + newString + '</font>';
             console.log(contentLines[i]);
+        } else {
+            buffor = contentLines[i];
         }
         results.push(contentLines[i]);
     }

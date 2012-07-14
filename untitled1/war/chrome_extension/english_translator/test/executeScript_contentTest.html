@@ -42,14 +42,34 @@
                 equal($(node).html().split("\n")[1], "&lt;font color=\"yellow\"&gt;ready = gotowy&lt;/font&gt;</pre>");
             });
 
+            test("appendTranslationToSubtitlesPhrasalVerbs1", function() {
+                var node = document.getElementById("appendTranslationToSubtitlesPhrasalVerbs");
+                appendTranslationToSubtitles(node, "pop out", "wyskoczyc");
+                equal($(node).html().split("\n")[0], "<pre>you pop it out");
+                equal($(node).html().split("\n")[1], "&lt;font color=\"yellow\"&gt;pop out = wyskoczyc&lt;/font&gt;</pre>");
+            });
+
+            test("appendTranslationToSubtitlesPhrasalVerbs2", function() {
+                var node = document.getElementById("appendTranslationToSubtitlesPhrasalVerbs2");
+                appendTranslationToSubtitles(node, "pop out", "wyskoczyc");
+                equal($(node).html().split("\n")[0], "<pre>you pop out");
+                equal($(node).html().split("\n")[1], "&lt;font color=\"yellow\"&gt;pop out = wyskoczyc&lt;/font&gt;</pre>");
+            });
+
+            test("appendTranslationToSubtitlesPhrasalVerbs3", function() {
+                var node = document.getElementById("appendTranslationToSubtitlesPhrasalVerbs3");
+                appendTranslationToSubtitles(node, "pop out", "wyskoczyc");
+                equal($(node).html().split("\n")[0], "<pre>you pop ");
+                equal($(node).html().split("\n")[1], "somewhere out");
+                equal($(node).html().split("\n")[2], "&lt;font color=\"yellow\"&gt;pop out = wyskoczyc&lt;/font&gt;</pre>");
+            });
+
             test("appendTranslationToSubtitlesTestWithCaseInsensitive", function() {
                 var node = document.getElementById("appendTranslationToSubtitlesTestWithCaseInsensitive");
                 appendTranslationToSubtitles(node, "ready", "gotowy");
-                console.log()
                 equal($(node).html().split("\n")[0], "<pre>Are you Ready to test");
                 equal($(node).html().split("\n")[1], "&lt;font color=\"yellow\"&gt;ready = gotowy&lt;/font&gt;</pre>");
             });
-
         });
     </script>
 
@@ -70,6 +90,10 @@
 <div id="domReplaceTestWithIFrame">Are you ready to test? <iframe>Are you ready to test?</iframe></div>
 <div id="appendTranslationToSubtitlesTest">Are you ready to test</div>
 <div id="appendTranslationToSubtitlesTestWithCaseInsensitive">Are you Ready to test</div>
+<div id="appendTranslationToSubtitlesPhrasalVerbs">you pop it out</div>
+<div id="appendTranslationToSubtitlesPhrasalVerbs2">you pop out</div>
+<div id="appendTranslationToSubtitlesPhrasalVerbs3">you pop <br /> somewhere out</div>
+
 
 </body>
 </html>

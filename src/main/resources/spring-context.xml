@@ -79,7 +79,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
     </bean>
 
 
-    <bean id="wordExtractor" class="server.core.WordExtractor"/>
+    <bean id="wordExtractor" class="server.core.WordExtractor" init-method="init"/>
 
     <bean id="loginService" class="server.api.LoginService"/>
 

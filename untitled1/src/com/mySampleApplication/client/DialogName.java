@@ -8,7 +8,19 @@ public enum DialogName {
 
     REGISTER(RegisterDialog.class),
 
-    EXCLUDE_WORDS(ExcludeWordsDialog.class);
+    EXCLUDE_WORDS(ExcludeWordsDialog.class),
+
+    INCLUDE_WORDS(IncludeWordsDialog.class),
+
+    ADD_TEXT(AddTextDialog.class),
+
+    OPTIONS(OptionsDialog.class),
+
+    CONTACT(ContactDialog.class),
+
+
+    ;
+
 
     private Class<?> clazz;
 
@@ -16,13 +28,21 @@ public enum DialogName {
         this.clazz = clazz;
     }
 
-    public CafaWidget getDialog() {
+    public CafaWidget getDialog() {            //TODO refactor.
         if (REGISTER.equals(this)) {
 			return GWT.create(RegisterDialog.class);
 		} else if (EXCLUDE_WORDS.equals(this)) {
 			return GWT.create(ExcludeWordsDialog.class);
+        } else if(ADD_TEXT.equals(this)){
+           return GWT.create(AddTextDialog.class);
+        } else if(OPTIONS.equals(this)){
+           return GWT.create(OptionsDialog.class);
+        } else if(INCLUDE_WORDS.equals(this)){
+           return GWT.create(IncludeWordsDialog.class);
+        } else if(CONTACT.equals(this)){
+           return GWT.create(ContactDialog.class);
         }
-        return GWT.create(RegisterDialog.class);
+        return GWT.create(AddTextDialog.class);
     }
 
     public String getName() {

@@ -6,14 +6,15 @@
 
     <g:HTMLPanel>
 
-        <form class="well form-inline" action="">
-            <fieldset>
-                <g:TextBox ui:field="username" styleName="input-small">user@gmail.com</g:TextBox>
-                <g:PasswordTextBox ui:field="password" styleName="input-small">123456</g:PasswordTextBox>
-                <g:Button ui:field="login" styleName="btn btn-primary">Log-In</g:Button>
-                <g:Button ui:field="register" styleName="btn btn-danger">Register</g:Button>
-            </fieldset>
-        </form>
-        <g:Label ui:field="dropDownText">Not logged in</g:Label>
+        <!--<form class="well form-inline" action="">-->
+        <div class="form-inline">
+            <g:TextBox ui:field="username" styleName="input-small">user@gmail.com</g:TextBox>
+            <g:PasswordTextBox ui:field="password" styleName="input-small">123456</g:PasswordTextBox>
+            <g:Button ui:field="login" styleName="btn btn-primary">Log-In</g:Button>
+            <g:Button ui:field="register" styleName="btn btn-danger">Register</g:Button>
+            <g:Button ui:field="logout" styleName="btn btn-danger">Logout</g:Button>
+        </div>
+        <!--</form>-->
+        <!--<g:Label ui:field="dropDownText">Not logged in</g:Label>-->
     </g:HTMLPanel>
 </ui:UiBinder> 

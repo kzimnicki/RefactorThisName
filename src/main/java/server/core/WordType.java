@@ -29,4 +29,5 @@ public enum WordType {
     Inf,
     Form,
     ClO,
+    undefined
 }

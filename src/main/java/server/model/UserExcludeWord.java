@@ -1,9 +1,11 @@
 package server.model;
+import server.model.newModel.User;
+import server.model.newModel.Word;
 
 import javax.persistence.*;
 
 
-@Entity
+//@Entity
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "word_id"})}
 )
@@ -12,7 +14,7 @@ public class UserExcludeWord extends EntityObject {
     @OneToOne
     private User user;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Word word;
 
     public User getUser() {

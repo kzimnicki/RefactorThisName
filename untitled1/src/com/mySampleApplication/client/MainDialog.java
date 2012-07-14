@@ -19,10 +19,19 @@ public class MainDialog extends CafaWidget implements Dialog {
 	SimplePanel container;
 
 	@UiField
-	Anchor about;
+	Anchor contact;
+
+    @UiField
+	Anchor options;
 
     @UiField
 	Anchor excludeWords;
+
+    @UiField
+	Anchor includeWords;
+
+    @UiField
+	Anchor submitText;
 
     @UiField
     LoginDropDown loginDropDown;
@@ -35,14 +44,30 @@ public class MainDialog extends CafaWidget implements Dialog {
 	public void init() {
 	}
 
-	@UiHandler("about")
-	public void aboutClick(ClickEvent e) {
-		getController().goTo(DialogName.REGISTER);
+    @UiHandler("options")
+	public void optionsClick(ClickEvent e) {
+		getController().goTo(DialogName.OPTIONS);
 	}
 
     @UiHandler("excludeWords")
-	public void excludeWordsClick(ClickEvent e) {
-		getController().goTo(DialogName.EXCLUDE_WORDS);
+    public void excludeWordsClick(ClickEvent e) {
+        getController().goTo(DialogName.EXCLUDE_WORDS);
+    }
+
+
+    @UiHandler("includeWords")
+    public void includeWordsClick(ClickEvent e) {
+        getController().goTo(DialogName.INCLUDE_WORDS);
+    }
+
+    @UiHandler("contact")
+	public void contactClick(ClickEvent e) {
+		getController().goTo(DialogName.CONTACT);
+	}
+
+    @UiHandler("submitText")
+	public void submitTextClick(ClickEvent e) {
+		getController().goTo(DialogName.ADD_TEXT);
 	}
 
 

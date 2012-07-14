@@ -1,4 +1,7 @@
 Pierwszy Release:
+- Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
+- dodac test w ktorym po dodaniu exclude worda  sprawdzic czy przy nastepnym procesowaniu tekstu tego slowa juz nie ma.
+- Phrasal verbs - problem jezeli sa wiekszej odleglosci od siebie:  They TOPPED the building OFF with a tall flagpole juz nie podmieni tego phrasal verba.
 - Jezeli uzywamy localStorage to wprowadzic jakis swoj prefix. np. etMax
 - Underscore.js - przeczytac i wprowadzic do projektu.
 - Przyjrzec sie TESTNG i moze na nim popisac testy.
@@ -16,6 +19,57 @@ Pierwszy Release:
 - Pons.de tlumaczy slowa, ktorych nie dał rady przedłumaczyć Google translate and Microsoft. Ale moze korzystac z innych slow i szukac synonimów WORDNET!!! http://webapps.stackexchange.com/questions/9156/database-of-english-synonyms
 - wywalic for var in loop http://stackoverflow.com/questions/3010840/loop-through-array-in-javascript
 - Github test.
+- nastepuje wylgoowanie po zamknieicu przegladarki - dodac jakis expiry time.
+- nie zwracac nulli tylko puste obiekty
+
+
+Nowy Model
+
+User
+- List<WordFamily> excludedWords
+- List<WordFamily> includedWords
+- List<PhrasalVerb> excludedPhrasalVerbs
+- List<PhrasalVerb> includedPhrasalVerbs
+- List<Document> documents
+- Configuration config
+
+Configuration
+- int min
+- int max
+
+
+PhrasalVerb
+- Word verb
+- Word suffix1
+- Word suffix2
+
+Document
+- String uri
+- String text
+- List<PhrasalVerbs> phrasalVerbs
+- List<Words> vocabulary
+- String parameters // tutaj wrocic.
+
+Word
+- String value
+- Enum wordType
+- int frequency
+
+WordFamily
+- Word rootWord
+- Set<Word> wordFamily
+
+WordMeaning
+- Word word
+- Language lang // tutaj moze byc ciekawy myk, ze dla angielskiego bedzie opis w j angielskim
+- String meaning
+- String exampleSentence
+
+Language
+- String isoCode
+- String name
+
+
 
 Przetestowac:
 
@@ -36,11 +90,9 @@ http://www.nltk.org/
 - - - jquery
 
 Nazwy:
-- Memen.to
-- meaning
-sugge.st
-choo.se
-whisper - szeptac.d
+clear.li
+hint.ly
+memen.to
 
 
 

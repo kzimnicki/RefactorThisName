@@ -1,9 +1,9 @@
 var EXTENSION_ID = "fkpnojcafafpkoonhhgnapemmbkgphlm";
 
 function log(arguments) {
-    if (chrome.i18n.getMessage("@@extension_id") == EXTENSION_ID) {
+//    if (chrome.i18n.getMessage("@@extension_id") == EXTENSION_ID) {
         console.log(arguments);
-    }
+//    }
 }
 
 function base64_encode(data) {

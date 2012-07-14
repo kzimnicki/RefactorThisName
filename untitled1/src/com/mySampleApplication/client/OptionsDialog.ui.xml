@@ -1,0 +1,46 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+        >
+
+    <g:HTMLPanel styleName="row">
+        <div class="span8">
+             <form class="form-horizontal" action="">
+                    <fieldset>
+                        <legend>Options</legend>
+                        <div class="control-group">
+                           <g:Label styleName="control-label">Min: </g:Label>
+
+                            <div class="controls">
+                                <g:TextBox ui:field="min" styleName="input-xlarge focused" text="0" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Max: </label>
+
+                            <div class="controls">
+                                <g:TextBox ui:field="max" styleName="input-xlarge focused" text="90"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Text template: </label>
+
+                            <div class="controls">
+                                <g:TextBox ui:field="textTemplate" styleName="input-xlarge focused" text="(@@TRANSLETED_WORD@@)"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Subtitle template: </label>
+
+                            <div class="controls">
+                                <g:TextBox ui:field="subtitleTemplate" styleName="input-xlarge focused" text="(@@TRANSLETED_WORD@@)"></g:TextBox>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <g:Button ui:field="save" styleName="btn btn-primary">Save</g:Button>
+                        </div>
+                    </fieldset>
+                </form>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder> 

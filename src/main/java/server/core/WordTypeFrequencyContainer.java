@@ -1,7 +1,7 @@
 package server.core;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import server.model.newModel.Word;
+import server.model.newModel.WordFamily;
 
 import java.util.*;
 
@@ -12,42 +12,54 @@ import java.util.*;
  */
 public class WordTypeFrequencyContainer {
 
-    private Map<String, Integer> wordFrequency;
-    private Map<String, WordType> wordType;
-    private Map<String, Set<String>> wordFamilyMap;
+    private Map<String, Word> words;
+    private Map<Word, WordFamily> wordFamilies;
 
     public WordTypeFrequencyContainer() {
-        this.wordFrequency = new HashMap<String, Integer>();
-        this.wordType = new HashMap<String, WordType>();
-        this.wordFamilyMap = new HashMap<String, Set<String>>();
+        this.words = new HashMap<String, Word>();
+        this.wordFamilies = new HashMap<Word, WordFamily>();
     }
 
-    public void put(String word, Integer frequency) {
-        wordFrequency.put(word, frequency);
+    public void put(String value, Word word) {
+        words.put(value, word);
     }
 
-    public void put(String word, WordType type) {
-        wordType.put(word, type);
+    public void put(Word word, WordFamily wordFamily) {
+        wordFamilies.put(word, wordFamily);
     }
 
-    public void put(String word, Set<String> wordFamilyList) {
-          wordFamilyMap.put(word, wordFamilyList);
+    public List<Word> getWordFamilyFor(String wordValue) {
+        Word word = words.get(wordValue);
+        if (word != null) {
+            for (WordFamily wordFamily : wordFamilies.values()) {
+                if (wordFamily.getFamily().contains(word)){
+                    return wordFamily.getFamily();
+                }
+            }
+        }
+        return Collections.emptyList();
+    }
+    
+    public WordFamily getWordFamilyFor(Word word) {
+        if (word != null) {
+            return wordFamilies.get(word);
+        }
+        return WordFamily.EMPTY;
     }
 
-     public Set<String> getWordFamilyFor(String word) {
-         Set<String> wordsFamily = wordFamilyMap.get(word);
-         return wordsFamily;
-     }
-
-    public Integer getFrequnecyFor(String word) {
-        Integer frequency = wordFrequency.get(word);
-        return frequency != null ? frequency : Integer.valueOf(-1);
+    public Integer getFrequnecyFor(String wordValue) {
+        Word word = words.get(wordValue);
+        return word != null ? word.getFrequency() : Integer.valueOf(-1);
     }
 
-    public WordType getWordTypeFor(String word) {
-        return wordType.get(word);
+    public WordType getWordTypeFor(String wordValue) {
+        Word word = words.get(wordValue);
+        return word != null ? word.getWordType() : WordType.undefined;
     }
 
-
+    public Word getWord(String wordValue) {
+        Word word = words.get(wordValue);
+        return word != null ? word : Word.EMPTY;
+    }
 }
 

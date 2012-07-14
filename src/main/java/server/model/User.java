@@ -12,9 +12,9 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import server.api.Role;
 
-
-@Entity
-@Table(name = "user")
+//
+//@Entity
+//@Table(name = "user")
 public class User extends EntityObject {
 
 	@Column(unique = true)

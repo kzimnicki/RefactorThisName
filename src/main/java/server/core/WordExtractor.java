@@ -1,6 +1,8 @@
 package server.core;
 
+import edu.stanford.nlp.ling.HasWord;
 import org.apache.commons.io.IOUtils;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -14,22 +16,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import server.api.CommonDao;
 import server.api.LoginService;
 import server.api.WordDetails;
-import server.model.User;
-import server.model.UserExcludeWord;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import server.model.newModel.PhrasalVerb;
+import server.model.newModel.User;
+import server.model.newModel.Word;
+import server.model.newModel.WordFamily;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.*;
 
 public class WordExtractor {
 
+    public static final String PHRASAL_VERB_QUERY = "FROM PhrasalVerb pv " +
+                                                    "WHERE pv.verb=:verb " +
+                                                    "AND pv.suffix1=:suffix1 " +
+                                                    "AND pv.suffix2=:suffix2";
+
+        public static final String PHRASAL_VERB_QUERY_SUFFIX2_IS_NULL = "FROM PhrasalVerb pv " +
+                                                    "WHERE pv.verb=:verb " +
+                                                    "AND pv.suffix1=:suffix1 " +
+                                                    "AND pv.suffix2=:suffix2";
     @Autowired
     CommonDao commonDao;
 
     @Autowired
     LoginService loginService;
+
+    private StanfordNLP stanfordNLP;
 
     private static final String FREQUENCY_FILE = "freq.txt";
     public static final Version LUCENE_VER = Version.LUCENE_30;
@@ -41,7 +53,7 @@ public class WordExtractor {
 
 
     public WordExtractor() {
-        init();
+        this.stanfordNLP = new StanfordNLP();
     }
 
     public void init() {
@@ -63,15 +75,22 @@ public class WordExtractor {
             System.exit(0);
         }
     }
-
+        //TODO refactor
     public Set<String> getUserExcludeSet() {
         Set<String> userExcludeSet = new HashSet<String>();
         try {
             User user = loginService.getLoggedUser();
-            List<UserExcludeWord> userExcludeWords = commonDao.getByHQL("From UserExcludeWord uw WHERE uw.user = :user", "user", user);
-            for (UserExcludeWord userExcludeWord : userExcludeWords) {
-                userExcludeSet.add(userExcludeWord.getWord().getValue());
+            List<WordFamily> excludedWords = user.getExcludedWords();
+            for (WordFamily wordFamily : excludedWords){
+                userExcludeSet.add(wordFamily.getRoot().getValue());
+                if(wordFamily.getFamily() != null){
+                    for (Word word: wordFamily.getFamily()){
+                                   userExcludeSet.add(word.getValue());
+                    }
+                }
             }
+
+//            userExcludeSet.add(user.getExcludedWords());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -83,7 +102,6 @@ public class WordExtractor {
         userWordsSet.addAll(stopWordsSet);
         userWordsSet.addAll(getUserExcludeSet());
         StandardAnalyzer standardAnalyzer = new StandardAnalyzer(LUCENE_VER, userWordsSet);
-//        StandardAnalyzerWithoutLowerCase standardAnalyzer = new StandardAnalyzerWithoutLowerCase(LUCENE_VER, userWordsSet);
         idx = new RAMDirectory();
         IndexWriter writer = new IndexWriter(idx, standardAnalyzer, MaxFieldLength.UNLIMITED);
         writer.addDocument(createDocument(content));
@@ -101,8 +119,6 @@ public class WordExtractor {
             String termText = term.text();
             if (termText.matches("[A-Za-z-]+") && termText.length() > 2) {
                 list.add(termText);
-//            } else {
-//                System.out.println(termText);
             }
         }
         return list;
@@ -120,14 +136,15 @@ public class WordExtractor {
         return resultList;
     }
 
-    //TODO refactor
     public Map<String, WordDetails> filterWordsToTranslateWithFrequency(List<String> list, int minFrequency, int maxFrequency) throws Exception {
         List<String> debugList = debugWordsToTranslate(list, minFrequency, maxFrequency, false);
         Map<String, WordDetails> results = new HashMap<String, WordDetails>();
         int x = 0;
         for (String element : debugList) {
             if (x++ % 3 == 0) {
-                results.put(element, new WordDetails(debugList.get(x + 1), container.getWordFamilyFor(element)));
+                List<Word> wordFamilyList = container.getWordFamilyFor(element);
+
+                results.put(element, new WordDetails(debugList.get(x + 1), wordFamilyList));
             }
         }
         return results;
@@ -136,14 +153,8 @@ public class WordExtractor {
     public List<String> debugWordsToTranslate(List<String> wordsToTranslate, int minFrequency, int maxFrequency, boolean includeNoP) {
         List<String> debugList = new LinkedList<String>();
         for (String word : wordsToTranslate) {
-            Integer frequency = container.getFrequnecyFor(word);
-            Integer frequencyForLowerCase = container.getFrequnecyFor(word.toLowerCase());
-            WordType wordType = container.getWordTypeFor(word);
-            //szukamy rowniez dla malej litery, czasami w naglowkach pisza z duzej wszystkie litery
-            if (frequency < frequencyForLowerCase && includeNoPForParameters(includeNoP, wordType)) {
-                frequency = frequencyForLowerCase;
-                wordType = container.getWordTypeFor(word.toLowerCase());
-            }
+            Integer frequency = container.getFrequnecyFor(word.toLowerCase());
+            WordType wordType = container.getWordTypeFor(word.toLowerCase());
             if (minFrequency < frequency && frequency < maxFrequency && includeNoPForParameters(includeNoP, wordType)) {
                 debugList.add(word);
                 debugList.add(String.valueOf(wordType));
@@ -168,59 +179,94 @@ public class WordExtractor {
     }
 
     private WordTypeFrequencyContainer createContainer() throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream(FREQUENCY_FILE)));
-        String line = "";
-        int x = 0;
         WordTypeFrequencyContainer container = new WordTypeFrequencyContainer();
-        WordType buffor = null;
-        String previousWord = "";
-        String previousLine = "";
-        while ((line = br.readLine()) != null) {
-            String[] elements = line.split("[\t@]+");
-            String word = elements[1];
-            Integer frequency = extractFrequency(line);
-            WordType wordType;
-            if (line.startsWith("\t@")) {
-                Set<String> wordsFamily;
-                if (previousLine.startsWith("\t@")) {
-                    wordsFamily = container.getWordFamilyFor(previousWord);
-                } else {
-                    wordsFamily = container.getWordFamilyFor(previousWord);
-                    if(wordsFamily == null){
-                          wordsFamily = new HashSet<String>();
-                    }
-                }
-                wordsFamily.add(word);
-                container.put(word, wordsFamily);
-                wordType = buffor;
-            } else {
-                wordType = WordType.valueOf(elements[2]);
-                buffor = wordType;
-            }
-            Integer oldFrequency = container.getFrequnecyFor(word);
-            if (oldFrequency == null) {
-                container.put(word, frequency);
-                container.put(word, wordType);
-            } else if (oldFrequency < frequency) {
-                container.put(word, frequency);
-                container.put(word, wordType);
-            }
 
-            previousWord = word;
-            previousLine = line;
+        List<Word> allWords = commonDao.getAll(Word.class);
+        for (Word word : allWords) {
+            Integer frequency = container.getFrequnecyFor(word.getValue());
+            if (word.getFrequency() > frequency) {
+                container.put(word.getValue(), word);
+            }
         }
+
+        List<WordFamily> allWordFamily = commonDao.getAll(WordFamily.class);
+        for (WordFamily wordFamily : allWordFamily) {
+            container.put(wordFamily.getRoot(), wordFamily);
+        }
+
         return container;
     }
 
-    private void createWordFamily(){
-
-    }
-
     public static void main(String[] args) throws Exception {
-        new WordExtractor().createContainer();
+        WordTypeFrequencyContainer container = new WordExtractor().createContainer();
+        System.out.println(container);
     }
 
-    private static Integer extractFrequency(String line) {
-        return Integer.valueOf(line.split("\t")[6].split("\\.")[1]);
+    public Map<String, WordDetails> addPhrasalVerbs(Map<String, WordDetails> wordsToTranslate, String text) {
+        List<List<HasWord>> sentences = stanfordNLP.getSentences(text);
+        Map<String, String> phrasalVerbs = stanfordNLP.getPhrasalVerbs(sentences);
+        for (String verb : phrasalVerbs.keySet()) {
+            wordsToTranslate.remove(verb);
+            wordsToTranslate.put(verb + " " + phrasalVerbs.get(verb), new WordDetails("PV", null));
+        }
+        return wordsToTranslate;
+    }
+
+    public Word getWord(String wordValue) {
+        return container.getWord(wordValue);
+    }
+
+    public WordFamily getWordFamily(String wordValue) {
+        Word word = container.getWord(wordValue);
+        WordFamily wordFamily = container.getWordFamilyFor(word);
+        if (wordFamily == null) {
+            wordFamily = new WordFamily();
+            wordFamily.setRoot(word);
+        }
+        return wordFamily;
+    }
+    
+    public WordFamily getWordFamilyForPhrasalVerb(String wordValue){
+        WordFamily wordFamily = getWordFamily(wordValue);
+        WordFamily transportWordFamily = new WordFamily();
+        transportWordFamily.setRoot(wordFamily.getRoot());
+        for (Word word : wordFamily.getFamily()){
+            if(WordType.Verb.equals(word.getWordType())){
+                transportWordFamily.getFamily().add(word);
+            }
+      }
+      return transportWordFamily;
+    }
+
+   public PhrasalVerb getPhrasalVerb(String phrasalVerbValue){
+
+       String[] pvParts = phrasalVerbValue.split(" ");
+       Object[] paramValues = {
+               getWordFamily(pvParts[0]),
+               getWord(pvParts[1]),
+               pvParts.length > 2 ? getWord(pvParts[2]):null
+       };
+       String[] paramNames = {
+               "verb",
+               "suffix1",
+               "suffix2"
+       };
+       String query = pvParts.length >2 ? PHRASAL_VERB_QUERY : PHRASAL_VERB_QUERY_SUFFIX2_IS_NULL;
+       List phrasalVerbs = commonDao.getByHQL(query, paramNames, paramValues );
+        if(phrasalVerbs != null && phrasalVerbs.size() != 0){
+            return (PhrasalVerb)phrasalVerbs.get(0);
+        }
+        return convertValueToPhrasalVerb(phrasalVerbValue);
+    }
+
+   private PhrasalVerb convertValueToPhrasalVerb(String phrasalVerbValue){
+        String[] wordValues = phrasalVerbValue.split(" ");
+        PhrasalVerb phrasalVerb = new PhrasalVerb();
+        phrasalVerb.setVerb(getWordFamily(wordValues[0]));
+        phrasalVerb.setSuffix1(getWord(wordValues[1]));
+        if(wordValues.length == 3){
+             phrasalVerb.setSuffix2(getWord(wordValues[2]));
+        }
+       return phrasalVerb;
     }
 }

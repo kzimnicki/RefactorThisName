@@ -20,10 +20,13 @@ public class LoginDropDown extends Composite {
     Button login;
 
     @UiField
-    Button register;
+    Button logout;
 
     @UiField
-    Label dropDownText;
+    Button register;
+
+//    @UiField
+//    Label dropDownText;
 
     @UiTemplate("LoginDropDown.ui.xml")
     interface LoginDropDownUiBinder extends UiBinder<Widget, LoginDropDown> {
@@ -39,31 +42,56 @@ public class LoginDropDown extends Composite {
         super();
         this.parent = parent;
         initWidget(uiBinder.createAndBindUi(this));
+        handleComponentsVisibility();
+    }
+
+    private void handleComponentsVisibility() {
+        if (isLogged()) {
+            username.setVisible(false);
+            password.setVisible(false);
+            login.setVisible(false);
+            register.setVisible(false);
+            logout.setVisible(true);
+        } else {
+            username.setVisible(true);
+            password.setVisible(true);
+            login.setVisible(true);
+            register.setVisible(true);
+            logout.setVisible(false);
+        }
     }
 
     @UiHandler("login")
     public void loginClick(ClickEvent e) {
-        parent.getController().goTo(DialogName.REGISTER);
         login(username.getText(), password.getText());
     }
 
     @UiHandler("register")
     public void registerClick(ClickEvent e) {
         parent.getController().goTo(DialogName.REGISTER);
+         handleComponentsVisibility();
     }
 
-    void loginCallback(String data){
-        if("SUCCESS".equals(data)){
-            dropDownText.setText(username.getText());
-            parent.getController().goTo(DialogName.EXCLUDE_WORDS);
-        }
+    @UiHandler("logout")
+    public void logoutClick(ClickEvent e) {
+        logout();
+         handleComponentsVisibility();
     }
+
+
+    public native void logout() /*-{
+        $wnd.ajaxExecutor.removeCookie();
+    }-*/;
+
+    public native boolean isLogged() /*-{
+        return $wnd.ajaxExecutor.isLogged();
+    }-*/;
 
     public native void login(String username, String password) /*-{
         var instance = this;
-         $wnd.ajaxExecutor.login(username, password, function(data){
-             instance.@com.mySampleApplication.client.LoginDropDown::loginCallback(Ljava/lang/String;)(data);
-             $wnd.ajaxExecutor.saveCookie(username, password);
-         });
+        $wnd.ajaxExecutor.login(username, password, function(data) {
+            $wnd.ajaxExecutor.saveCookie(username, password);
+            instance.@com.mySampleApplication.client.LoginDropDown::handleComponentsVisibility()();
+        });
     }-*/;
 }
