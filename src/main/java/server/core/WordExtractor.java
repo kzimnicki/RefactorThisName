@@ -80,7 +80,7 @@ public class WordExtractor {
         Set<String> userExcludeSet = new HashSet<String>();
         try {
             User user = loginService.getLoggedUser();
-            List<WordFamily> excludedWords = user.getExcludedWords();
+            Set<WordFamily> excludedWords = user.getExcludedWords();
             for (WordFamily wordFamily : excludedWords){
                 userExcludeSet.add(wordFamily.getRoot().getValue());
                 if(wordFamily.getFamily() != null){
@@ -90,7 +90,7 @@ public class WordExtractor {
                 }
             }
 
-//            userExcludeSet.add(user.getExcludedWords());
+//            userExcludeSet.add(user.loadExcludedWords());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,12 +216,24 @@ public class WordExtractor {
         return container.getWord(wordValue);
     }
 
-    public WordFamily getWordFamily(String wordValue) {
+    public WordFamily getWordFamily(String wordValue) {    //TODO refactor.
         Word word = container.getWord(wordValue);
+        if(word == null){
+            return WordFamily.EMPTY;
+        }
+
         WordFamily wordFamily = container.getWordFamilyFor(word);
         if (wordFamily == null) {
+            Map<Word, WordFamily> wordFamilies = container.getWordFamilies();
+            for(WordFamily currentWordFamily : wordFamilies.values()){
+                if(currentWordFamily.getFamily().contains(word)){
+                    return currentWordFamily;
+                }
+            }
             wordFamily = new WordFamily();
             wordFamily.setRoot(word);
+            commonDao.saveOrUpdate(wordFamily);
+            container.put(word, wordFamily);
         }
         return wordFamily;
     }

@@ -70,7 +70,7 @@ function createWordFamilyString (wordFamilyArray){
 }
 
 
-popup.createSiteTable = function(rows) {
+popup.createSiteTable = function(rows, title) {
     oSiteTable = $('#excludedWords').dataTable({
                //<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>
         "sDom": "<'row'<'span8'><'span8'f>r>t<'row'<'spa8'><'span8'p>>",
@@ -80,7 +80,7 @@ popup.createSiteTable = function(rows) {
         "aaData": rows,
         "bDestroy":true,
         "aoColumns":[
-            { "sTitle": "Excluded word"},
+            { "sTitle": title},
             { "sTitle": "Word family"},
             { "sTitle": "action"}
         ]

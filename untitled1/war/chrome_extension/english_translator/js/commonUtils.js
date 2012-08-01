@@ -1,3 +1,5 @@
+var commonUtils = commonUtils || {};
+
 var EXTENSION_ID = "fkpnojcafafpkoonhhgnapemmbkgphlm";
 
 function log(arguments) {
@@ -6,7 +8,12 @@ function log(arguments) {
 //    }
 }
 
-function base64_encode(data) {
+commonUtils.serverDown = function() {
+//    popup.writeError("Serwer nie odpowiada, prosze sprobowac pozniej.");
+    console.log("server down");
+}
+
+this.base64_encode = function(data) {
     // use native implementation if it's present
     if (typeof btoa === 'function') return btoa(data)
 
@@ -36,5 +43,68 @@ function base64_encode(data) {
     enc = tmp_arr.join('');
     var r = data.length % 3;
     return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
+}
+
+
+commonUtils.showDimmer = function(){
+    $("#progressBar").css("display","block");
+}
+
+commonUtils.hideDimmer = function(){
+    $("#progressBar").css("display","none");
+}
+
+
+this.getBase64 = function() {
+    if (window.localStorage.login) {
+        return getBase64FromOptions();
+    }else if(window.location.protocol=='file:'){  //for unit test
+        return "dXNlckBnbWFpbC5jb206MTIzNDU2";
+    }
+    else {
+        return getBase64FromCookies();
+    }
+}
+
+this.getBase64FromOptions = function() {
+    var stringToEncode = window.localStorage.login + ":" + window.localStorage.pass;
+    log(stringToEncode);
+    return base64_encode(stringToEncode);
+}
+
+
+
+commonUtils.saveCookie = function(username, password) {
+    var header = base64_encode(username + ":" + password);
+    document.cookie = "Authorization=" + header;
+    console.log("header: "+header);
+    console.log("cookie1: "+document.cookie);
+}
+
+
+commonUtils.isLogged = function() {
+    var result = false;
+    if (isLogged || getBase64()) {
+        result = true;
+    }
+    console.log("isLogged: " + result);
+    return result;
+}
+
+commonUtils.removeCookie = function() {
+    document.cookie = "Authorization=;expires=Thu, 01-Jan-70 00:00:01 GMT;";
+}
+
+this.getBase64FromCookies = function() {
+    console.log("cookie: "+document.cookie);
+    var cn = "Authorization=";
+    var idx = document.cookie.indexOf(cn)
+    if (idx != -1) {
+        var end = document.cookie.indexOf(";", idx + 1);
+        if (end == -1) end = document.cookie.length;
+        return unescape(document.cookie.substring(idx + cn.length, end));
+    } else {
+        return "";
+    }
 }
 

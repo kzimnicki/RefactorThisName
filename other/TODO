@@ -1,4 +1,6 @@
 Pierwszy Release:
+- Container jest zbedny, taka glupia metoda zastpienia EHCache. Na razie koszytac tylko z zapytan do bazy danych.
+- dodac do kolumn create i update date w Entity Object.
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - dodac test w ktorym po dodaniu exclude worda  sprawdzic czy przy nastepnym procesowaniu tekstu tego slowa juz nie ma.
 - Phrasal verbs - problem jezeli sa wiekszej odleglosci od siebie:  They TOPPED the building OFF with a tall flagpole juz nie podmieni tego phrasal verba.
@@ -97,6 +99,7 @@ memen.to
 
 
 Bledy:
+Po rejestracji automatycznie przekierowuje na exclude words. ale chyba zapomnial go zalogowac :)
 Jak jest jedno slowo to wezmie literke, a nie slowo.
 Przy zbyt duze ilosci strzalów jest sorry, nie moge  wtedy google translate tłumaczyc. Przetestowac ile strzalow mozna oddac zanim nastapi sorry :)
 Zrobic ostrzeżenie dla ramek plywajacych.

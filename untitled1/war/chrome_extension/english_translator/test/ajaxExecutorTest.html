@@ -1,0 +1,204 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <link rel="stylesheet" href="../css/qunit.css" type="text/css" media="screen"/>
+    <script type="text/javascript" src="../js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../js/commonUtils.js"></script>
+    <script type="text/javascript" src="../js/ajaxExecutor.js"></script>
+    <script type="text/javascript" src="qunit.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            asyncTest("loginTest", function() {
+                ajaxExecutor.login("user@gmail.com", "123456", function(data) {
+                    equal(data, "SUCCESS");
+                    start();
+                });
+            });
+
+            asyncTest("registerTest", function() {
+                ajaxExecutor.register("user2@gmail.com", "123456", function(data) {
+                    equal(data, "USER_ALREADY_EXIST");
+                    start();
+                });
+            });
+
+            asyncTest("extractWordsTest", function() {
+
+                var unExtractedData = {
+                    'text':'cat something wrong analyse',
+                    'url':'http://google.com'
+                };
+                ajaxExecutor.extractWords(unExtractedData, function(data) {
+                    equal(data.analyse.frequency, "89");
+                    equal(data.cat.frequency, "82");
+                    start();
+                });
+            });
+
+            asyncTest("translateTest", function() {
+                var words = ["lamp","dog","window"];
+                ajaxExecutor.translate(words, function(data) {
+                    equal(data[0][0], "lampa");
+                    equal(data[1][0], "pies");
+                    equal(data[2][0], "okno");
+                    start();
+                });
+            });
+
+            asyncTest("sendTranslatedWordsTest", function() {
+                var transaltedWords = {
+                    "lamp":"lampa",
+                    "dog":"pies",
+                    "window":"okno"
+                };
+                ajaxExecutor.sendTranslatedWords(transaltedWords, function(data) {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("sendExludeWordsTest", function() {
+                var words = ["car", "dog"];
+                ajaxExecutor.sendExcludedWords(words, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("removeExludeWordsTest", function() {
+                var word = "car";
+                ajaxExecutor.removeExcludedWord(word, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+//            asyncTest("loadExludeWordsTest", function() {
+//                ajaxExecutor.loadExcludedWords(function(data) {
+//                    equal(data[0].root.value, "dog");
+//                    start();
+//                });
+//            });
+
+            asyncTest("loadOptionsTest", function() {
+                ajaxExecutor.loadOptions(function(data) {
+                    equal("91", data.max);
+                    equal("2", data.min);
+                    equal("subtitleTemplate", data.subtitleTemplate);
+                    equal("txtTemplate", data.textTemplate);
+
+                    start();
+                });
+            });
+
+            asyncTest("saveOptionsTest", function() {
+                var options = {
+                    "min":2,
+                    "max":91,
+                    "subtitleTemplate":"subtitleTemplate",
+                    "textTemplate": "txtTemplate"
+
+                };
+
+                ajaxExecutor.saveOptions(JSON.stringify(options), function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("sendIncludedWordsTest", function() {
+                var words = ["car", "dog"];
+                ajaxExecutor.sendIncludedWords(words, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("removeIncludedWordsTest", function() {
+                var word = "car";
+                ajaxExecutor.removeIncludedWord(word, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("loadIncludedWordsTest", function() {
+                ajaxExecutor.loadIncludedWords(function(data) {
+                    equal(data[0].root.value, "dog");
+                    start();
+                });
+            });
+
+             asyncTest("sendIncludedPhrasalVerbsTest", function() {
+                var words = ["move in", "moving out"];
+                ajaxExecutor.sendIncludedPhrasalVerb(words, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("removeIncludedPhrasalVerbsTest", function() {
+                var word = "move in";
+                ajaxExecutor.removeIncludedPhrasalVerb(word, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("loadIncludedPhrasalVerbsTest", function() {
+                ajaxExecutor.loadIncludedPhrasalVerb(function(data) {
+                    equal("move", data[0].verb.family[0].value);
+                    equal("out", data[0].suffix1.value);
+                    start();
+                });
+            });
+
+
+              asyncTest("sendExcludedPhrasalVerbsTest", function() {
+                var words = ["move in", "moving out"];
+                ajaxExecutor.sendExcludedPhrasalVerb(words, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("removeExcludedPhrasalVerbsTest", function() {
+                var word = "move in";
+                ajaxExecutor.removeExcludedPhrasalVerb(word, function() {
+                    equal("1", "1");
+                    start();
+                });
+            });
+
+            asyncTest("loadExcludedPhrasalVerbsTest", function() {
+                ajaxExecutor.loadExcludedPhrasalVerb(function(data) {
+                    equal("move", data[0].verb.family[0].value);
+                    equal("out", data[0].suffix1.value);
+                    start();
+                });
+            });
+
+            test("createGoogleTranslateUrlTest", function() {
+                var words = ["car", "dog", "move in"];
+                var url = createUrl(words);
+                equal('http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=pl&q=car&q=dog&q=move in', url);
+            });
+
+        });
+    </script>
+
+</head>
+<body>
+<h1 id="qunit-header">QUnit example</h1>
+
+<h2 id="qunit-banner"></h2>
+
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+
+</body>
+</html>

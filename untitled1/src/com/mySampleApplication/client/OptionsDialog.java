@@ -55,7 +55,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     public void registerClick(ClickEvent e) {
        JSONObject jsonObject = new JSONObject();
        jsonObject.put(TEXT_TEMPLATE, new JSONString(textTemplate.getText()));
-       jsonObject.put(SUBTITLE_TEMPLATE, new JSONString(textTemplate.getText()));
+       jsonObject.put(SUBTITLE_TEMPLATE, new JSONString(subtitleTemplate.getText()));
        jsonObject.put(MIN, new JSONString(min.getText()));
        jsonObject.put(MAX, new JSONString(max.getText()));
        saveOptions(jsonObject.toString());

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import server.core.WordExtractor;
 import server.model.newModel.*;
+import sun.plugin.javascript.navig.Array;
 
 import javax.print.DocFlavor;
 import java.io.IOException;
@@ -43,32 +44,17 @@ public class EnglishTranslator {
     @RequestMapping(method = RequestMethod.POST, value = "/extractWords", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Secured(Role.USER)
-    public List<String> extractWords(@RequestBody DataToTranslate data) {
-        List<String> wordsToTranslate = new ArrayList<String>();
-        try {
-            wordExtractor.analyseText(data.getText());
-            List<String> words = wordExtractor.getWordsToTranslate();
-            wordsToTranslate = wordExtractor.filterWordsToTranslate(words, data.getMinFrequency(), data.getMaxFrequency());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return wordsToTranslate;
-    }
-         //TODO pomyslec nad zmiana nazwy tych rzeczy do procesowania.
-    @RequestMapping(method = RequestMethod.POST, value = "/extractWordsWithFrequency", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Secured(Role.USER)
     @Transactional
     public Map<String, WordDetails> extractWordsWithFrequency(@RequestBody DataToTranslate data) {
-        System.err.println(Thread.currentThread().getName());
-        System.err.println(SecurityContextHolder.getContext().getAuthentication());
+        User user = loginService.getLoggedUser();
         Map<String, WordDetails> wordsToTranslate = new HashMap<String, WordDetails>();
         try {
             wordExtractor.analyseText(data.getText());
             List<String> words = wordExtractor.getWordsToTranslate();
-            wordsToTranslate = wordExtractor.filterWordsToTranslateWithFrequency(words, data.getMinFrequency(), data.getMaxFrequency());
+            wordsToTranslate = wordExtractor.filterWordsToTranslateWithFrequency(words,
+                                                                                 user.getConfig().getMin(),
+                                                                                 user.getConfig().getMax());
             wordsToTranslate = wordExtractor.addPhrasalVerbs(wordsToTranslate, data.getText());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,8 +65,10 @@ public class EnglishTranslator {
     @RequestMapping(method = RequestMethod.POST, value = "/translatedWords", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Secured(Role.USER)
+    @Transactional
     public void saveTranslatedWords(@RequestBody Map<String, String> translatedWords) throws UnsupportedEncodingException {
         Set<Map.Entry<String, String>> entries = translatedWords.entrySet();
+        ArrayList<String> includedWords = new ArrayList<String>(entries.size());
         for (Map.Entry<String, String> entry : entries) {
             System.out.println(new String(entry.getValue().getBytes("ISO-8859-1")));
             System.out.println(new String(entry.getValue().getBytes("ISO8859_1")));
@@ -90,7 +78,9 @@ public class EnglishTranslator {
             System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "UTF8"));
             System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "ISO-8859-1"));
             System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "ISO8859_1"));
+            includedWords.add(entry.getKey());
         }
+        saveIncludedWords(includedWords);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/excludedWords", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -119,14 +109,14 @@ public class EnglishTranslator {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "/excludedWords", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, value = "/excludedWords", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public List<WordFamily> getExcludedWords() throws IOException {
+    public Set<WordFamily> loadExcludedWords() throws IOException {
         User user = loginService.getLoggedUser();
         Hibernate.initialize(user.getExcludedWords());
-        List<WordFamily> excludedWords = user.getExcludedWords();
+        Set<WordFamily> excludedWords = user.getExcludedWords();
         return excludedWords;
     }
 
@@ -147,7 +137,7 @@ public class EnglishTranslator {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public Configuration getOptions() {
+    public Configuration loadOptions() {
         User user = loginService.getLoggedUser();
         return user.getConfig();
     }
@@ -156,9 +146,12 @@ public class EnglishTranslator {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public void setOptions(@RequestBody Configuration config) {
+    public void saveOptions(@RequestBody Configuration config) {
         User user = loginService.getLoggedUser();
-        user.setConfig(config);
+        user.getConfig().setMax(config.getMax());
+        user.getConfig().setMin(config.getMin());
+        user.getConfig().setSubtitleTemplate(config.getSubtitleTemplate());
+        user.getConfig().setTextTemplate(config.getTextTemplate());
         commonDao.saveOrUpdate(user);
     }
 
@@ -171,15 +164,15 @@ public class EnglishTranslator {
         for (String wordValue : includedWords) {
             WordFamily wordFamily = wordExtractor.getWordFamily(wordValue);
             user.getIncludedWords().add(wordFamily);
-            commonDao.saveOrUpdate(user);
         }
+        commonDao.saveOrUpdate(user);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/includedWords", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public List<WordFamily> loadIncludedWords() {
+    public Set<WordFamily> loadIncludedWords() {
         User user = loginService.getLoggedUser();
         Hibernate.initialize(user.getIncludedWords()); //TODO zrobic cos z tymi initializami.
         return user.getIncludedWords();
@@ -200,7 +193,7 @@ public class EnglishTranslator {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public List<PhrasalVerb> loadExcludedPhrasalVerbs() {
+    public Set<PhrasalVerb> loadExcludedPhrasalVerbs() {
         User user = loginService.getLoggedUser();
         Hibernate.initialize(user.getExcludedPhrasalVerbs()); //TODO zrobic cos z tymi initializami.
         return user.getExcludedPhrasalVerbs();
@@ -234,7 +227,7 @@ public class EnglishTranslator {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public List<PhrasalVerb> loadIncludedPhrasalVerbs() {
+    public Set<PhrasalVerb> loadIncludedPhrasalVerbs() {
             User user = loginService.getLoggedUser();
             Hibernate.initialize(user.getIncludedPhrasalVerbs()); //TODO zrobic cos z tymi initializami.
             return user.getIncludedPhrasalVerbs();

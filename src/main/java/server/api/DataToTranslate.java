@@ -13,29 +13,11 @@ import java.io.Serializable;
  */
 public class DataToTranslate implements Serializable {
 
-    private int minFrequency;
-    private int maxFrequency;
     private String text;
-    private String textUrl;
+    private String url;
 
     public DataToTranslate() {
 
-    }
-
-    public int getMinFrequency() {
-        return minFrequency;
-    }
-
-    public void setMinFrequency(int minFrequency) {
-        this.minFrequency = minFrequency;
-    }
-
-    public int getMaxFrequency() {
-        return maxFrequency;
-    }
-
-    public void setMaxFrequency(int maxFrequency) {
-        this.maxFrequency = maxFrequency;
     }
 
     public String getText() {
@@ -44,14 +26,6 @@ public class DataToTranslate implements Serializable {
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public String getTextUrl() {
-        return textUrl;
-    }
-
-    public void setTextUrl(String textUrl) {
-        this.textUrl = textUrl;
     }
 
     public int hashCode() {
@@ -69,4 +43,11 @@ public class DataToTranslate implements Serializable {
     }
 
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 }

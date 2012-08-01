@@ -58,8 +58,11 @@ public class WordTypeFrequencyContainer {
     }
 
     public Word getWord(String wordValue) {
-        Word word = words.get(wordValue);
-        return word != null ? word : Word.EMPTY;
+        return  words.get(wordValue);
+    }
+
+    public Map<Word, WordFamily> getWordFamilies(){
+        return wordFamilies;
     }
 }
 

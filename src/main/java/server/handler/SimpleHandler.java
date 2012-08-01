@@ -22,35 +22,35 @@ public class SimpleHandler{
         englishTranslator = new EnglishTranslator();
     }
 
-    public void handle(String s, HttpServletRequest request, HttpServletResponse response, int i) throws IOException, ServletException {
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);
-//        ((Request) request).setHandled(true);
-
-        String contentLength = request.getHeader("Content-Length");
-        if (contentLength != null && Integer.valueOf(contentLength) > MAX_CONTENT_LENGTH) {
-            System.out.println("__ERR: Too big REQUEST: " + contentLength);
-            response.setStatus(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
-        } else if (request.getParameter("tw") != null) {
-            saveTranslatedWords(request);
-        } else {
-            String httpResponse = extractWords(request);
-            response.getWriter().append(httpResponse);
-        }
-    }
+//    public void handle(String s, HttpServletRequest request, HttpServletResponse response, int i) throws IOException, ServletException {
+//        response.setContentType("text/html");
+//        response.setStatus(HttpServletResponse.SC_OK);
+////        ((Request) request).setHandled(true);
+//
+//        String contentLength = request.getHeader("Content-Length");
+//        if (contentLength != null && Integer.valueOf(contentLength) > MAX_CONTENT_LENGTH) {
+//            System.out.println("__ERR: Too big REQUEST: " + contentLength);
+//            response.setStatus(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE);
+//        } else if (request.getParameter("tw") != null) {
+//            saveTranslatedWords(request);
+//        } else {
+//            String httpResponse = extractWords(request);
+//            response.getWriter().append(httpResponse);
+//        }
+//    }
 
     private void saveTranslatedWords(HttpServletRequest request) {
         Map<String, String> translatedWords = ClientDataConverter.convertTranslatedWords(request);
 //        englishTranslator.saveTranslatedWords(translatedWords);
     }
 
-    private String extractWords(HttpServletRequest request) {
-        DataToTranslate dataToTranslate = ClientDataConverter.convert(request);
-        List<String> wordsToTranslate = englishTranslator.extractWords(dataToTranslate);
-        String httpResponse = createResponseInHttpFormat(wordsToTranslate);
-        return httpResponse;
-
-    }
+//    private String extractWords(HttpServletRequest request) {
+//        DataToTranslate dataToTranslate = ClientDataConverter.convert(request);
+//        List<String> wordsToTranslate = englishTranslator.extractWords(dataToTranslate);
+//        String httpResponse = createResponseInHttpFormat(wordsToTranslate);
+//        return httpResponse;
+//
+//    }
 
     private String createResponseInHttpFormat(List<String> wordsToTranslate) {
         StringBuilder builder = new StringBuilder();

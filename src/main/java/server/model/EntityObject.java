@@ -1,11 +1,12 @@
 package server.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 
+import com.google.common.base.Objects;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import org.hibernate.util.EqualsHelper;
+
+import java.util.Date;
 
 @MappedSuperclass
 public abstract class EntityObject{
@@ -13,6 +14,24 @@ public abstract class EntityObject{
 	@Id
 	@GeneratedValue
 	private Long id;
+
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "created", nullable = false)
+//    private Date created;
+//
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(name = "updated", nullable = false)
+//    private Date updated;
+//
+//    @PrePersist
+//    protected void onCreate() {
+//        updated = created = new Date();
+//    }
+//
+//    @PreUpdate
+//    protected void onUpdate() {
+//        updated = new Date();
+//    }
 
 	public void setId(Long id) {
 		this.id = id;
@@ -37,23 +56,16 @@ public abstract class EntityObject{
 
     @Override
     public int hashCode(){
-        // we are working on peristed objects. From container. There is no not persisted objects!
-        if(id != null){
-            return id.intValue();
-        }
-        super.hashCode();
-        return -1;
-
+        return Objects.hashCode(id);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if ( !(obj instanceof EntityObject) ) return false;
-
-        final EntityObject cat = (EntityObject) obj;
-
-        if ( !cat.getId().equals( getId() ) ) return false;
-        return true;
+        if(obj instanceof EntityObject){
+            final EntityObject other = (EntityObject) obj;
+            return Objects.equal(id, other.getId());
+        } else{
+            return false;
+        }
     }
 }

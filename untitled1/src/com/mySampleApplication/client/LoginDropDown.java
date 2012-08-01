@@ -80,17 +80,17 @@ public class LoginDropDown extends Composite {
 
 
     public native void logout() /*-{
-        $wnd.ajaxExecutor.removeCookie();
+        $wnd.commonUtils.removeCookie();
     }-*/;
 
     public native boolean isLogged() /*-{
-        return $wnd.ajaxExecutor.isLogged();
+        return $wnd.commonUtils.isLogged();
     }-*/;
 
     public native void login(String username, String password) /*-{
         var instance = this;
         $wnd.ajaxExecutor.login(username, password, function(data) {
-            $wnd.ajaxExecutor.saveCookie(username, password);
+            $wnd.commonUtils.saveCookie(username, password);
             instance.@com.mySampleApplication.client.LoginDropDown::handleComponentsVisibility()();
         });
     }-*/;

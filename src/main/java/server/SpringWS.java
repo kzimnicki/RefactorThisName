@@ -24,8 +24,6 @@ public class SpringWS {
         System.out.println("TEST");
         ArrayList<DataToTranslate> dataToTranslates = new ArrayList<DataToTranslate>();
         DataToTranslate d = new DataToTranslate();
-        d.setMaxFrequency(0);
-        d.setMinFrequency(1);
         d.setText("dsadas");
         dataToTranslates.add(d);
         return dataToTranslates;
@@ -38,8 +36,6 @@ public class SpringWS {
         System.out.println("TEST");
         ArrayList<DataToTranslate> dataToTranslates = new ArrayList<DataToTranslate>();
         DataToTranslate d = new DataToTranslate();
-        d.setMaxFrequency(value);
-        d.setMinFrequency(1);
         d.setText("dsadas");
         dataToTranslates.add(d);
         return dataToTranslates;

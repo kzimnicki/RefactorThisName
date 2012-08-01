@@ -1,6 +1,8 @@
 var ajaxExecutor = ajaxExecutor || {};
 
 var AJAX_TYPE_POST = 'POST';
+var AJAX_TYPE_GET = 'GET';
+var AJAX_TYPE_DELETE = 'DELETE';
 var CURRENT_TYPE_JSON = 'application/json; charset=utf-8;';
 var DATA_TYPE_JSON = 'JSON'
 //var SERVER_URL = "http://188.40.66.81:443/";
@@ -8,104 +10,50 @@ var SERVER_URL = "http://localhost:8881/";
 var TRANSLATE_URL = 'http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=pl'; //96 chars +  (word size +3 chars) * words counts
 var isLogged = false;
 
-this.serverDown = function() {
-    popup.writeError("Serwer nie odpowiada, prosze sprobowac pozniej.");
-}
+
+var INCLUDED_WORDS =  "app/includedWords";
+var EXCLUDED_WORDS = "app/excludedWords";
+var EXTARCT_WORDS = "app/extractWords";
+var INCLUDED_PHRASAL_VERB = "app/includedPhrasalVerbs";
+var OPTIONS = "app/options";
+var EXCLUDED_PHRASAL_VERB = "app/excludedPhrasalVerbs";
 
 
 this.setup = function() {
-    showDimmer();
+    commonUtils.showDimmer();
     $.ajaxSetup({
             type : AJAX_TYPE_POST,
             contentType: CURRENT_TYPE_JSON,
             dataType: DATA_TYPE_JSON,
             beforeSend: function(xhr) {
-                console.log(getBase64());
                 xhr.setRequestHeader("Authorization", "Basic " + getBase64());
-                console.log(xhr);
             },
             error: function() {
-                serverDown();
+                commonUtils.serverDown();
             }
         }
     );
 }
 
-function showDimmer(){
-    $("#progressBar").css("display","block");
-}
-
-function hideDimmer(){
-    $("#progressBar").css("display","none");
-}
-
-
-this.getBase64 = function() {
-    if (window.localStorage.login) {
-        return getBase64FromOptions();
-    } else {
-        return getBase64FromCookies();
-    }
-}
-
-this.getBase64FromOptions = function() {
-    var stringToEncode = window.localStorage.login + ":" + window.localStorage.pass;
-    log(stringToEncode);
-    return base64_encode(stringToEncode);
-}
-
-ajaxExecutor.saveCookie = function(username, password) {
-    var header = base64_encode(username + ":" + password);
-    document.cookie = "Authorization=" + header;
-    console.log("cookie1: "+document.cookie);
-}
-
-
-ajaxExecutor.isLogged = function() {
-    var result = false;
-    if (isLogged || getBase64()) {
-        result = true;
-    }
-    console.log("isLogged: " + result);
-    return result;
-}
-
-ajaxExecutor.removeCookie = function() {
-    document.cookie = "Authorization=;expires=Thu, 01-Jan-70 00:00:01 GMT;";
-}
-
-this.getBase64FromCookies = function() {
-    console.log("cookie: "+document.cookie);
-    var cn = "Authorization=";
-    var idx = document.cookie.indexOf(cn)
-    if (idx != -1) {
-        var end = document.cookie.indexOf(";", idx + 1);
-        if (end == -1) end = document.cookie.length;
-        return unescape(document.cookie.substring(idx + cn.length, end));
-    } else {
-        return "";
-    }
-}
-
-
-ajaxExecutor.ajaxExtractWords = function(dataToTranslate, callback) {
+ajaxExecutor.extractWords = function(dataToTranslate, callback) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/extractWords",
+        url: SERVER_URL + EXTARCT_WORDS,
         data: JSON.stringify(dataToTranslate),
         success: callback
-    }).done(hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
-ajaxExecutor.ajaxExtractWordsWithFrequency = function(dataToTranslate, callback) {
+ajaxExecutor.translate = function(wordsArray, callback) {
+    console.log(wordsArray.length);
+    console.log(wordsArray);
     setup();
     $.ajax({
-        url: SERVER_URL + "app/extractWordsWithFrequency",
-        data: JSON.stringify(dataToTranslate),
+        url: createUrl(wordsArray),
+        type: AJAX_TYPE_GET,
         success: callback
-    }).done(hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
-
 
 this.createUrl = function(wordsArray) {
     var url = [TRANSLATE_URL];
@@ -115,40 +63,41 @@ this.createUrl = function(wordsArray) {
     return url.join('');
 }
 
-ajaxExecutor.translate = function(wordsArray, callback) {
-    setup();
-    $.ajax({
-        url: createUrl(wordsArray),
-        type: 'GET',
-        success: callback
-    }).done(hideDimmer);
-}
-
 ajaxExecutor.sendTranslatedWords = function(translatedMapJSON, callback) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/saveTranslatedWords",
+        url: SERVER_URL + "app/translatedWords",
         data: JSON.stringify(translatedMapJSON),
         success: callback
-    }).done(hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.sendExcludedWords = function(excludedWordsJSON, callback) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/saveExcludedWords",
+        url: SERVER_URL + EXCLUDED_WORDS,
         data: JSON.stringify(excludedWordsJSON),
         success: callback
-    }).done(hideDimmer());
+    }).done(commonUtils.hideDimmer());
 }
 
 ajaxExecutor.removeExcludedWord = function(word, callback) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/removeExcludedWord",
+        url: SERVER_URL + EXCLUDED_WORDS,
         data: word,
+        type: AJAX_TYPE_DELETE,
         success: callback
-    }).done(hideDimmer());
+    }).done(commonUtils.hideDimmer());
+}
+
+ajaxExecutor.loadExcludedWords = function(callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + EXCLUDED_WORDS,
+        type: AJAX_TYPE_GET,
+        success: callback
+    }).success(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.register = function(username, password, callback) {
@@ -157,7 +106,7 @@ ajaxExecutor.register = function(username, password, callback) {
         url: SERVER_URL + "app/register",
         data: '{"username":"' + username + '", "password": "' + password + '"}',
         success: callback
-    }).done(hideDimmer());
+    }).done(commonUtils.hideDimmer());
 }
 
 ajaxExecutor.login = function(username, password, callback) {
@@ -166,37 +115,115 @@ ajaxExecutor.login = function(username, password, callback) {
         url: SERVER_URL + "app/login",
         data: '{"username":"' + username + '", "password": "' + password + '"}',
         success: callback
-    }).done(hideDimmer());
-}
-
-ajaxExecutor.loadExcludedWords = function(callback) {
-    setup();
-    $.ajax({
-        url: SERVER_URL + "app/excludedWords",
-        success: callback
-    }).success(hideDimmer);
+    }).done(commonUtils.hideDimmer());
 }
 
 
 ajaxExecutor.loadOptions = function(callback) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/options",
-        type: "GET",
+        url: SERVER_URL + OPTIONS,
+        type: AJAX_TYPE_GET,
         success: callback
-    }).success(hideDimmer);
+    }).success(commonUtils.hideDimmer);
 }
 
 
 ajaxExecutor.saveOptions = function(optionsData, callback) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/options",
-        type: "POST",
+        url: SERVER_URL + OPTIONS,
         data: optionsData,
         success: callback
-    }).success(hideDimmer);
+    }).success(commonUtils.hideDimmer);
 }
+
+ajaxExecutor.sendIncludedWords = function(includedWordsJSON, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + INCLUDED_WORDS,
+        data: JSON.stringify(includedWordsJSON),
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
+ajaxExecutor.removeIncludedWord = function(word, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + INCLUDED_WORDS,
+        data: word,
+        type: AJAX_TYPE_DELETE,
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
+ajaxExecutor.loadIncludedWords = function(callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + INCLUDED_WORDS,
+        type: AJAX_TYPE_GET,
+        success: callback
+    }).success(commonUtils.hideDimmer);
+}
+
+
+ajaxExecutor.sendIncludedPhrasalVerb = function(includedPhrasalVerbJSON, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + INCLUDED_PHRASAL_VERB,
+        data: JSON.stringify(includedPhrasalVerbJSON),
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
+ajaxExecutor.removeIncludedPhrasalVerb = function(phrasalVerb, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + INCLUDED_PHRASAL_VERB,
+        data: phrasalVerb,
+        type: AJAX_TYPE_DELETE,
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
+ajaxExecutor.loadIncludedPhrasalVerb = function(callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + INCLUDED_PHRASAL_VERB,
+        type: AJAX_TYPE_GET,
+        success: callback
+    }).success(commonUtils.hideDimmer);
+}
+
+
+ajaxExecutor.sendExcludedPhrasalVerb = function(excludedPhrasalVerbJSON, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + EXCLUDED_PHRASAL_VERB,
+        data: JSON.stringify(excludedPhrasalVerbJSON),
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
+ajaxExecutor.removeExcludedPhrasalVerb = function(phrasalVerb, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + EXCLUDED_PHRASAL_VERB,
+        data: phrasalVerb,
+        type: AJAX_TYPE_DELETE,
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
+ajaxExecutor.loadExcludedPhrasalVerb = function(callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + EXCLUDED_PHRASAL_VERB,
+        type: AJAX_TYPE_GET,
+        success: callback
+    }).success(commonUtils.hideDimmer);
+}
+
 
 
 

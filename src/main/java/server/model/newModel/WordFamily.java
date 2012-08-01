@@ -1,5 +1,6 @@
 package server.model.newModel;
 
+import com.google.common.base.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -34,13 +35,4 @@ public class WordFamily extends EntityObject {
     @Setter
     @OneToMany(fetch = FetchType.EAGER)
     private List<Word> family = new ArrayList<Word>();
-
-    public int hashCode(){
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
 }

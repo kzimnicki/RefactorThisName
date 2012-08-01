@@ -22,7 +22,7 @@ curl -i -H "Accept: application/json" -H "Content-type: application/json" -X POS
 ##  Authentykacja
 
 "Basic dXNlckBnbWFpbC5jb206MTIzNDU2"
-curl -i --user "user@gmail.com:123456" -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"minFrequency":1,"maxFrequency":100,"text":"cat something wrong house","textUrl":null}'  http://localhost:8881/app/extractWords
+curl -i --user "user@gmail.com:123456" -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"minFrequency":1,"maxFrequency":100,"text":ń","textUrl":null}'  http://localhost:8881/app/extractWords
 
 
 

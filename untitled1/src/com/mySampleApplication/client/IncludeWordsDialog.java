@@ -18,7 +18,15 @@ public class IncludeWordsDialog extends CafaWidget implements Dialog {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
-    public void init() {
+     public void init() {
+        loadResults();
     }
+
+    public native void loadResults() /*-{
+        $wnd.ajaxExecutor.loadIncludedWords(function(data) {
+            var rows = $wnd.popup.createSiteRows(data);
+            $wnd.popup.createSiteTable(rows,"Excluded word");
+        });
+    }-*/;
 
 }

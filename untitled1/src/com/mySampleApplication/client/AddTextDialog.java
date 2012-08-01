@@ -66,9 +66,8 @@ public class AddTextDialog extends CafaWidget implements Dialog {
 	}
 
      public native void process(String text) /*-{
-         var dataToTranslate ={"minFrequency":"0","maxFrequency":"90","text":text,"textUrl":"FROM_SITE"};
-         $wnd.ajaxExecutor.ajaxExtractWordsWithFrequency(dataToTranslate, function(wordsArray) {
-             $wnd.EnglishTranslator.createWordsTable(wordsArray);
+         $wnd.EnglishTranslator.extractWords(text, function(words){
+             $wnd.popup.createTable(words);
          });
     }-*/;
 
@@ -79,20 +78,15 @@ public class AddTextDialog extends CafaWidget implements Dialog {
 
 
     public native String translate(String text) /*-{
-        var wordsToTranslate = $wnd.popup.listWordsFromTable();
+         var words = $wnd.popup.listWordsFromTable();
         var instance = this;
-        var googleTranslateWordParts = $wnd.EnglishTranslator.splitWordsToGoogleTranslateParts(wordsToTranslate);
-            for (var x in googleTranslateWordParts) {
-                var words = googleTranslateWordParts[x];
-                $wnd.ajaxExecutor.translate(words, function(translatedData) {
-                    var translatedMapJSON =  $wnd.EnglishTranslator.createTranslatedBrackets(words, translatedData, text);
-                    text = $wnd.EnglishTranslator.putTranslationInText(translatedMapJSON, text);
-                    $wnd.EnglishTranslator.sendTranslatedWords(translatedMapJSON);
-                    instance.@com.mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
-            }
-        );
-    }
 
+        $wnd.EnglishTranslator.translate(words, function(translatedWords) {
+            text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text);
+            $wnd.ajaxExecutor.sendTranslatedWords(translatedWords);
+
+            instance.@com.mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
+        });
     }-*/;
 
 
