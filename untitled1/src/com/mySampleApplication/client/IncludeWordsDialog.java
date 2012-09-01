@@ -24,8 +24,8 @@ public class IncludeWordsDialog extends CafaWidget implements Dialog {
 
     public native void loadResults() /*-{
         $wnd.ajaxExecutor.loadIncludedWords(function(data) {
-            var rows = $wnd.popup.createSiteRows(data);
-            $wnd.popup.createSiteTable(rows,"Excluded word");
+            var rows = $wnd.popup.createIncludedSiteRows(data);
+            $wnd.popup.createSiteTable(rows,"Included word", "#includedWords");
         });
     }-*/;
 

@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import server.api.CommonDao;
 import server.api.LoginService;
 import server.api.WordDetails;
-import server.model.newModel.PhrasalVerb;
-import server.model.newModel.User;
-import server.model.newModel.Word;
-import server.model.newModel.WordFamily;
+import server.model.newModel.*;
 
 import java.io.StringReader;
 import java.util.*;
@@ -49,7 +46,6 @@ public class WordExtractor {
     public static final String EXLUDE_FILE_PATH = "C:\\Users\\kzimnick\\IdeaProjects\\RefactorThisname\\src\\main\\resources\\stoplists\\excludeFile.txt";
     private RAMDirectory idx;
     private HashSet<String> stopWordsSet;
-    private WordTypeFrequencyContainer container;
 
 
     public WordExtractor() {
@@ -69,7 +65,6 @@ public class WordExtractor {
             stopWordsSet.addAll(femaleNamesWords);
             stopWordsSet.addAll(maleNamesWords);
             stopWordsSet.addAll(surnamesWords);
-            container = createContainer();
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(0);
@@ -80,17 +75,15 @@ public class WordExtractor {
         Set<String> userExcludeSet = new HashSet<String>();
         try {
             User user = loginService.getLoggedUser();
-            Set<WordFamily> excludedWords = user.getExcludedWords();
-            for (WordFamily wordFamily : excludedWords){
-                userExcludeSet.add(wordFamily.getRoot().getValue());
-                if(wordFamily.getFamily() != null){
-                    for (Word word: wordFamily.getFamily()){
-                                   userExcludeSet.add(word.getValue());
+            Set<RootWord> excludedWords = user.getExcludedWords();
+            for (RootWord rootWord : excludedWords){
+                Set<Word> wordFamily = getWordFamily(rootWord);
+                 if(wordFamily != null){
+                    for (Word word : wordFamily){
+                        userExcludeSet.add(word.getValue());
                     }
                 }
             }
-
-//            userExcludeSet.add(user.loadExcludedWords());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,7 +135,7 @@ public class WordExtractor {
         int x = 0;
         for (String element : debugList) {
             if (x++ % 3 == 0) {
-                List<Word> wordFamilyList = container.getWordFamilyFor(element);
+                Set<Word> wordFamilyList = getWordFamily(element);
 
                 results.put(element, new WordDetails(debugList.get(x + 1), wordFamilyList));
             }
@@ -153,8 +146,8 @@ public class WordExtractor {
     public List<String> debugWordsToTranslate(List<String> wordsToTranslate, int minFrequency, int maxFrequency, boolean includeNoP) {
         List<String> debugList = new LinkedList<String>();
         for (String word : wordsToTranslate) {
-            Integer frequency = container.getFrequnecyFor(word.toLowerCase());
-            WordType wordType = container.getWordTypeFor(word.toLowerCase());
+            Integer frequency = getFrequency(word.toLowerCase());
+            WordType wordType = getWordType(word.toLowerCase());
             if (minFrequency < frequency && frequency < maxFrequency && includeNoPForParameters(includeNoP, wordType)) {
                 debugList.add(word);
                 debugList.add(String.valueOf(wordType));
@@ -178,107 +171,59 @@ public class WordExtractor {
         return doc;
     }
 
-    private WordTypeFrequencyContainer createContainer() throws Exception {
-        WordTypeFrequencyContainer container = new WordTypeFrequencyContainer();
-
-        List<Word> allWords = commonDao.getAll(Word.class);
-        for (Word word : allWords) {
-            Integer frequency = container.getFrequnecyFor(word.getValue());
-            if (word.getFrequency() > frequency) {
-                container.put(word.getValue(), word);
-            }
+    public RootWord getRootWord(String wordValue) {
+        List wordRelations = commonDao.getByHQL("FROM WordRelation wr WHERE wr.word.value = :wordValue ORDER BY wr.word.frequency", "wordValue", wordValue);
+        if(wordRelations.size() > 0){
+            WordRelation wr =  (WordRelation)wordRelations.get(0);
+            return wr.getRootWord();
         }
-
-        List<WordFamily> allWordFamily = commonDao.getAll(WordFamily.class);
-        for (WordFamily wordFamily : allWordFamily) {
-            container.put(wordFamily.getRoot(), wordFamily);
-        }
-
-        return container;
-    }
-
-    public static void main(String[] args) throws Exception {
-        WordTypeFrequencyContainer container = new WordExtractor().createContainer();
-        System.out.println(container);
-    }
-
-    public Map<String, WordDetails> addPhrasalVerbs(Map<String, WordDetails> wordsToTranslate, String text) {
-        List<List<HasWord>> sentences = stanfordNLP.getSentences(text);
-        Map<String, String> phrasalVerbs = stanfordNLP.getPhrasalVerbs(sentences);
-        for (String verb : phrasalVerbs.keySet()) {
-            wordsToTranslate.remove(verb);
-            wordsToTranslate.put(verb + " " + phrasalVerbs.get(verb), new WordDetails("PV", null));
-        }
-        return wordsToTranslate;
+        return null;
     }
 
     public Word getWord(String wordValue) {
-        return container.getWord(wordValue);
+        List words = commonDao.getByHQL("FROM Word w WHERE w.value = :wordValue ORDER BY w.frequency", "wordValue", wordValue);
+        if(words.size() > 0){
+            return (Word)words.get(0);
+        }
+        return null;
     }
 
-    public WordFamily getWordFamily(String wordValue) {    //TODO refactor.
-        Word word = container.getWord(wordValue);
-        if(word == null){
-            return WordFamily.EMPTY;
-        }
+    public WordType getWordType(String wordValue){
+        Word word = getWord(wordValue);
+        return word != null ? word.getWordType() : WordType.undefined;
+    }
 
-        WordFamily wordFamily = container.getWordFamilyFor(word);
-        if (wordFamily == null) {
-            Map<Word, WordFamily> wordFamilies = container.getWordFamilies();
-            for(WordFamily currentWordFamily : wordFamilies.values()){
-                if(currentWordFamily.getFamily().contains(word)){
-                    return currentWordFamily;
-                }
+    public Integer getFrequency(String wordValue){
+         Word word = getWord(wordValue);
+        return word != null ? word.getFrequency() : 0;
+    }
+
+
+    public Set<Word> getWordFamily(String wordValue) {
+        List wordRelations = new LinkedList();
+        wordRelations.addAll(commonDao.getByHQL("FROM WordRelation wr WHERE wr.rootWord.rootWord.value = :wordValue ORDER BY wr.word.frequency", "wordValue", wordValue));
+        wordRelations.addAll(commonDao.getByHQL("FROM WordRelation wr WHERE wr.word.value = :wordValue ORDER BY wr.word.frequency", "wordValue", wordValue));
+        if(wordRelations.size() > 0){
+            Set<Word> wordFamily = new HashSet<Word>(wordRelations.size());
+            for (Object o : wordRelations){
+                WordRelation wr = (WordRelation)o;
+                wordFamily.add(wr.getWord());
             }
-            wordFamily = new WordFamily();
-            wordFamily.setRoot(word);
-            commonDao.saveOrUpdate(wordFamily);
-            container.put(word, wordFamily);
+            return wordFamily;
         }
-        return wordFamily;
-    }
-    
-    public WordFamily getWordFamilyForPhrasalVerb(String wordValue){
-        WordFamily wordFamily = getWordFamily(wordValue);
-        WordFamily transportWordFamily = new WordFamily();
-        transportWordFamily.setRoot(wordFamily.getRoot());
-        for (Word word : wordFamily.getFamily()){
-            if(WordType.Verb.equals(word.getWordType())){
-                transportWordFamily.getFamily().add(word);
-            }
-      }
-      return transportWordFamily;
+        return Collections.<Word>emptySet();
     }
 
-   public PhrasalVerb getPhrasalVerb(String phrasalVerbValue){
-
-       String[] pvParts = phrasalVerbValue.split(" ");
-       Object[] paramValues = {
-               getWordFamily(pvParts[0]),
-               getWord(pvParts[1]),
-               pvParts.length > 2 ? getWord(pvParts[2]):null
-       };
-       String[] paramNames = {
-               "verb",
-               "suffix1",
-               "suffix2"
-       };
-       String query = pvParts.length >2 ? PHRASAL_VERB_QUERY : PHRASAL_VERB_QUERY_SUFFIX2_IS_NULL;
-       List phrasalVerbs = commonDao.getByHQL(query, paramNames, paramValues );
-        if(phrasalVerbs != null && phrasalVerbs.size() != 0){
-            return (PhrasalVerb)phrasalVerbs.get(0);
-        }
-        return convertValueToPhrasalVerb(phrasalVerbValue);
+    public Set<Word> getWordFamily(RootWord rootWord) {
+        return getWordFamily(rootWord.getRootWord().getValue());
     }
 
-   private PhrasalVerb convertValueToPhrasalVerb(String phrasalVerbValue){
-        String[] wordValues = phrasalVerbValue.split(" ");
-        PhrasalVerb phrasalVerb = new PhrasalVerb();
-        phrasalVerb.setVerb(getWordFamily(wordValues[0]));
-        phrasalVerb.setSuffix1(getWord(wordValues[1]));
-        if(wordValues.length == 3){
-             phrasalVerb.setSuffix2(getWord(wordValues[2]));
+    public Set<String> getStringWordFamily(RootWord rootWord) {
+        Set<Word> wordFamily = getWordFamily(rootWord);
+        HashSet<String> simpleWordFamily = new HashSet<String>();
+        for (Word w : wordFamily){
+            simpleWordFamily.add(w.getValue());
         }
-       return phrasalVerb;
+        return simpleWordFamily;
     }
 }

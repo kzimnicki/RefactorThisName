@@ -37,8 +37,10 @@ public class AddTextDialog extends CafaWidget implements Dialog {
     }
 
     public void init() {
-        tablePanel.setVisible(false);
+        sendTextButton.setVisible(true);
+        textArea.setVisible(true);
         translateButton.setVisible(false);
+        tablePanel.setVisible(false);
     }
 
     @UiHandler("textArea")

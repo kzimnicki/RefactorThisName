@@ -52,9 +52,8 @@ public class EnglishTranslator {
             wordExtractor.analyseText(data.getText());
             List<String> words = wordExtractor.getWordsToTranslate();
             wordsToTranslate = wordExtractor.filterWordsToTranslateWithFrequency(words,
-                                                                                 user.getConfig().getMin(),
-                                                                                 user.getConfig().getMax());
-            wordsToTranslate = wordExtractor.addPhrasalVerbs(wordsToTranslate, data.getText());
+                    user.getConfig().getMin(),
+                    user.getConfig().getMax());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,10 +89,12 @@ public class EnglishTranslator {
     public void saveExcludeWords(@RequestBody List<String> excludedWords) throws IOException {
         User user = loginService.getLoggedUser();
         for (String wordValue : excludedWords) {
-            WordFamily wordFamily = wordExtractor.getWordFamily(wordValue);
-            user.getExcludedWords().add(wordFamily);
-            commonDao.saveOrUpdate(user);
+            RootWord rootWord = wordExtractor.getRootWord(wordValue);
+            if(rootWord!=null){
+                user.getExcludedWords().add(rootWord);
+            }
         }
+        commonDao.saveOrUpdate(user);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -113,11 +114,15 @@ public class EnglishTranslator {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public Set<WordFamily> loadExcludedWords() throws IOException {
+    public Map<String,Set<String>> loadExcludedWords() throws IOException {
         User user = loginService.getLoggedUser();
-        Hibernate.initialize(user.getExcludedWords());
-        Set<WordFamily> excludedWords = user.getExcludedWords();
-        return excludedWords;
+       Set<RootWord> excludedWords = user.getExcludedWords();
+        HashMap<String, Set<String>> map = new HashMap<String, Set<String>>();
+        for (RootWord rootWord : excludedWords){
+            Set<String> wordFamily = wordExtractor.getStringWordFamily(rootWord);
+            map.put(rootWord.getRootWord().getValue(), wordFamily);
+        }
+        return map;
     }
 
 
@@ -127,8 +132,8 @@ public class EnglishTranslator {
     @Transactional
     public void removeExcludedWord(@RequestBody String wordValue) throws IOException {
         User user = loginService.getLoggedUser();
-        WordFamily wordFamily = wordExtractor.getWordFamily(wordValue);
-        user.getExcludedWords().remove(wordFamily);
+        RootWord rootWord = wordExtractor.getRootWord(wordValue);
+        user.getExcludedWords().remove(rootWord);
         commonDao.saveOrUpdate(user);
     }
 
@@ -162,8 +167,10 @@ public class EnglishTranslator {
     public void saveIncludedWords(@RequestBody List<String> includedWords) {
         User user = loginService.getLoggedUser();
         for (String wordValue : includedWords) {
-            WordFamily wordFamily = wordExtractor.getWordFamily(wordValue);
-            user.getIncludedWords().add(wordFamily);
+            RootWord rootWord = wordExtractor.getRootWord(wordValue);
+            if(rootWord != null){
+                user.getIncludedWords().add(rootWord);
+            }
         }
         commonDao.saveOrUpdate(user);
     }
@@ -172,10 +179,16 @@ public class EnglishTranslator {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public Set<WordFamily> loadIncludedWords() {
+    public Map<String, Set<String>> loadIncludedWords() {
         User user = loginService.getLoggedUser();
         Hibernate.initialize(user.getIncludedWords()); //TODO zrobic cos z tymi initializami.
-        return user.getIncludedWords();
+        Set<RootWord> includedWords = user.getIncludedWords();
+        HashMap<String, Set<String>> map = new HashMap<String, Set<String>>();
+        for (RootWord rootWord : includedWords){
+            Set<String> wordFamily = wordExtractor.getStringWordFamily(rootWord);
+            map.put(rootWord.getRootWord().getValue(), wordFamily);
+        }
+        return map;
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/includedWords", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -184,76 +197,76 @@ public class EnglishTranslator {
     @Transactional
     public void removeIncludedWords(@RequestBody String wordValue) {
         User user = loginService.getLoggedUser();
-        WordFamily wordFamily = wordExtractor.getWordFamily(wordValue);
-        user.getIncludedWords().remove(wordFamily);
+        RootWord rootWord = wordExtractor.getRootWord(wordValue);
+        user.getIncludedWords().remove(rootWord);
         commonDao.saveOrUpdate(user);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/excludedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Secured(Role.USER)
-    @Transactional
-    public Set<PhrasalVerb> loadExcludedPhrasalVerbs() {
-        User user = loginService.getLoggedUser();
-        Hibernate.initialize(user.getExcludedPhrasalVerbs()); //TODO zrobic cos z tymi initializami.
-        return user.getExcludedPhrasalVerbs();
-    }
+//    @RequestMapping(method = RequestMethod.GET, value = "/excludedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Secured(Role.USER)
+//    @Transactional
+//    public Set<PhrasalVerb> loadExcludedPhrasalVerbs() {
+//        User user = loginService.getLoggedUser();
+//        Hibernate.initialize(user.getExcludedPhrasalVerbs()); //TODO zrobic cos z tymi initializami.
+//        return user.getExcludedPhrasalVerbs();
+//    }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/excludedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Secured(Role.USER)
-    @Transactional
-    public void saveExcludedPhrasalVerbs(@RequestBody List<String> phrasalVerbs) {
-        User user = loginService.getLoggedUser();
-        for (String pv : phrasalVerbs){
-            PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(pv);
-            user.getExcludedPhrasalVerbs().add(phrasalVerb);
-        }
-        commonDao.saveOrUpdate(user);
-    }
+//    @RequestMapping(method = RequestMethod.POST, value = "/excludedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Secured(Role.USER)
+//    @Transactional
+//    public void saveExcludedPhrasalVerbs(@RequestBody List<String> phrasalVerbs) {
+//        User user = loginService.getLoggedUser();
+//        for (String pv : phrasalVerbs){
+//            PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(pv);
+//            user.getExcludedPhrasalVerbs().add(phrasalVerb);
+//        }
+//        commonDao.saveOrUpdate(user);
+//    }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/excludedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Secured(Role.USER)
-    @Transactional
-    public void removeExcludedPhrasalVerbs(@RequestBody String phrasalVerbValue) {
-        User user = loginService.getLoggedUser();
-        PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(phrasalVerbValue);
-        user.getExcludedPhrasalVerbs().remove(phrasalVerb);
-        commonDao.saveOrUpdate(user);
-    }
+//    @RequestMapping(method = RequestMethod.DELETE, value = "/excludedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Secured(Role.USER)
+//    @Transactional
+//    public void removeExcludedPhrasalVerbs(@RequestBody String phrasalVerbValue) {
+//        User user = loginService.getLoggedUser();
+//        PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(phrasalVerbValue);
+//        user.getExcludedPhrasalVerbs().remove(phrasalVerb);
+//        commonDao.saveOrUpdate(user);
+//    }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/includedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Secured(Role.USER)
-    @Transactional
-    public Set<PhrasalVerb> loadIncludedPhrasalVerbs() {
-            User user = loginService.getLoggedUser();
-            Hibernate.initialize(user.getIncludedPhrasalVerbs()); //TODO zrobic cos z tymi initializami.
-            return user.getIncludedPhrasalVerbs();
-    }
+//    @RequestMapping(method = RequestMethod.GET, value = "/includedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Secured(Role.USER)
+//    @Transactional
+//    public Set<PhrasalVerb> loadIncludedPhrasalVerbs() {
+//            User user = loginService.getLoggedUser();
+//            Hibernate.initialize(user.getIncludedPhrasalVerbs()); //TODO zrobic cos z tymi initializami.
+//            return user.getIncludedPhrasalVerbs();
+//    }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/includedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Secured(Role.USER)
-    @Transactional
-    public void saveIncludedPhrasalVerbs(@RequestBody List<String> phrasalVerbs) {
-       User user = loginService.getLoggedUser();
-        for (String pv : phrasalVerbs){
-            PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(pv);
-            user.getIncludedPhrasalVerbs().add(phrasalVerb);
-        }
-        commonDao.saveOrUpdate(user);
-    }
+//    @RequestMapping(method = RequestMethod.POST, value = "/includedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Secured(Role.USER)
+//    @Transactional
+//    public void saveIncludedPhrasalVerbs(@RequestBody List<String> phrasalVerbs) {
+//       User user = loginService.getLoggedUser();
+//        for (String pv : phrasalVerbs){
+//            PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(pv);
+//            user.getIncludedPhrasalVerbs().add(phrasalVerb);
+//        }
+//        commonDao.saveOrUpdate(user);
+//    }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/includedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    @Secured(Role.USER)
-    @Transactional
-    public void removeIncludedPhrasalVerbs(@RequestBody String phrasalVerbValue) {
-        User user = loginService.getLoggedUser();
-        PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(phrasalVerbValue);
-        user.getIncludedPhrasalVerbs().remove(phrasalVerb);
-        commonDao.saveOrUpdate(user);
-    }
+//    @RequestMapping(method = RequestMethod.DELETE, value = "/includedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Secured(Role.USER)
+//    @Transactional
+//    public void removeIncludedPhrasalVerbs(@RequestBody String phrasalVerbValue) {
+//        User user = loginService.getLoggedUser();
+//        PhrasalVerb phrasalVerb = wordExtractor.getPhrasalVerb(phrasalVerbValue);
+//        user.getIncludedPhrasalVerbs().remove(phrasalVerb);
+//        commonDao.saveOrUpdate(user);
+//    }
 }

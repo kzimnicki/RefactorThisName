@@ -20,7 +20,7 @@ import java.util.Set;
  * Date: 30.05.12
  * Time: 20:38
  */
-@Entity
+//@Entity
 public class WordFamily extends EntityObject {
 
     public static WordFamily EMPTY = new WordFamily();

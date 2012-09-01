@@ -35,27 +35,40 @@ popup.removeThisRow = function(object) {
 }
 
 popup.removeExcludedWord = function(object) {
-    var row = $(object).closest("tr").get(0);
-    oTable.fnDeleteRow(oTable.fnGetPosition(row));
-    var word = $(row).children(":first").text();
+    var word = deleteRow(object);
     ajaxExecutor.removeExcludedWord(word, function() {
         console.log("Wyslane");
     });
 }
 
-popup.removeWholeFamily = function(object) {
+function deleteRow(object) {
     var row = $(object).closest("tr").get(0);
-    oTable.fnDeleteRow(oTable.fnGetPosition(row));
-    var exludedWordArray = $(row).children(":nth-child(4)").text().split(",");
-    popup.remove(exludedWordArray);
+    oSiteTable.fnDeleteRow(oSiteTable.fnGetPosition(row));
+    var word = $(row).children(":first").text();
+    return word;
+}
+popup.removeIncludedWord = function(object) {
+    var word = deleteRow(object);
+    ajaxExecutor.removeIncludedWord(word, function() {
+        console.log("Wyslane");
+    });
 }
 
-popup.createSiteRows = function(wordFamilies) {
+popup.createExcludedSiteRows = function(wordFamilies) {
     var rows = [];
-    for (var i = 0; i < wordFamilies.length; i++) {
-        console.log("test");
-        var wordFamilyArray = (wordFamilies[i]["family"]);
-        var row = [wordFamilies[i]["root"]["value"], createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">Delete</a>'];
+    for (var key in  wordFamilies) {
+        var wordFamilyArray = (wordFamilies[key]);
+        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">Delete</a>'];
+        rows.push(row);
+    }
+    return rows;
+}
+
+popup.createIncludedSiteRows = function(wordFamilies) {
+    var rows = [];
+    for (var key in  wordFamilies) {
+        var wordFamilyArray = (wordFamilies[key]);
+        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeIncludedWord(this)">Delete</a>'];
         rows.push(row);
     }
     return rows;
@@ -64,14 +77,14 @@ popup.createSiteRows = function(wordFamilies) {
 function createWordFamilyString (wordFamilyArray){
     var wordFamilyString = [];
     for (var i=0; i<wordFamilyArray.length; i++) {
-        wordFamilyString.push(wordFamilyArray[i]['value']);
+        wordFamilyString.push(wordFamilyArray[i]);
     }
     return wordFamilyString.join(' ');
 }
 
 
-popup.createSiteTable = function(rows, title) {
-    oSiteTable = $('#excludedWords').dataTable({
+popup.createSiteTable = function(rows, title, id) {
+    oSiteTable = $(id).dataTable({
                //<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>
         "sDom": "<'row'<'span8'><'span8'f>r>t<'row'<'spa8'><'span8'p>>",
         "sPaginationType": "bootstrap",

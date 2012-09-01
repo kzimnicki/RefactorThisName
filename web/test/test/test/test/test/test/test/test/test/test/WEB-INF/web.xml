@@ -15,6 +15,16 @@
         <url-pattern>/app/*</url-pattern>
     </filter-mapping>
 
+
+     <filter>
+        <filter-name>CORSFiletrChain</filter-name>
+        <filter-class>server.filter.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORSFiletrChain</filter-name>
+        <url-pattern>/app/*</url-pattern>
+    </filter-mapping>
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>

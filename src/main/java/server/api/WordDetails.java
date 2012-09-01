@@ -15,9 +15,9 @@ import java.util.Set;
 public class WordDetails {
 
     private String frequency;
-    private List<Word> wordFamily;
+    private Set<Word> wordFamily;
 
-    public WordDetails(String frequency, List<Word> wordFamily) {
+    public WordDetails(String frequency, Set<Word> wordFamily) {
         this.frequency = frequency;
         this.wordFamily = wordFamily;
     }

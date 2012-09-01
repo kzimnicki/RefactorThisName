@@ -1,6 +1,8 @@
 Pierwszy Release:
 - Container jest zbedny, taka glupia metoda zastpienia EHCache. Na razie koszytac tylko z zapytan do bazy danych.
 - dodac do kolumn create i update date w Entity Object.
+- PrePersist i PreUpdate nie zadzialalo.
+- jezeli nie przechodzi walidacji to ten komunikat powinnien sie gdzies wyswietlic, na razie leci w logach, dla rejestracji byl test.
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - dodac test w ktorym po dodaniu exclude worda  sprawdzic czy przy nastepnym procesowaniu tekstu tego slowa juz nie ma.
 - Phrasal verbs - problem jezeli sa wiekszej odleglosci od siebie:  They TOPPED the building OFF with a tall flagpole juz nie podmieni tego phrasal verba.
@@ -70,6 +72,15 @@ WordMeaning
 Language
 - String isoCode
 - String name
+
+
+Database
+
+
+WordRelation
+word | rootWord
+
+
 
 
 

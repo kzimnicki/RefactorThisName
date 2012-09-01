@@ -49,6 +49,10 @@ public class CommonDao extends HibernateDaoSupport {
 		getHibernateTemplate().update(bean);
 	}
 
+    public <T> void merge(final T bean) {
+		getHibernateTemplate().merge(bean);
+	}
+
 	public void flush() {
 		getHibernateTemplate().flush();
 	}

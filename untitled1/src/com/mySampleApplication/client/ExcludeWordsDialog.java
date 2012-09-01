@@ -29,8 +29,8 @@ public class ExcludeWordsDialog extends CafaWidget implements Dialog {
 
     public native void loadResults() /*-{
         $wnd.ajaxExecutor.loadExcludedWords(function(data) {
-            var rows = $wnd.popup.createSiteRows(data);
-            $wnd.popup.createSiteTable(rows, "Included Word");
+            var rows = $wnd.popup.createExcludedSiteRows(data);
+            $wnd.popup.createSiteTable(rows, "Excluded Word", "#excludedWords");
         });
     }-*/;
 }

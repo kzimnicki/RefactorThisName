@@ -2,6 +2,7 @@ package server.model.newModel;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
+import server.model.AuditableEntityObject;
 import server.model.EntityObject;
 
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import javax.validation.constraints.Min;
  */
 @Entity
 @Data
-public class Configuration extends EntityObject{
+public class Configuration extends AuditableEntityObject{
 
     @Min(0)
     @Max(100)

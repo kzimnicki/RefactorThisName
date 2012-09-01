@@ -10,10 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import server.api.*;
 import server.core.WordExtractor;
-import server.model.newModel.Configuration;
-import server.model.newModel.PhrasalVerb;
-import server.model.newModel.User;
-import server.model.newModel.WordFamily;
+import server.model.newModel.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -55,8 +52,6 @@ public class EnglishTranslatorTest {
     }
 
     private void cleanDatabase() {
-        commonDao.executeSQL("DELETE FROM user_excludedphrasalverbs");
-        commonDao.executeSQL("DELETE FROM user_includedphrasalverbs");
         commonDao.executeSQL("DELETE FROM user_includedwords");
         commonDao.executeSQL("DELETE FROM user_excludedwords");
         commonDao.executeSQL("DELETE FROM user_includedwords");
@@ -97,12 +92,12 @@ public class EnglishTranslatorTest {
 
         Map<String, WordDetails> extractedWords = englishTranslator.extractWordsWithFrequency(data);
 
-        assertEquals(9, extractedWords.size());
+        assertEquals(19, extractedWords.size());
         assertEquals("76", extractedWords.get("quo").getFrequency());
         assertEquals(2, extractedWords.get("quo").getWordFamily().size());
 
-        assertEquals("PV", extractedWords.get("doubling down").getFrequency());
-        assertEquals(null, extractedWords.get("doubling down").getWordFamily());
+//        assertEquals("PV", extractedWords.get("doubling down").getFrequency());
+//        assertEquals(null, extractedWords.get("doubling down").getWordFamily());
     }
 
     @Test
@@ -130,7 +125,7 @@ public class EnglishTranslatorTest {
         englishTranslator.saveExcludeWords(excludedwords);
         Map<String, WordDetails> extractedWords = englishTranslator.extractWordsWithFrequency(data);
 
-        assertEquals(8, extractedWords.size());
+        assertEquals(18, extractedWords.size());
     }
 
 
@@ -143,15 +138,31 @@ public class EnglishTranslatorTest {
         });
         englishTranslator.saveExcludeWords(excludedwords);
 
-        Set<WordFamily> loadedExcludedWords = englishTranslator.loadExcludedWords();
+        Map<String, Set<String>> loadedExcludedWords = englishTranslator.loadExcludedWords();
         assertEquals(5, loadedExcludedWords.size());
 
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("car")));
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("cat")));
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("dog")));
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("ship")));
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("get")));
+        Assert.assertTrue(loadedExcludedWords.containsKey("car"));
+        Assert.assertTrue(loadedExcludedWords.containsKey("cat"));
+        Assert.assertTrue(loadedExcludedWords.containsKey("dog"));
+        Assert.assertTrue(loadedExcludedWords.containsKey("ship"));
+        Assert.assertTrue(loadedExcludedWords.containsKey("getting"));
     }
+
+    @Test
+    public void testSaveExcludeWordsForWordWhichNotExists() throws Exception {
+        createRegisterAndLoginUser();
+
+        List<String> excludedwords = Arrays.asList(new String[]{
+                "car", "zxcxcxzczxcsadqweqqwe"
+        });
+        englishTranslator.saveExcludeWords(excludedwords);
+
+        Map<String, Set<String>> loadedExcludedWords = englishTranslator.loadExcludedWords();
+        assertEquals(1, loadedExcludedWords.size());
+
+        Assert.assertTrue(loadedExcludedWords.containsKey("car"));
+    }
+
 
 
     @Test
@@ -162,45 +173,32 @@ public class EnglishTranslatorTest {
         });
         englishTranslator.saveIncludedWords(includedWords);
 
-        Set<WordFamily> loadedIncludedWords = englishTranslator.loadIncludedWords();
+        Map<String, Set<String>> loadedIncludedWords = englishTranslator.loadIncludedWords();
         assertEquals(4, loadedIncludedWords.size());
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("car")));
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("cat")));
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("dog")));
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("ship")));
+        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("car")));
+        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("cat")));
+        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("dog")));
+        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("ship")));
     }
 
-@Test
-    public void testSaveIncludedWordsFor2NullIdWordFamily() throws Exception {
-        createRegisterAndLoginUser();
-        List<String> includedWords = Arrays.asList(new String[]{
-                "fungal", "fusarium"
-        });
-        englishTranslator.saveIncludedWords(includedWords);
-
-        Set<WordFamily> loadedIncludedWords = englishTranslator.loadIncludedWords();
-        assertEquals(2, loadedIncludedWords.size());
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("fungal")));
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("fusarium")));
-    }
-
-
-    @Test
-    public void testSaveIncludedPhrasalVerb() throws Exception {
-        createRegisterAndLoginUser();
-        List<String> phrasalVerbs = Arrays.asList(new String[]{
-                "moving in", "move out", "get rid of"
-        });
-        englishTranslator.saveIncludedPhrasalVerbs(phrasalVerbs);
-
-        Set<PhrasalVerb> includedPhrasalVerbs = englishTranslator.loadIncludedPhrasalVerbs();
-        assertEquals(3, includedPhrasalVerbs.size());
-
-        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move in")));
-        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move out")));
-        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("get rid of")));
-    }
-
+//
+//
+//    @Test
+//    public void testSaveIncludedPhrasalVerb() throws Exception {
+//        createRegisterAndLoginUser();
+//        List<String> phrasalVerbs = Arrays.asList(new String[]{
+//                "moving in", "move out", "get rid of"
+//        });
+//        englishTranslator.saveIncludedPhrasalVerbs(phrasalVerbs);
+//
+//        Set<PhrasalVerb> includedPhrasalVerbs = englishTranslator.loadIncludedPhrasalVerbs();
+//        assertEquals(3, includedPhrasalVerbs.size());
+//
+//        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move in")));
+//        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move out")));
+//        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("get rid of")));
+//    }
+//
     private void createRegisterAndLoginUser() throws IOException {
         User testUser = createTestUser();
         englishTranslator.register(testUser);
@@ -234,12 +232,12 @@ public class EnglishTranslatorTest {
         englishTranslator.saveExcludeWords(excludedwords);
         englishTranslator.removeExcludedWord("dog");
 
-        Set<WordFamily> loadedExcludedWords = englishTranslator.loadExcludedWords();
+        Map<String, Set<String>> loadedExcludedWords = englishTranslator.loadExcludedWords();
 
         assertEquals(3, loadedExcludedWords.size());
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("car")));
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("cat")));
-        Assert.assertTrue(loadedExcludedWords.contains(wordExtractor.getWordFamily("ship")));
+        Assert.assertTrue(loadedExcludedWords.containsKey("car"));
+        Assert.assertTrue(loadedExcludedWords.containsKey("cat"));
+        Assert.assertTrue(loadedExcludedWords.containsKey("ship"));
     }
 
     @Test
@@ -251,48 +249,48 @@ public class EnglishTranslatorTest {
         englishTranslator.saveIncludedWords(includedWords);
         englishTranslator.removeIncludedWords("dog");
 
-        Set<WordFamily> loadedIncludedWords = englishTranslator.loadIncludedWords();
+        Map<String, Set<String>> loadedIncludedWords = englishTranslator.loadIncludedWords();
 
         assertEquals(3, loadedIncludedWords.size());
 
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("car")));
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("cat")));
-        Assert.assertTrue(loadedIncludedWords.contains(wordExtractor.getWordFamily("ship")));
+        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("car")));
+        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("cat")));
+        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("ship")));
     }
 
-    @Test
-    public void testRemoveIncludedPhrasalVerb() throws Exception {
-        createRegisterAndLoginUser();
-        List<String> includedWords = Arrays.asList(new String[]{
-                "move in", "move out", "getting rid of"
-        });
-        englishTranslator.saveIncludedPhrasalVerbs(includedWords);
-        englishTranslator.removeIncludedPhrasalVerbs("move out");
-
-        Set<PhrasalVerb> includedPhrasalVerbs = englishTranslator.loadIncludedPhrasalVerbs();
-
-        assertEquals(2, includedPhrasalVerbs.size());
-
-        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move in")));
-        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("get rid of")));
-    }
-
-    @Test
-    public void testRemoveExcludedPhrasalVerb() throws Exception {
-        createRegisterAndLoginUser();
-        List<String> excludedWords = Arrays.asList(new String[]{
-                "moving in", "move out", "get rid of"
-        });
-        englishTranslator.saveExcludedPhrasalVerbs(excludedWords);
-        englishTranslator.removeExcludedPhrasalVerbs("get rid of");
-
-        Set<PhrasalVerb> excludedPhrasalVerbs = englishTranslator.loadExcludedPhrasalVerbs();
-
-        assertEquals(2, excludedPhrasalVerbs.size());
-        Assert.assertTrue(excludedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move in")));
-        Assert.assertTrue(excludedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move out")));
-    }
-
+//    @Test
+//    public void testRemoveIncludedPhrasalVerb() throws Exception {
+//        createRegisterAndLoginUser();
+//        List<String> includedWords = Arrays.asList(new String[]{
+//                "move in", "move out", "getting rid of"
+//        });
+//        englishTranslator.saveIncludedPhrasalVerbs(includedWords);
+//        englishTranslator.removeIncludedPhrasalVerbs("move out");
+//
+//        Set<PhrasalVerb> includedPhrasalVerbs = englishTranslator.loadIncludedPhrasalVerbs();
+//
+//        assertEquals(2, includedPhrasalVerbs.size());
+//
+//        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move in")));
+//        Assert.assertTrue(includedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("get rid of")));
+//    }
+//
+//    @Test
+//    public void testRemoveExcludedPhrasalVerb() throws Exception {
+//        createRegisterAndLoginUser();
+//        List<String> excludedWords = Arrays.asList(new String[]{
+//                "moving in", "move out", "get rid of"
+//        });
+//        englishTranslator.saveExcludedPhrasalVerbs(excludedWords);
+//        englishTranslator.removeExcludedPhrasalVerbs("get rid of");
+//
+//        Set<PhrasalVerb> excludedPhrasalVerbs = englishTranslator.loadExcludedPhrasalVerbs();
+//
+//        assertEquals(2, excludedPhrasalVerbs.size());
+//        Assert.assertTrue(excludedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move in")));
+//        Assert.assertTrue(excludedPhrasalVerbs.contains(wordExtractor.getPhrasalVerb("move out")));
+//    }
+//
     @Test
     public void testOptions() throws Exception {
         createRegisterAndLoginUser();
@@ -322,9 +320,10 @@ public class EnglishTranslatorTest {
         englishTranslator.saveIncludedWords(includedWords);
         englishTranslator.removeIncludedWords("car");
 
-        assertNotNull(wordExtractor.getWordFamily("car").getId());
-        assertEquals(2, wordExtractor.getWordFamily("car").getFamily().size());
+        assertNotNull(wordExtractor.getRootWord("car").getId());
+        assertEquals(3, wordExtractor.getWordFamily("car").size());
     }
-
-    //TODO dodac test w stylu: moving in => a loaded should be move in (base form).
+//
+//    //TODO dodac test w stylu: moving in => a loaded should be move in (base form).
+    // ToDO NASTEPNY TEST czy on filtruje po wordfamily ? o okreslnym frequency. Np. cat ma freq 88 cats 92 w takim razie cats nie powinien przejsc.
 }

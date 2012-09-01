@@ -8,8 +8,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import server.api.CommonDao;
 import server.core.WordType;
 import server.core.WordTypeFrequencyContainer;
+import server.model.newModel.RootWord;
 import server.model.newModel.Word;
 import server.model.newModel.WordFamily;
+import server.model.newModel.WordRelation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,17 +36,17 @@ public class ImportWordsToDatabase {
     @Autowired
     CommonDao commonDao;
 
-//    @Test
+    @Test
     public void importWords() throws IOException, InterruptedException {
         BufferedReader br = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("freq.txt")));
+//           BufferedReader br = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testFreq.txt")));
         String line = "";
         int x = 0;
-        WordTypeFrequencyContainer container = new WordTypeFrequencyContainer();
         WordType buffor = null;
         Word previousWord = new Word();
-        WordFamily previousWordfamily = new WordFamily();
-        WordFamily wordFamily = new WordFamily();
-        String previousLine = "";
+        RootWord previousRootWord = new RootWord();
+        RootWord rootWord = new RootWord();
+        WordRelation wordRelation = new WordRelation();
         WordType wordType;
         while ((line = br.readLine()) != null) {
             String[] elements = line.split("[\t@]+");
@@ -57,50 +59,70 @@ public class ImportWordsToDatabase {
             Word word = new Word();
             word.setValue(elements[1].toLowerCase());
             word.setFrequency(extractFrequency(line));
+            wordRelation = new WordRelation();
 
             if (line.startsWith("\t@")) {
-                if (previousLine.startsWith("\t@")) {
-                    wordFamily = previousWordfamily;
-                } else {
-                    wordFamily = new WordFamily();
-                    wordFamily.setRoot(previousWord);
-                }
+//                if (previousLine.startsWith("\t@")) {
+//                    wordFamily = previousWordfamily;
+//                } else {
+//                    wordFamily = new WordFamily();
+//                    wordFamily.setRoot(previousWord);
+//                }
                 word.setWordType(buffor);
-                if(wordFamily.getRoot().getValue().equalsIgnoreCase(word.getValue())){
-                    word = wordFamily.getRoot();
-                }
-                wordFamily.getFamily().add(word);
+                rootWord = previousRootWord;
+                wordRelation.setRootWord(rootWord);
+                wordRelation.setWord(word);
+//                if(wordFamily.getRoot().getValue().equalsIgnoreCase(word.getValue())){
+//                    word = wordFamily.getRoot();
+//                }
+//                wordFamily.getFamily().add(word);
             } else {
+                rootWord = new RootWord();
+                rootWord.setRootWord(word);
+
                 wordType = WordType.valueOf(elements[2]);
                 word.setWordType(wordType);
+
                 buffor = wordType;
+
+                wordRelation.setRootWord(rootWord);
+                wordRelation.setWord(word);
             }
+            previousRootWord = rootWord;
             previousWord = word;
-            previousLine = line;
-            previousWordfamily = wordFamily;
 
 //            System.out.println(word.getValue());
 
-            try{
-                commonDao.saveOrUpdate(word);
+//            try{
+            System.out.println(word);
 
+            if(word.getFrequency() > 0 && !word.getWordType().equals(WordType.NoP) ){
 
-            }catch(Exception e){
-//                e.printStackTrace();
-                Word persistedWord = (Word) commonDao.getFirstByHQL("FROM Word w WHERE w.value = :wordValue", "wordValue", word.getValue());
-                word.setId(persistedWord.getId());
-//                Thread.sleep(5*1000);
-            }
-
-
-            if(wordFamily.getRoot() != null){
                 try{
-                commonDao.saveOrUpdate(wordFamily);
+                    commonDao.saveOrUpdate(wordRelation.getWord());
+                    commonDao.saveOrUpdate(wordRelation.getRootWord());
+                    commonDao.merge(wordRelation);
                 }catch(Exception e){
-//                    e.printStackTrace();
+                    e.printStackTrace();
+//                    Word persistedWord = getWordFromDB(word.getValue(), word.getWordType());
+//                    wordRelation.setWord(persistedWord);
                 }
-                x++;
+
+
             }
+
+
+
+//
+
+//            if(wordFamily.getRoot() != null){
+//                try{
+//                commonDao.saveOrUpdate(wordFamily);
+//                }catch(Exception e){
+////                    e.printStackTrace();
+//                }
+//                x++;
+//            }
 //            if(x > 10000){
 //                System.out.println("KONIEC");
 //                break;
@@ -109,6 +131,12 @@ public class ImportWordsToDatabase {
          System.out.println("KONIEC !!!!!");
 
 
+    }
+
+    private Word getWordFromDB(String wordValue, WordType wordType) {
+        String[] params = {"wordValue"}; //TODO wordType
+        Object[]  values = {wordValue};
+        return (Word) commonDao.getFirstByHQL("FROM Word w WHERE w.value = :wordValue", params, values);
     }
 
     private static Integer extractFrequency(String line) {
