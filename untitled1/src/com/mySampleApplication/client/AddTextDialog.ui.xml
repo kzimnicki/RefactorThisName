@@ -29,7 +29,8 @@ Palm oil - as used in foods and biodiesel - is a product cultivated from the oil
 
                     <div class="form-actions">
                         <g:Button ui:field="sendTextButton" styleName="btn btn-primary">Submit Text</g:Button>
-                        <g:Button ui:field="translateButton" styleName="btn btn-primary">Translate</g:Button>
+                        <g:Button ui:field="translateTextButton" styleName="btn btn-primary">Translate Text</g:Button>
+                        <g:Button ui:field="translateSubtitlesButton" styleName="btn btn-primary">Translate Subtitles</g:Button>
                     </div>
                 </fieldset>
             </form>

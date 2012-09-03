@@ -90,6 +90,7 @@ Drugi Release:
 - OpenNLP
 http://www.nltk.org/
 - Refactoring - server side
+- dodac optional http://code.google.com/p/guava-libraries/wiki/UsingAndAvoidingNullExplained
 - - wysyłanie obiektów jsona przerobionych na obiekt.
 - - odbieranie obiektów jsonowych
 - - dodanie springa

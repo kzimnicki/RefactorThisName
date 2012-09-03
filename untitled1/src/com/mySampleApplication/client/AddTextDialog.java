@@ -29,7 +29,10 @@ public class AddTextDialog extends CafaWidget implements Dialog {
     Button sendTextButton;
 
     @UiField
-    Button translateButton;
+    Button translateTextButton;
+
+    @UiField
+    Button translateSubtitlesButton;
 
     public AddTextDialog() {
         super();
@@ -39,7 +42,8 @@ public class AddTextDialog extends CafaWidget implements Dialog {
     public void init() {
         sendTextButton.setVisible(true);
         textArea.setVisible(true);
-        translateButton.setVisible(false);
+        translateTextButton.setVisible(false);
+        translateSubtitlesButton.setVisible(false);
         tablePanel.setVisible(false);
     }
 
@@ -54,20 +58,32 @@ public class AddTextDialog extends CafaWidget implements Dialog {
          tablePanel.setVisible(true);
          textArea.setVisible(false);
          sendTextButton.setVisible(false);
-         translateButton.setVisible(true);
+         translateTextButton.setVisible(true);
+         translateSubtitlesButton.setVisible(true);
          process(textArea.getText());
 	}
 
-    @UiHandler("translateButton")
-	public void translateButtonClick(ClickEvent e) {
-         textArea.setVisible(true);
-         sendTextButton.setVisible(true);
-         translateButton.setVisible(false);
-         tablePanel.setVisible(false);
-         translate(textArea.getText());
+    @UiHandler("translateTextButton")
+	public void translateTextButtonClick(ClickEvent e) {
+        setComponentVisibility();
+         translateText(textArea.getText());
 	}
 
-     public native void process(String text) /*-{
+        @UiHandler("translateSubtitlesButton")
+	public void translateSubtitlesButtonClick(ClickEvent e) {
+         setComponentVisibility();
+         translateSubtitles(textArea.getText());
+	}
+
+    private void setComponentVisibility() {
+        textArea.setVisible(true);
+        sendTextButton.setVisible(true);
+        translateTextButton.setVisible(false);
+        translateSubtitlesButton.setVisible(false);
+        tablePanel.setVisible(false);
+    }
+
+    public native void process(String text) /*-{
          $wnd.EnglishTranslator.extractWords(text, function(words){
              $wnd.popup.createTable(words);
          });
@@ -79,15 +95,31 @@ public class AddTextDialog extends CafaWidget implements Dialog {
     }
 
 
-    public native String translate(String text) /*-{
+    public native String translateText(String text) /*-{
          var words = $wnd.popup.listWordsFromTable();
         var instance = this;
 
         $wnd.EnglishTranslator.translate(words, function(translatedWords) {
-            text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text);
-            $wnd.ajaxExecutor.sendTranslatedWords(translatedWords);
+             $wnd.ajaxExecutor.loadOptions(function(optionsData){
+                var pattern = optionsData['textTemplate'];
+                text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
+                $wnd.ajaxExecutor.sendTranslatedWords(translatedWords);
+                instance.@com.mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
+             });
+        });
+    }-*/;
 
-            instance.@com.mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
+     public native String translateSubtitles(String text) /*-{
+         var words = $wnd.popup.listWordsFromTable();
+        var instance = this;
+
+        $wnd.EnglishTranslator.translate(words, function(translatedWords) {
+             $wnd.ajaxExecutor.loadOptions(function(optionsData){
+                var pattern = optionsData['subtitleTemplate'];
+                text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
+                $wnd.ajaxExecutor.sendTranslatedWords(translatedWords);
+                instance.@com.mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
+             });
         });
     }-*/;
 

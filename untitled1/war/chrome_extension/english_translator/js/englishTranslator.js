@@ -53,10 +53,10 @@ this.createTranslatedBrackets = function(words, translatedData, text) {
     return translatedMapJSON;
 }
 
-EnglishTranslator.putTranslationInText = function(translatedWords, text){
+EnglishTranslator.putTranslationInText = function(translatedWords, text, pattern){
     for(var key in translatedWords){
         if(key.toLowerCase() != translatedWords[key].toLowerCase()){
-            text = textReplace(text, key, translatedWords[key]);
+            text = textReplace(text, key, translatedWords[key], pattern);
         }
     }
     return text;
@@ -64,8 +64,9 @@ EnglishTranslator.putTranslationInText = function(translatedWords, text){
 
 
 
-this.textReplace = function(text, oldString, newString) {
+this.textReplace = function(text, oldString, newString, pattern) {
+    pattern = pattern.replace('@@TRANSLETED_WORD@@', newString);
     var regex = new RegExp('(\\b' + oldString + '\\b)', 'gi');
-    text = text.replace(regex, "$1(" + newString + ")");
+    text = text.replace(regex, "$1" + pattern);
     return text;
 }
