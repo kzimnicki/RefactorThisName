@@ -1,6 +1,8 @@
 package server.model.newModel;
 
 import lombok.Data;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotBlank;
 import server.core.WordType;
 import server.model.EntityObject;
@@ -21,6 +23,7 @@ import javax.validation.constraints.NotNull;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"value", "wordType"})}
 )
 @Data
+@Cache(usage= CacheConcurrencyStrategy.READ_ONLY)
 public class Word extends EntityObject {
 
     public static Word EMPTY = new Word();

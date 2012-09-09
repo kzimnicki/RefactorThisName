@@ -1,22 +1,19 @@
 package server.api;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import server.core.WordExtractor;
+import server.core.CommonDao;
 import server.model.newModel.*;
-import sun.plugin.javascript.navig.Array;
+import org.apache.commons.lang.StringUtils;
 
-import javax.print.DocFlavor;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
@@ -115,14 +112,7 @@ public class EnglishTranslator {
     @Secured(Role.USER)
     @Transactional
     public Map<String,Set<String>> loadExcludedWords() throws IOException {
-        User user = loginService.getLoggedUser();
-       Set<RootWord> excludedWords = user.getExcludedWords();
-        HashMap<String, Set<String>> map = new HashMap<String, Set<String>>();
-        for (RootWord rootWord : excludedWords){
-            Set<String> wordFamily = wordExtractor.getStringWordFamily(rootWord);
-            map.put(rootWord.getRootWord().getValue(), wordFamily);
-        }
-        return map;
+        return wordExtractor.getExcludedWords();
     }
 
 
@@ -180,11 +170,12 @@ public class EnglishTranslator {
     @Secured(Role.USER)
     @Transactional
     public Map<String, Set<String>> loadIncludedWords() {
-        User user = loginService.getLoggedUser();
-        Hibernate.initialize(user.getIncludedWords()); //TODO zrobic cos z tymi initializami.
-        Set<RootWord> includedWords = user.getIncludedWords();
+        return wordExtractor.getIncludedWords();
+    }
+
+    private HashMap<String, Set<String>> createMap(Set<RootWord> words) {
         HashMap<String, Set<String>> map = new HashMap<String, Set<String>>();
-        for (RootWord rootWord : includedWords){
+        for (RootWord rootWord : words){
             Set<String> wordFamily = wordExtractor.getStringWordFamily(rootWord);
             map.put(rootWord.getRootWord().getValue(), wordFamily);
         }
@@ -201,6 +192,36 @@ public class EnglishTranslator {
         user.getIncludedWords().remove(rootWord);
         commonDao.saveOrUpdate(user);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/exportExcludedWords", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    @Secured(Role.USER)
+    @Transactional
+    public String exportExcludedWords() {
+        User user = loginService.getLoggedUser();
+        Set<RootWord> excludedWords = user.getExcludedWords();
+        StringBuilder builder = new StringBuilder();
+        for (RootWord rootWord : excludedWords){
+            Set<String> wordFamily = wordExtractor.getStringWordFamily(rootWord);
+            builder.append(rootWord.getRootWord().getValue());
+            builder.append(";");
+            builder.append(StringUtils.join(wordFamily, " "));
+            builder.append(";\n");
+        }
+        return builder.toString();
+
+    }
+
+//    @RequestMapping(method = RequestMethod.DELETE, value = "/includedWords", produces = MediaType.APPLICATION_JSON_VALUE)
+//    @ResponseBody
+//    @Secured(Role.USER)
+//    @Transactional
+//    public void removeIncludedWords(@RequestBody String wordValue) {
+//        User user = loginService.getLoggedUser();
+//        RootWord rootWord = wordExtractor.getRootWord(wordValue);
+//        user.getIncludedWords().remove(rootWord);
+//        commonDao.saveOrUpdate(user);
+//    }
 
 //    @RequestMapping(method = RequestMethod.GET, value = "/excludedPhrasalVerbs", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody

@@ -7,6 +7,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -16,10 +17,10 @@ public class RegisterDialog extends CafaWidget implements Dialog {
     TextBox username;
 
     @UiField
-    TextBox pass;
+    PasswordTextBox pass;
 
     @UiField
-    TextBox repeatPass;
+    PasswordTextBox repeatPass;
 
     @UiField
     Button register;

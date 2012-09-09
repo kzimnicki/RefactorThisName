@@ -1,12 +1,17 @@
-package server.api;
+package server.core;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.type.Type;
+import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import server.model.newModel.WordRelation;
+
+import javax.persistence.TypedQuery;
 
 public class CommonDao extends HibernateDaoSupport {
 
@@ -73,6 +78,7 @@ public class CommonDao extends HibernateDaoSupport {
 
     public void executeHQL(String query,String name ,String value) {
         Query hqlQuery = getSession().createQuery(query);
+        hqlQuery.setCacheable(true);
         if(name != null){
             hqlQuery.setString(name, value);
         }
@@ -83,7 +89,18 @@ public class CommonDao extends HibernateDaoSupport {
 		return getHibernateTemplate().findByNamedParam(queryString, paramNames, values);
 	}
 	public List getByHQL(String queryString, String paramName, Object value) {
-		return getHibernateTemplate().findByNamedParam(queryString, paramName, value);
+        Query query = getSession().createQuery(queryString);
+        query.setString(paramName, (String) value);
+        query.setCacheable(true);
+        return  query.list();
+	}
+
+
+    public List getByHQL(String queryString, String paramName, Collection collection) {
+        Query query = getSession().createQuery(queryString);
+        query.setParameterList(paramName, collection);
+        query.setCacheable(true);
+        return  query.list();
 	}
 
     public Object getFirstByHQL(String queryString, String paramName, Object value) {

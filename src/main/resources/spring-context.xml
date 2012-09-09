@@ -78,8 +78,31 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         <property name="exitMessage" value="Leaving $[methodName](): time: $[invocationTime] $[returnValue]"/>
     </bean>
 
+     <bean id="performanceMonitor"
+              class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor" />
 
-    <bean id="wordExtractor" class="server.core.WordExtractor" init-method="init"/>
+    <aop:config>
+        <aop:pointcut id="allMethods" expression="execution(* server.api.*.*(..))"/>
+        <aop:advisor pointcut-ref="allMethods" advice-ref="performanceMonitor" order="2"/>
+    </aop:config>
+
+    <bean id="jmxExporter" class="org.springframework.jmx.export.MBeanExporter">
+    <property name="beans">
+        <map>
+            <entry key="Hibernate:application=Statistics" value-ref="hibernateStatisticsBean"/>
+        </map>
+    </property>
+    </bean>
+
+    <bean id="hibernateStatisticsBean" class="org.hibernate.jmx.StatisticsService">
+        <property name="statisticsEnabled" value="true"/>
+        <property name="sessionFactory">
+            <ref local="sessionFactory"/>
+        </property>
+    </bean>
+
+
+    <bean id="wordExtractor" class="server.api.WordExtractor" init-method="init"/>
 
     <bean id="loginService" class="server.api.LoginService"/>
 

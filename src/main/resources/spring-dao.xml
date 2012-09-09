@@ -9,7 +9,7 @@
 	</bean>
 
 	<bean id="commonDao" parent="hibernateDaoSupport"
-		class="server.api.CommonDao">
+		class="server.core.CommonDao">
 	</bean>
 
 </beans>

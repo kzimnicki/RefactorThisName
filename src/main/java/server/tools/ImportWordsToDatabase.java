@@ -5,19 +5,15 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import server.api.CommonDao;
+import server.core.CommonDao;
 import server.core.WordType;
-import server.core.WordTypeFrequencyContainer;
 import server.model.newModel.RootWord;
 import server.model.newModel.Word;
-import server.model.newModel.WordFamily;
 import server.model.newModel.WordRelation;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * User: kzimnick
@@ -38,7 +34,7 @@ public class ImportWordsToDatabase {
 
     @Test
     public void importWords() throws IOException, InterruptedException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("freq.txt")));
+        BufferedReader br = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("files/freq.txt")));
 //           BufferedReader br = new BufferedReader(new InputStreamReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("testFreq.txt")));
         String line = "";
         int x = 0;

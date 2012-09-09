@@ -74,6 +74,13 @@ popup.createIncludedSiteRows = function(wordFamilies) {
     return rows;
 }
 
+popup.addAllToExclude = function() {
+    var words = popup.listWordsFromTable();
+    ajaxExecutor.sendExcludedWords(words, function(){
+        console.log('sended');
+    });
+}
+
 function createWordFamilyString (wordFamilyArray){
     var wordFamilyString = [];
     for (var i=0; i<wordFamilyArray.length; i++) {
@@ -86,10 +93,11 @@ function createWordFamilyString (wordFamilyArray){
 popup.createSiteTable = function(rows, title, id) {
     oSiteTable = $(id).dataTable({
                //<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>
-        "sDom": "<'row'<'span8'><'span8'f>r>t<'row'<'spa8'><'span8'p>>",
+        "sDom": "<'row'<'span8'><'span8'f>r>t<'row'<'spa8'><'span8'pi>>",
         "sPaginationType": "bootstrap",
-        "iDisplayLength": 13,
-        "bFilter": false,
+        "iDisplayLength": 10,
+        "bFilter": true,
+        "bInfo": true,
         "aaData": rows,
         "bDestroy":true,
         "aoColumns":[
@@ -115,9 +123,12 @@ popup.createTable = function(wordsMap) {
         "sPaginationType": "bootstrap",
         "iDisplayLength": 10,
         "iDisplayStart":0,
-        "bFilter": false,
+        "bFilter": true,
         "aaData": words,
         "bDestroy":true,
+        "oLanguage": {
+			"sSearch": "Search all columns:"
+		},
         "aoColumns":[
             { "sTitle": "words", "sWidth": "30px" },
             { "sTitle": "freq", "sWidth": "40px"},
@@ -126,5 +137,5 @@ popup.createTable = function(wordsMap) {
 
         ]
     });
-    $('#words').after("<a class='btn btn-danger' href='#' onclick='EnglishTranslator.translateWords(popup.listWordsFromTable());'>Translate</a>");
+    $('#words').after("<a class='btn btn-danger' href='#' onclick='popup.addAllToExclude();'>Add all words to exclude</a>");
 }

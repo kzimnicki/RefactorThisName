@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import server.api.*;
-import server.core.WordExtractor;
+import server.core.CommonDao;
+import server.api.WordExtractor;
 import server.model.newModel.*;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -94,7 +96,7 @@ public class EnglishTranslatorTest {
 
         assertEquals(19, extractedWords.size());
         assertEquals("76", extractedWords.get("quo").getFrequency());
-        assertEquals(2, extractedWords.get("quo").getWordFamily().size());
+//        assertEquals(2, extractedWords.get("quo").getWordFamily().size());
 
 //        assertEquals("PV", extractedWords.get("doubling down").getFrequency());
 //        assertEquals(null, extractedWords.get("doubling down").getWordFamily());
@@ -175,10 +177,10 @@ public class EnglishTranslatorTest {
 
         Map<String, Set<String>> loadedIncludedWords = englishTranslator.loadIncludedWords();
         assertEquals(4, loadedIncludedWords.size());
-        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("car")));
-        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("cat")));
-        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("dog")));
-        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("ship")));
+        Assert.assertTrue(loadedIncludedWords.containsKey("car"));
+        Assert.assertTrue(loadedIncludedWords.containsKey("cat"));
+        Assert.assertTrue(loadedIncludedWords.containsKey("dog"));
+        Assert.assertTrue(loadedIncludedWords.containsKey("ship"));
     }
 
 //
@@ -253,9 +255,9 @@ public class EnglishTranslatorTest {
 
         assertEquals(3, loadedIncludedWords.size());
 
-        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("car")));
-        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("cat")));
-        Assert.assertTrue(loadedIncludedWords.containsKey(wordExtractor.getRootWord("ship")));
+        Assert.assertTrue(loadedIncludedWords.containsKey("car"));
+        Assert.assertTrue(loadedIncludedWords.containsKey("cat"));
+        Assert.assertTrue(loadedIncludedWords.containsKey("ship"));
     }
 
 //    @Test
@@ -322,6 +324,20 @@ public class EnglishTranslatorTest {
 
         assertNotNull(wordExtractor.getRootWord("car").getId());
         assertEquals(3, wordExtractor.getWordFamily("car").size());
+    }
+
+    @Test
+    public void testExportsAllWordsToCSVFormat() throws Exception {
+        createRegisterAndLoginUser();
+            List<String> excludedwords = Arrays.asList(new String[]{
+                "car", "cat"
+        });
+        englishTranslator.saveExcludeWords(excludedwords);
+
+        String exportedExcludedWords = englishTranslator.exportExcludedWords();
+
+        assertTrue(exportedExcludedWords.contains("car;car cars;"));
+        assertTrue(exportedExcludedWords.contains("cat;cats cat;"));
     }
 //
 //    //TODO dodac test w stylu: moving in => a loaded should be move in (base form).

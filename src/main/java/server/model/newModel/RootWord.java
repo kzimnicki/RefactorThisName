@@ -1,11 +1,13 @@
 package server.model.newModel;
 
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.CascadeType;
 import server.model.EntityObject;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,6 +20,7 @@ import javax.validation.constraints.NotNull;
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames = {"rootWord_id"})}
 )
+@org.hibernate.annotations.Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class RootWord extends EntityObject {
 
     @NotNull

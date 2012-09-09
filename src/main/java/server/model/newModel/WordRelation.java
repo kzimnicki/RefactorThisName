@@ -1,6 +1,8 @@
 package server.model.newModel;
 
 import lombok.Data;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import server.model.EntityObject;
@@ -21,6 +23,7 @@ import javax.validation.constraints.NotNull;
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames = {"word_id", "rootWord_id"})}
 )
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class WordRelation extends EntityObject {
 
     @NotNull

@@ -15,10 +15,10 @@ import java.util.Set;
 public class WordDetails {
 
     private String frequency;
-    private Set<Word> wordFamily;
+//    private Set<Word> wordFamily;
 
-    public WordDetails(String frequency, Set<Word> wordFamily) {
+    public WordDetails(String frequency/*, Set<Word> wordFamily*/) {
         this.frequency = frequency;
-        this.wordFamily = wordFamily;
+//        this.wordFamily = wordFamily;
     }
 }
