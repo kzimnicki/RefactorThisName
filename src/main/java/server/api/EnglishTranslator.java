@@ -6,16 +6,18 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import server.core.CommonDao;
 import server.model.newModel.*;
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.*;
 
 /**
@@ -58,25 +60,28 @@ public class EnglishTranslator {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "/translatedWords", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.DELETE, value = "/translatedWords", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public void saveTranslatedWords(@RequestBody Map<String, String> translatedWords) throws UnsupportedEncodingException {
-        Set<Map.Entry<String, String>> entries = translatedWords.entrySet();
-        ArrayList<String> includedWords = new ArrayList<String>(entries.size());
-        for (Map.Entry<String, String> entry : entries) {
-            System.out.println(new String(entry.getValue().getBytes("ISO-8859-1")));
-            System.out.println(new String(entry.getValue().getBytes("ISO8859_1")));
-            System.out.println(new String(entry.getValue().getBytes("UTF-8")));
-            System.out.println(new String(entry.getValue().getBytes("UTF8")));
-            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "UTF-8"));
-            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "UTF8"));
-            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "ISO-8859-1"));
-            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "ISO8859_1"));
-            includedWords.add(entry.getKey());
-        }
-        saveIncludedWords(includedWords);
+    public void saveTranslatedWords(@RequestBody Map<String,String> test) throws UnsupportedEncodingException {
+//        Set<Map.Entry<String, String>> entries = translatedWords.entrySet();
+//        ArrayList<String> includedWords = new ArrayList<String>(entries.size());
+//        for (Map.Entry<String, String> entry : entries) {
+//            System.err.println(entry.getValue());
+//            System.out.println(new String(entry.getValue().getBytes("ISO-8859-1")));
+//            System.out.println(new String(entry.getValue().getBytes("ISO8859_1")));
+//            System.out.println(new String(entry.getValue().getBytes("UTF-8")));
+//            System.out.println(new String(entry.getValue().getBytes("UTF8")));
+//            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "UTF-8"));
+//            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "UTF8"));
+//            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "ISO-8859-1"));
+//            System.out.println(entry.getKey() + " - " + java.net.URLDecoder.decode(entry.getValue(), "ISO8859_1"));
+//            includedWords.add(entry.getKey());
+//        }
+//        saveIncludedWords(includedWords);
+       System.err.println(test);
+
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/excludedWords", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -198,19 +203,29 @@ public class EnglishTranslator {
     @Secured(Role.USER)
     @Transactional
     public String exportExcludedWords() {
-        User user = loginService.getLoggedUser();
-        Set<RootWord> excludedWords = user.getExcludedWords();
+        Map<String, Set<String>> excludedWords = wordExtractor.getExcludedWords();
         StringBuilder builder = new StringBuilder();
-        for (RootWord rootWord : excludedWords){
-            Set<String> wordFamily = wordExtractor.getStringWordFamily(rootWord);
-            builder.append(rootWord.getRootWord().getValue());
+        for (Map.Entry<String, Set<String>> entry : excludedWords.entrySet()){
+            builder.append(entry.getKey());
             builder.append(";");
-            builder.append(StringUtils.join(wordFamily, " "));
+            builder.append(StringUtils.join(entry.getValue(), " "));
             builder.append(";\n");
         }
         return builder.toString();
 
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public void handleException(final ConstraintViolationException e, final HttpServletResponse response, Writer writer) throws IOException {
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        StringBuilder builder = new StringBuilder();
+        for(ConstraintViolation<?> constraint : e.getConstraintViolations()){
+            builder.append(constraint.getMessage()).append("");
+        }
+        writer.write("\"Exceptipon\"");
+    }
+
+
 
 //    @RequestMapping(method = RequestMethod.DELETE, value = "/includedWords", produces = MediaType.APPLICATION_JSON_VALUE)
 //    @ResponseBody

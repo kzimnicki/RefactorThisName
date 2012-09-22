@@ -18,9 +18,21 @@ public class CORSFilter implements Filter{
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if (response instanceof HttpServletResponse) {
-		    ((HttpServletResponse)response).setHeader("Access-Control-Allow-Origin","*");
-		}
+//        if (response instanceof HttpServletResponse) {
+//		    ((HttpServletResponse)response).setHeader("Access-Control-Allow-Origin","http://127.0.0.1:8888");
+//             ((HttpServletResponse)response).setHeader("Access-Control-Allow-Method","POST, GET, PUT, DELETE, OPTIONS");
+//		}
+
+//        if (request.getCharacterEncoding() == null) {
+//            request.setCharacterEncoding("UTF-8");
+//        }
+
+//        if (response.getCharacterEncoding() == null) {
+//            response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
+
+         response.isCommitted();
+//        }
         chain.doFilter(request, response);
     }
 

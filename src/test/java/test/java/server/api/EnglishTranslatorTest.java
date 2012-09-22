@@ -87,14 +87,12 @@ public class EnglishTranslatorTest {
 
         DataToTranslate data = new DataToTranslate();
         data.setText(text);
-//        data.setMinFrequency(0);             //TODO refactor to get max and min from options.
-//        data.setMaxFrequency(90);
         data.setUrl("http://www.nytimes.com/2012/06/02/business/jobs-report-makes-federal-reserve-more-likely-to-act.html?hp");
 
 
         Map<String, WordDetails> extractedWords = englishTranslator.extractWordsWithFrequency(data);
 
-        assertEquals(19, extractedWords.size());
+        assertEquals(14, extractedWords.size());
         assertEquals("76", extractedWords.get("quo").getFrequency());
 //        assertEquals(2, extractedWords.get("quo").getWordFamily().size());
 
@@ -127,7 +125,7 @@ public class EnglishTranslatorTest {
         englishTranslator.saveExcludeWords(excludedwords);
         Map<String, WordDetails> extractedWords = englishTranslator.extractWordsWithFrequency(data);
 
-        assertEquals(18, extractedWords.size());
+        assertEquals(13, extractedWords.size());
     }
 
 
@@ -147,7 +145,7 @@ public class EnglishTranslatorTest {
         Assert.assertTrue(loadedExcludedWords.containsKey("cat"));
         Assert.assertTrue(loadedExcludedWords.containsKey("dog"));
         Assert.assertTrue(loadedExcludedWords.containsKey("ship"));
-        Assert.assertTrue(loadedExcludedWords.containsKey("getting"));
+        Assert.assertTrue(loadedExcludedWords.containsKey("get"));
     }
 
     @Test
@@ -339,6 +337,8 @@ public class EnglishTranslatorTest {
         assertTrue(exportedExcludedWords.contains("car;car cars;"));
         assertTrue(exportedExcludedWords.contains("cat;cats cat;"));
     }
+
+
 //
 //    //TODO dodac test w stylu: moving in => a loaded should be move in (base form).
     // ToDO NASTEPNY TEST czy on filtruje po wordfamily ? o okreslnym frequency. Np. cat ma freq 88 cats 92 w takim razie cats nie powinien przejsc.

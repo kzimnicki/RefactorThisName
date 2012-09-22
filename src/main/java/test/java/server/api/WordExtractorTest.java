@@ -5,6 +5,7 @@ import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import server.api.WordExtractor;
+import server.model.newModel.RootWord;
 import server.model.newModel.Word;
 
 import javax.inject.Inject;
@@ -42,6 +43,15 @@ public class WordExtractorTest {
          assertTrue(wordFmilies.get("truck").contains("trucks"));
          assertTrue(wordFmilies.get("cart").contains("carts"));
          assertTrue(wordFmilies.get("cart").contains("carting"));
+    }
+
+     @Test
+    public void shouldReturnRootWordForWord() throws Exception {
+         String word = "falling";
+
+         RootWord rootWord = wordExtractor.getRootWord(word);
+
+         assertEquals("fall", rootWord.getRootWord().getValue());
     }
 
       @Test

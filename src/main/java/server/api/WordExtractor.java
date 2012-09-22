@@ -117,8 +117,6 @@ public class WordExtractor {
         int x = 0;
         for (String element : debugList) {
             if (x++ % 3 == 0) {
-//                Set<Word> wordFamilyList = getWordFamily(element);
-
                 results.put(element, new WordDetails(debugList.get(x + 1)/*, wordFamilyList*/));
             }
         }
@@ -162,18 +160,19 @@ public class WordExtractor {
     }
 
     public RootWord getRootWord(String wordValue) {
-        List wordRelations = commonDao.getByHQL("FROM WordRelation wr WHERE wr.word.value = :wordValue ORDER BY wr.word.frequency", "wordValue", wordValue);
-        if(wordRelations.size() > 0){
-            WordRelation wr =  (WordRelation)wordRelations.get(0);
-            return wr.getRootWord();
+        List<WordRelation> wordRelations = (List<WordRelation>)commonDao.getByHQL("FROM WordRelation wr WHERE wr.word.value = :wordValue", "wordValue", wordValue);
+        TreeMap<Integer, RootWord> sortRootWordContainer = new TreeMap<Integer, RootWord>();
+        for (WordRelation wr : wordRelations){
+            List family = commonDao.getByHQLObject("FROM WordRelation wr WHERE wr.rootWord = :rootWord", "rootWord", wr.getRootWord());
+            sortRootWordContainer.put(family.size(),wr.getRootWord());
         }
-        return null;
+        return sortRootWordContainer.size() > 0 ? sortRootWordContainer.get(sortRootWordContainer.lastKey()): null;
     }
 
     public Word getWord(String wordValue) {
-        List words = commonDao.getByHQL("FROM Word w WHERE w.value = :wordValue ORDER BY w.frequency", "wordValue", wordValue);
+        List words = commonDao.getByHQL("FROM Word w WHERE w.value = :wordValue ORDER BY w.frequency DESC", "wordValue", wordValue);
         if(words.size() > 0){
-            return (Word)words.get(0);
+                 return (Word)words.get(0);
         }
         return null;
     }
@@ -191,8 +190,8 @@ public class WordExtractor {
 
     public Set<Word> getWordFamily(String wordValue) {
         List wordRelations = new LinkedList();
-        wordRelations.addAll(commonDao.getByHQL("FROM WordRelation wr WHERE wr.rootWord.rootWord.value = :wordValue ORDER BY wr.word.frequency", "wordValue", wordValue));
-        wordRelations.addAll(commonDao.getByHQL("FROM WordRelation wr WHERE wr.word.value = :wordValue ORDER BY wr.word.frequency", "wordValue", wordValue));
+        wordRelations.addAll(commonDao.getByHQL("FROM WordRelation wr WHERE wr.rootWord.rootWord.value = :wordValue", "wordValue", wordValue));
+        wordRelations.addAll(commonDao.getByHQL("FROM WordRelation wr WHERE wr.word.value = :wordValue", "wordValue", wordValue));
         if(wordRelations.size() > 0){
             Set<Word> wordFamily = new HashSet<Word>(wordRelations.size());
             for (Object o : wordRelations){

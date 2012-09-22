@@ -1,0 +1,40 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+        >
+
+    <g:HTMLPanel styleName="row">
+        <g:Label ui:field="errorMessages"/>
+            <div class="span8">
+                <form class="form-horizontal" action="">
+                    <fieldset>
+                        <legend>Register</legend>
+                        <div class="control-group">
+                           <g:Label styleName="control-label">Email: </g:Label>
+
+                            <div class="controls">
+                                <g:TextBox ui:field="username" styleName="input-xlarge focused" />
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Password: </label>
+
+                            <div class="controls">
+                                <g:PasswordTextBox ui:field="pass" styleName="input-xlarge focused"/>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">Repeat Password: </label>
+
+                            <div class="controls">
+                                <g:PasswordTextBox ui:field="repeatPass" styleName="input-xlarge focused"/>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <g:Button ui:field="register" styleName="btn btn-primary">Register</g:Button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+    </g:HTMLPanel>
+</ui:UiBinder> 

@@ -1,18 +1,13 @@
 Pierwszy Release:
-- podczas exclude slowa, moznaby odrazu usuwac wszytskie wordfamily z tabelki addText
-- dodac do kolumn create i update date w Entity Object.
-- PrePersist i PreUpdate nie zadzialalo - zastanowic sie nad EntityManagerem, dostaniemy TypedQuery.
-- Problem z kodowaniem
 - jezeli nie przechodzi walidacji to ten komunikat powinnien sie gdzies wyswietlic, na razie leci w logach, dla rejestracji byl test.
-- Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
-- dodac test w ktorym po dodaniu exclude worda  sprawdzic czy przy nastepnym procesowaniu tekstu tego slowa juz nie ma.
-- przyklady dla roznej konfiguracji.
 - nastepuje wylgoowanie po zamknieicu przegladarki - dodac jakis expiry time.
-- Delikatnie zmienic options, maly opisik, aby bylo wiadomo co i jak.
+- przyklady dla roznej konfiguracji, Delikatnie zmienic options, maly opisik, aby bylo wiadomo co i jak.
 - Jakas strona startowac, theme moze jakis z backgroundem i duzo opisow jak to dziala itp.
 - zarejestrowac domene.
+- zrobic release na serwer
 
 Refactoring:
+- Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - zmienic nazwe rootWord.getRootWord().getValue() => rootWord.getWord().getValue();
 - Zmienic nazwe projekty.
 - Refactoring - server side:
@@ -32,13 +27,21 @@ Chrome Plugin:
 Nowe pomysly-technologie:
 - Underscore.js - przeczytac i wprowadzic do projektu.
 - dodac optional http://code.google.com/p/guava-libraries/wiki/UsingAndAvoidingNullExplained
+- NoSQL
 - Youtube caption.http://video.google.com/timedtext?lang=en&v=XcT4yYu_TTs
 - Pons.de tlumaczy slowa, ktorych nie dał rady przedłumaczyć Google translate and Microsoft. Ale moze korzystac z innych slow i szukac synonimów WORDNET!!! http://webapps.stackexchange.com/questions/9156/database-of-english-synonyms
 
 
 Drugi Release:
+- Problem z kodowaniem  - zobaczymy co bedzie na serwerze, ale tylko z postem jest problem.
 - phrasal verbs
 - Phrasal verbs - problem jezeli sa wiekszej odleglosci od siebie:  They TOPPED the building OFF with a tall flagpole juz nie podmieni tego phrasal verba.
+- PrePersist i PreUpdate nie zadzialalo - zastanowic sie nad EntityManagerem, dostaniemy TypedQuery.
+- dodac do kolumn create i update date w Entity Object.
+- jak klikam add all to exclude, wtedy powinien przycisk zniknac, albo loading bar sie pojawic. Co aby user nie klikal nie wiadomo ile.
+
+Zastanowic sie nad:
+- podczas exclude slowa, moznaby odrazu usuwac wszytskie wordfamily z tabelki addText
 
 
 Nowy Model
