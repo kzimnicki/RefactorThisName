@@ -1,4 +1,4 @@
-package test.java.server.api;
+package api;
 
 import junit.framework.Assert;
 import org.junit.After;
@@ -304,10 +304,10 @@ public class EnglishTranslatorTest {
         englishTranslator.saveOptions(config);
         Configuration options = englishTranslator.loadOptions();
 
-        Assert.assertEquals(98, options.getMax());
-        Assert.assertEquals(12, options.getMin());
-        Assert.assertEquals("txt", options.getTextTemplate());
-        Assert.assertEquals("sub", options.getSubtitleTemplate());
+        assertEquals(98, options.getMax());
+        assertEquals(12, options.getMin());
+        assertEquals("txt", options.getTextTemplate());
+        assertEquals("sub", options.getSubtitleTemplate());
     }
 
 
