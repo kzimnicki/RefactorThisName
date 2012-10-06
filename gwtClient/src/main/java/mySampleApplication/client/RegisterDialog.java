@@ -22,8 +22,7 @@ public class RegisterDialog extends CafaWidget implements Dialog {
     @UiField
     Button register;
 
-    @UiField
-    Label errorMessages;
+    private MainDialog mainDialog;
 
     @UiTemplate("RegisterDialog.ui.xml")
     interface AboutDialogUiBinder extends UiBinder<Widget, RegisterDialog> {
@@ -41,14 +40,16 @@ public class RegisterDialog extends CafaWidget implements Dialog {
 
     @UiHandler("register")
     public void registerClick(ClickEvent e) {
-        register(username.getText(), pass.getText());
+        if(pass.getText().equals(repeatPass.getText())){
+            register(username.getText(), pass.getText());
+        }else{
+            getController().getMainDialog().handleError("Passwords should be the same.");
+        }
     }
 
     void registerCallback(String data) {
         if("SUCCESS".equals(data)){
             getController().goTo(DialogName.EXCLUDE_WORDS);
-        }else{
-            errorMessages.setText(data);
         }
     }
 

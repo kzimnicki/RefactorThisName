@@ -4,13 +4,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.*;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.*;
 
 public class MainDialog extends CafaWidget implements Dialog {
 
-	@UiTemplate("MainDialog.ui.xml")
+
+
+    @UiTemplate("MainDialog.ui.xml")
 	interface MainDialogUiBinder extends UiBinder<Widget, MainDialog> {
 	}
 
@@ -37,12 +39,20 @@ public class MainDialog extends CafaWidget implements Dialog {
     @UiField
     LoginDropDown loginDropDown;
 
+    @UiField
+    HTMLPanel errorPanel;
+
     private Element lastClicked = new Anchor().getElement();
 
 	public MainDialog() {
 		super();
+        initErrorHandler();
 		initWidget(uiBinder.createAndBindUi(this));
 	}
+
+    public void setDefaultDialog(DialogName dialogName){
+       container.add(getController().getWidget(dialogName));
+    }
 
 	public void init() {
 	}
@@ -91,4 +101,20 @@ public class MainDialog extends CafaWidget implements Dialog {
 	public SimplePanel getContainer() {
 		return container;
 	}
+
+    public void handleError(String errorData){
+        DOM.getElementById("POPUP").setAttribute("style","display:block");
+        errorPanel.clear();
+        String[] messages = errorData.split("\\|");
+        for(String m : messages){
+            errorPanel.add(new Label(m));
+        }
+    }
+
+    private native void initErrorHandler() /*-{
+         var that = this;
+         $wnd.errorHandler = function(errorData) {
+            that.@mySampleApplication.client.MainDialog::handleError(Ljava/lang/String;)(errorData)
+         }
+     }-*/;
 }

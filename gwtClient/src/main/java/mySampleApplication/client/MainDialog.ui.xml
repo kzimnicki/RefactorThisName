@@ -20,7 +20,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="#">ET</a>
+                    <a class="brand" href="#">explain.cc</a>
 
                     <div class="nav-collapse">
 
@@ -28,7 +28,7 @@
                         <ul class="nav">
                             <li>
                                 <g:Anchor ui:field="contact">
-                                    <span>Contact</span>
+                                    <span>Home</span>
                                 </g:Anchor>
                             </li>
                             <li>
@@ -70,6 +70,15 @@
 
         <div>
             <div>
+                 <div id="POPUP" class="modal hide fade in" style="display: none;">
+                  <div class="modal-header">
+                    <h3>Error</h3>
+                  </div>
+                   <g:HTMLPanel ui:field="errorPanel" styleName="modal-body" />
+                  <div class="modal-footer">
+                    <a href="#" class="btn" onclick="$('#POPUP').hide();">Close</a>
+                  </div>
+                </div>
                 <g:SimplePanel ui:field="container"/>
             </div>
         </div>

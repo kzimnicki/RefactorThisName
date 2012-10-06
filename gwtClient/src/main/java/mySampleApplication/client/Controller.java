@@ -12,12 +12,13 @@ public class Controller implements ValueChangeHandler<String> {
 
 	private static final String TAB_ACTIVE = "tab_active";
 	private static final String TAB_PREFIX = "tab_";
-	private SimplePanel container;
 	public HashMap<DialogName, Widget> widgets = new HashMap<DialogName, Widget>();
 //	private CafaServiceAsync service;
 
-	public Controller(SimplePanel container) {
-		this.container = container;
+    private MainDialog mainDialog;
+
+	public Controller(MainDialog mainDialog) {
+        this.mainDialog = mainDialog;
 		History.addValueChangeHandler(this);
 	}
 
@@ -50,8 +51,8 @@ public class Controller implements ValueChangeHandler<String> {
 			DialogName view = DialogName.valueOf(dialogName);
 			Widget widget = getWidget(view);
 			((Dialog) widget).init();
-			container.clear();
-			container.add(widget);
+			mainDialog.getContainer().clear();
+			mainDialog.getContainer().add(widget);
 		}
 //		setTabStyle(dialogName);
 	}
@@ -71,5 +72,9 @@ public class Controller implements ValueChangeHandler<String> {
 	private boolean isNotEmpty(String s){
 		return !(s.equals(""));
 	}
+
+    public MainDialog getMainDialog(){
+        return mainDialog;
+    }
 
 }

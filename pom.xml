@@ -16,8 +16,6 @@
     <properties>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
     </properties>
-
-
     <build>
 
 

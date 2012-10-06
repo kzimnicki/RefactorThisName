@@ -11,6 +11,16 @@
     <script>
         $(document).ready(function() {
 
+           asyncTest("translateTest", function() {
+                var words = ["lamp","dog","window"];
+                ajaxExecutor.translate(words, function(data) {
+                    equal(data[0][0], "lampa");
+                    equal(data[1][0], "pies");
+                    equal(data[2][0], "okno");
+                    start();
+                });
+            });
+
             asyncTest("loginTest", function() {
                 ajaxExecutor.login("user@gmail.com", "123456", function(data) {
                     equal(data, "SUCCESS");
@@ -38,15 +48,7 @@
                 });
             });
 
-            asyncTest("translateTest", function() {
-                var words = ["lamp","dog","window"];
-                ajaxExecutor.translate(words, function(data) {
-                    equal(data[0][0], "lampa");
-                    equal(data[1][0], "pies");
-                    equal(data[2][0], "okno");
-                    start();
-                });
-            });
+
 
             asyncTest("sendTranslatedWordsTest", function() {
                 var transaltedWords = {

@@ -17,3 +17,23 @@
     top: 0px;
     left: 0px;
 }
+
+.white_content {
+			display: none;
+			position: absolute;
+			top: 25%;
+			left: 25%;
+			width: 470px;
+			height: 80%;
+			padding: 16px;
+			z-index:1002;
+			overflow: auto;
+}
+
+a {
+    cursor: pointer;
+}
+
+body {
+    background: url('img/bg.png') left top repeat white;
+}

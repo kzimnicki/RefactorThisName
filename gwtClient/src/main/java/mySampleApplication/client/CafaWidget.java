@@ -22,5 +22,5 @@ public class CafaWidget extends Composite {
 	}
 	public Controller getController() {
 		return controller;
-	}
+    }
 }

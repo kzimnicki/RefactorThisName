@@ -4,7 +4,6 @@
         >
 
     <g:HTMLPanel styleName="row">
-        <g:Label ui:field="errorMessages"/>
             <div class="span8">
                 <form class="form-horizontal" action="">
                     <fieldset>

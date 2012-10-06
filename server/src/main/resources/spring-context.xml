@@ -40,6 +40,8 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
 				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
 				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+                <bean class="server.converter.CsvMessageConverter"/>
 			</list>
 		</property>
 	</bean>

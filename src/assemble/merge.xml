@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<uberwar>
+  <wars>
+    <war>gwtClient:gwtClient</war>
+    <war>server:server</war>
+  </wars>
+</uberwar>

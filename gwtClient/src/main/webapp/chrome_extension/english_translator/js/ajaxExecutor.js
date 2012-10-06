@@ -5,7 +5,7 @@ var AJAX_TYPE_GET = 'GET';
 var AJAX_TYPE_DELETE = 'DELETE';
 var CURRENT_TYPE_JSON = 'application/json; charset=UTF-8';
 var DATA_TYPE_JSON = 'JSON'
-//var SERVER_URL = "http://188.40.66.81:443/";
+//var SERVER_URL = "";
 var SERVER_URL = "http://localhost:8881/";
 var TRANSLATE_URL = 'http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=pl'; //96 chars +  (word size +3 chars) * words counts
 var isLogged = false;
@@ -28,8 +28,9 @@ this.setup = function() {
             beforeSend: function(xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + getBase64());
             },
-            error: function() {
-                commonUtils.serverDown();
+            error: function (xhr, ajaxOptions, thrownError) {
+                commonUtils.hideDimmer();
+                window.errorHandler(xhr.responseText);
             }
         }
     );
@@ -45,14 +46,20 @@ ajaxExecutor.extractWords = function(dataToTranslate, callback) {
 }
 
 ajaxExecutor.translate = function(wordsArray, callback) {
-    console.log(wordsArray.length);
-    console.log(wordsArray);
-    setup();
-    $.ajax({
-        url: createUrl(wordsArray),
-        type: AJAX_TYPE_POST,
-        success: callback
-    }).done(commonUtils.hideDimmer);
+//    setup();
+//    var jCallback = function(data){
+//        commonUtils.hideDimmer();
+//        callback(data);
+//    };
+//
+//    $.ajax({
+//        url: createUrl(wordsArray),
+//        dataType: 'jsonp',
+//        type: AJAX_TYPE_POST,
+//        jsonpCallback: jCallback
+//    }).done(commonUtils.hideDimmer);
+
+    $.getJSON(createUrl(wordsArray), callback);
 }
 
 this.createUrl = function(wordsArray) {
@@ -103,12 +110,33 @@ ajaxExecutor.loadExcludedWords = function(callback) {
     }).success(commonUtils.hideDimmer);
 }
 
-ajaxExecutor.register = function(username, password, callback) {
+ajaxExecutor.exportExcludedWords = function(callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + "app/exportExcludedWords",
+        type: AJAX_TYPE_GET,
+         dataType: 'HTML',
+        success: callback
+    }).success(commonUtils.hideDimmer);
+}
+
+ajaxExecutor.exportIncludedWords = function(callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + "app/exportIncludedWords",
+        type: AJAX_TYPE_GET,
+         dataType: 'HTML',
+        success: callback
+    }).success(commonUtils.hideDimmer);
+}
+
+ajaxExecutor.register = function(username, password, callback, errorCalback) {
     setup();
     $.ajax({
         url: SERVER_URL + "app/register",
         data: '{"username":"' + username + '", "password": "' + password + '"}',
-        success: callback
+        success: callback,
+        error:  errorCalback
     }).done(commonUtils.hideDimmer());
 }
 

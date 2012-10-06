@@ -26,14 +26,14 @@
                             <label class="control-label">Text template: </label>
 
                             <div class="controls">
-                                <g:TextBox ui:field="textTemplate" styleName="input-xlarge focused" text="(@@TRANSLETED_WORD@@)"/>
+                                <g:TextBox ui:field="textTemplate" styleName="input span5 focused" text="(@@TRANSLETED_WORD@@)"/>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Subtitle template: </label>
 
                             <div class="controls">
-                                <g:TextBox ui:field="subtitleTemplate" styleName="input-xlarge focused" text="(@@TRANSLETED_WORD@@)"></g:TextBox>
+                                <g:TextBox ui:field="subtitleTemplate" styleName="input span5 focused" text="(@@TRANSLETED_WORD@@)"></g:TextBox>
                             </div>
                         </div>
                         <div class="form-actions">

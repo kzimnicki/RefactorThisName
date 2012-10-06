@@ -8,8 +8,8 @@
 
         <!--<form class="well form-inline" action="">-->
         <div class="form-inline">
-            <g:TextBox ui:field="username" styleName="input-small">user@gmail.com</g:TextBox>
-            <g:PasswordTextBox ui:field="password" styleName="input-small">123456</g:PasswordTextBox>
+            <g:TextBox ui:field="username" styleName="input-small"></g:TextBox>
+            <g:PasswordTextBox ui:field="password" styleName="input-small"></g:PasswordTextBox>
             <g:Button ui:field="login" styleName="btn btn-primary">Log-In</g:Button>
             <g:Button ui:field="register" styleName="btn btn-danger">Register</g:Button>
             <g:Button ui:field="logout" styleName="btn btn-danger">Logout</g:Button>

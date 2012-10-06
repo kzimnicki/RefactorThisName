@@ -1,12 +1,12 @@
 Pierwszy Release:
-- jezeli nie przechodzi walidacji to ten komunikat powinnien sie gdzies wyswietlic, na razie leci w logach, dla rejestracji byl test.
+- dolozyc sonde.
 - nastepuje wylgoowanie po zamknieicu przegladarki - dodac jakis expiry time.
-- przyklady dla roznej konfiguracji, Delikatnie zmienic options, maly opisik, aby bylo wiadomo co i jak.
-- Jakas strona startowac, theme moze jakis z backgroundem i duzo opisow jak to dziala itp.
 - zarejestrowac domene.
 - zrobic release na serwer
 
 Refactoring:
+- export slow zrobic na tym samej zasadzie co errory, generycznie, z uwzglednieniem roznych dialogow. handleError, handleInfo itp.
+- simple event bus
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - zmienic nazwe rootWord.getRootWord().getValue() => rootWord.getWord().getValue();
 - Zmienic nazwe projekty.
@@ -79,3 +79,19 @@ Nazwy:
 clear.li
 hint.ly
 memen.to
+
+Funkcjonalnosc, nowe pomysly:
+
+- dodanie phrasal verbs oraz
+- idiomy.
+- learning mode - nauka słówek przed filmem/artykułem.
+- interaktywne uczenie: wysylanie smsem/mailem partii raz na dzien.
+- subtitles dla zaawansowanych - czyli wymazujemy cały tekst i na dole pokazuje sie tylko słowo ktorego nie znamy wraz z tlumaczeniem.
+- nowe jezyki: niemiecki, hiszpanski
+- zatrzymac film jak jest duzo tekstu itp.
+
+Przyjrzec sie ANKI, jaka ona ma funkcjonalnosc?
+
+
+Maile:
+damiankowalczyk1988@gmail.com - wyslac maila ze juz dziala.

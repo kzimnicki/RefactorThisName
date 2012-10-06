@@ -101,11 +101,21 @@ popup.createSiteTable = function(rows, title, id) {
         "aaData": rows,
         "bDestroy":true,
         "aoColumns":[
-            { "sTitle": title},
-            { "sTitle": "Word family"},
-            { "sTitle": "action"}
+            { "sTitle": title, "sWidth": "200px"},
+            { "sTitle": "Word family", "sWidth": "400px"},
+            { "sTitle": "action", "sWidth": "100px"}
         ]
     });
+}
+
+popup.showPopupMessage = function(data){
+    $("#csvPopupPre").empty();
+    $("#csvPopup").show();
+    $("#csvPopupPre").text(data);
+}
+
+popup.hidePopupMessage = function(data){
+    $("#csvPopup").hide();
 }
 
 popup.createTable = function(wordsMap) {

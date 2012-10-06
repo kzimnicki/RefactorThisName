@@ -13,9 +13,9 @@ public class MySampleApplication implements EntryPoint {
      */
     public void onModuleLoad() {
         MainDialog mainDialog = new MainDialog();
-        Controller controller = new Controller(mainDialog.getContainer());
+        Controller controller = new Controller(mainDialog);
         mainDialog.setController(controller);
-        controller.goTo(DialogName.REGISTER);
+        mainDialog.setDefaultDialog(DialogName.CONTACT);
         RootPanel.get("et").add(mainDialog);
     }
 }

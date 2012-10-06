@@ -3,9 +3,94 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
         >
 
+
+
+
     <g:HTMLPanel styleName="row">
-        <div class="span8">
-           Contact
+
+         <div class="offset1">
+            <div id="myCarousel" class="carousel slide span6">
+              <!-- Carousel items -->
+
+            <div class="carousel-inner">
+                    <div class="active item">
+                        <img src="img/got.png" alt="" />
+                    </div>
+                    <div class="item">
+                        <img src="img/thm.png" alt="" />
+                    </div>
+                  </div>
+                  <!-- Carousel nav -->
+                  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+            </div>
+        </div>
+         <br />
+
+        <div class="span8 well">
+
+
+
+
+
+            <h1>Możliwości aplikacji:</h1>
+            <br />
+            <ul>
+                <li>zapamietywanie wykluczonych słów. </li>
+                <li>zapamietywanie słów, których nie znaliśmy. </li>
+                <li>pobranie w formacie CSV wykluczonych słów. </li>
+                <li>wykluczanie słów pokrewnych. </li>
+                <li>konfiguracja: </li>
+                <ul>
+                  <li>częstości występowania słowa  </li>
+                  <li>sposób jego wyświetlania (np w postaci HTML: <code>&lt;font color="yellow"&gt;(przetlumaczony tekst)&lt;/font&gt;</code>) </li>
+                </ul>
+            </ul>
+
+            <br />
+            <h1>Sposób użycia aplikacji</h1>
+            <br />
+            <ol>
+                <li>Klikamy "Submit text" </li>
+                <li>Wklejamy napisy do filmu.   </li>
+                <li>Klikamy niebieski przycisk "Submit text".  </li>
+                <li>Z tabelki usuwamy słowa której już znamy. </li>
+                <li>Klikamy "translate subtitle". </li>
+                <li>Kopiujemy tekst do pliku z napisamy. </li>
+                <li>Zaczynamy oglądać film.    </li>
+            </ol>
+           <br />
+
+
+
+            <h1>Jak to działa ?</h1>
+            <br />
+            <ol>
+                <li>Pobiera tekst z formularza.</li>
+                <li>Filtruje wszystkie słowa, które mieszczą się w zakresie „częstości występowania”. Zakres pobrany z konfiguracji użytkownika.</li>
+                <li>Usuwa słowa, które użytkownik już zna(exclude words).                                                                            </li>
+                <li>Tworzy tabelkę ze słowami, które nie zostały odfiltrowane.                                                                            </li>
+                <li>Z tabelki użytkownik może usunąć słowa które już zna a do tej pory nie pojawiły się w jego exclude liscie.                                 </li>
+                <li>Po kliknieciu translate, w tekscie wyszukiwane są słowa z tabelki i tłumaczone za pomoca google transalate oraz podmieniane zgodnie ze wzorem z konfiguracji. Slowa, które zostały przetłumaczone wędruja do listy: „include words”.</li>
+            </ol>
+               <br />
+
+             <h1>Konto testowe</h1>
+            <br />
+            <p>
+
+               <code>login: user@gmail.com</code> <br />
+               <code> password: 123456  </code>  <br />
+                Konto zawiera moje wykluczone slowa, okolo 1000. Mozna latwo przetransportowac slowa na wlasne konto, nalezy tylko wyeksportowac tekst do formatu CSV, zalogowac sie na swoje konto, wkleic go do "submit text", a nastepnie wcisnąc przycisk: "Add all words to exclude".
+
+            </p>
+
+            <h1>Uwagi</h1>
+            <br />
+            <p>
+                Obecny wersja aplikacji to wczesna beta, dlatego bardzo cenię sobie wszelkie uwagi, sugestie, znalezione błedy, wszystko to proszę komunikować poprzez grupe dyskusyjną: <a href="https://groups.google.com/forum/#!forum/explain_cc"><b>explain.cc google group</b></a>.
+
+            </p>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder> 

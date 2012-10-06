@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import server.api.*;
+import server.converter.CsvResponse;
 import server.core.CommonDao;
 import server.api.WordExtractor;
 import server.model.newModel.*;
@@ -325,7 +326,7 @@ public class EnglishTranslatorTest {
     }
 
     @Test
-    public void testExportsAllWordsToCSVFormat() throws Exception {
+    public void testExportsAllExcludeWordsToCSVFormat() throws Exception {
         createRegisterAndLoginUser();
             List<String> excludedwords = Arrays.asList(new String[]{
                 "car", "cat"
@@ -334,10 +335,23 @@ public class EnglishTranslatorTest {
 
         String exportedExcludedWords = englishTranslator.exportExcludedWords();
 
-        assertTrue(exportedExcludedWords.contains("car;car cars;"));
-        assertTrue(exportedExcludedWords.contains("cat;cats cat;"));
+        assertTrue(exportedExcludedWords.contains("car;car cars;\n"));
+        assertTrue(exportedExcludedWords.contains("cat;cats cat;\n"));
     }
 
+        @Test
+    public void testExportsAllIncludeWordsToCSVFormat() throws Exception {
+        createRegisterAndLoginUser();
+            List<String> excludedwords = Arrays.asList(new String[]{
+                "truck", "ship"
+        });
+        englishTranslator.saveIncludedWords(excludedwords);
+
+        String exportedExcludedWords = englishTranslator.exportIncludedWords();
+
+        assertTrue(exportedExcludedWords.contains("truck;trucks truck trucked trucking;\n"));
+        assertTrue(exportedExcludedWords.contains("ship;shipping shipped ship ships;\n"));
+    }
 
 //
 //    //TODO dodac test w stylu: moving in => a loaded should be move in (base form).

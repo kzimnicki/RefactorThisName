@@ -19,11 +19,8 @@
                 <!--    <g:Label styleName="control-label">Text:</g:Label>
 
                     <div class="controls">-->
-                        <g:TextArea name="textToTranslate" ui:field="textArea" height="480px" width="640px">
-                            Palm oil is highly versatile. It can be used in foods and as biodiesel. But microbial diseases are a threat. British researchers say they have a new way to detect the pest.
-Researchers at Britain's University of Bath say they have developed a new technique to detect a strain of a fungal disease called Fusarium oxysporum, which is specific to oil palms.
-Palm oil - as used in foods and biodiesel - is a product cultivated from the oil palm tree. The tree is native to tropical Africa, where it was first grown more than 5,000 years ago.
-
+                        <g:TextArea name="textToTranslate" ui:field="textArea" height="480px" width="770px">
+                            Put here english text or subtitles.
                         </g:TextArea>
                     <!--</div>-->
 
