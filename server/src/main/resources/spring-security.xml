@@ -16,7 +16,7 @@
                 class="org.springframework.security.web.FilterChainProxy">
         <security:filter-chain-map path-type="ant">
             <security:filter-chain pattern="/app/*"
-                                   filters="securityContextPersistenceFilter, basicAuthenticationFilter"/>
+                                   filters="basicAuthenticationFilter"/>
         </security:filter-chain-map>
     </beans:bean>
 

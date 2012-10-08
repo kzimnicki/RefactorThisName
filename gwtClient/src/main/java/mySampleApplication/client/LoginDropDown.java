@@ -42,16 +42,17 @@ public class LoginDropDown extends Composite {
         super();
         this.parent = parent;
         initWidget(uiBinder.createAndBindUi(this));
-        handleComponentsVisibility();
+        handleComponentsVisibility(null);
     }
 
-    private void handleComponentsVisibility() {
+    private void handleComponentsVisibility(String usernameValue) {
         if (isLogged()) {
             username.setVisible(false);
             password.setVisible(false);
             login.setVisible(false);
             register.setVisible(false);
             logout.setVisible(true);
+            logout.setText(usernameValue+" - logout");
         } else {
             username.setVisible(true);
             password.setVisible(true);
@@ -69,13 +70,12 @@ public class LoginDropDown extends Composite {
     @UiHandler("register")
     public void registerClick(ClickEvent e) {
         parent.getController().goTo(DialogName.REGISTER);
-         handleComponentsVisibility();
     }
 
     @UiHandler("logout")
     public void logoutClick(ClickEvent e) {
         logout();
-         handleComponentsVisibility();
+        handleComponentsVisibility(null);
     }
 
 
@@ -91,7 +91,7 @@ public class LoginDropDown extends Composite {
         var instance = this;
         $wnd.ajaxExecutor.login(username, password, function(data) {
             $wnd.commonUtils.saveCookie(username, password);
-            instance.@mySampleApplication.client.LoginDropDown::handleComponentsVisibility()();
+            instance.@mySampleApplication.client.LoginDropDown::handleComponentsVisibility(Ljava/lang/String;)(username);
         });
     }-*/;
 }

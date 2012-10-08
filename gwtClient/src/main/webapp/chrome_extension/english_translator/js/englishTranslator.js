@@ -65,7 +65,7 @@ EnglishTranslator.putTranslationInText = function(translatedWords, text, pattern
 
 
 this.textReplace = function(text, oldString, newString, pattern) {
-    pattern = pattern.replace('@@TRANSLETED_WORD@@', newString);
+    pattern = pattern.replace('@@TRANSLATED_TEXT@@', newString);
     var regex = new RegExp('(\\b' + oldString + '\\b)', 'gi');
     text = text.replace(regex, "$1" + pattern);
     return text;

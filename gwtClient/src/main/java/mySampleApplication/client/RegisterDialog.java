@@ -36,6 +36,7 @@ public class RegisterDialog extends CafaWidget implements Dialog {
     }
 
     public void init() {
+         getController().getMainDialog().getLoginDropDown().logoutClick(null);
     }
 
     @UiHandler("register")
@@ -46,6 +47,10 @@ public class RegisterDialog extends CafaWidget implements Dialog {
             getController().getMainDialog().handleError("Passwords should be the same.");
         }
     }
+
+    public native void logout() /*-{
+        $wnd.commonUtils.removeCookie();
+    }-*/;
 
     void registerCallback(String data) {
         if("SUCCESS".equals(data)){

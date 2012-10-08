@@ -98,6 +98,10 @@ public class MainDialog extends CafaWidget implements Dialog {
 		return loginDropDown;
 	}
 
+    public LoginDropDown getLoginDropDown(){
+        return loginDropDown;
+    }
+
 	public SimplePanel getContainer() {
 		return container;
 	}

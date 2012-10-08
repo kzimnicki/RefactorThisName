@@ -93,7 +93,7 @@ public class EnglishTranslatorTest {
 
         Map<String, WordDetails> extractedWords = englishTranslator.extractWordsWithFrequency(data);
 
-        assertEquals(14, extractedWords.size());
+        assertEquals(17, extractedWords.size());
         assertEquals("76", extractedWords.get("quo").getFrequency());
 //        assertEquals(2, extractedWords.get("quo").getWordFamily().size());
 
@@ -126,7 +126,7 @@ public class EnglishTranslatorTest {
         englishTranslator.saveExcludeWords(excludedwords);
         Map<String, WordDetails> extractedWords = englishTranslator.extractWordsWithFrequency(data);
 
-        assertEquals(13, extractedWords.size());
+        assertEquals(16, extractedWords.size());
     }
 
 
@@ -301,14 +301,33 @@ public class EnglishTranslatorTest {
         config.setTextTemplate("txt");
         config.setSubtitleTemplate("sub");
         englishTranslator.saveOptions(config);
-        englishTranslator.saveOptions(config);
-        englishTranslator.saveOptions(config);
         Configuration options = englishTranslator.loadOptions();
 
         assertEquals(98, options.getMax());
         assertEquals(12, options.getMin());
         assertEquals("txt", options.getTextTemplate());
         assertEquals("sub", options.getSubtitleTemplate());
+    }
+
+
+    @Test
+    public void testGetWordsAccordingToOptionsBoundaryTest() throws Exception {
+        createRegisterAndLoginUser();
+        Configuration config = new Configuration();
+        config.setMax(87);
+        config.setMin(12);
+        config.setTextTemplate("txt");
+        config.setSubtitleTemplate("sub");
+        englishTranslator.saveOptions(config);
+
+        DataToTranslate dataToTranslate = new DataToTranslate();
+        dataToTranslate.setText("department"); //frequency = 87
+
+
+        Map<String, WordDetails> results = englishTranslator.extractWordsWithFrequency(dataToTranslate);
+
+        assertNotNull(results.get("department"));
+        assertEquals("87",  results.get("department").getFrequency());
     }
 
 
