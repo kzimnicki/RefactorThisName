@@ -75,6 +75,7 @@ popup.createIncludedSiteRows = function(wordFamilies) {
 }
 
 popup.addAllToExclude = function() {
+    $('#excludeAllButton').hide();
     var words = popup.listWordsFromTable();
     ajaxExecutor.sendExcludedWords(words, function(){
         console.log('sended');
@@ -144,5 +145,5 @@ popup.createTable = function(wordsMap) {
 
         ]
     });
-    $('#words').after("<a class='btn btn-danger' href='#' onclick='popup.addAllToExclude();'>Add all words to exclude</a>");
+    $('#words').after("<a id='excludeAllButton' class='btn btn-danger' href='#' onclick='popup.addAllToExclude();'>Add all words to exclude</a>");
 }

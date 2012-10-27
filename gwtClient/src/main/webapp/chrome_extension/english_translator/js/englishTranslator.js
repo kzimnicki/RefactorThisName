@@ -47,7 +47,7 @@ this.createTranslatedBrackets = function(words, translatedData, text) {
     var translatedMapJSON = {};
     translatedData.forEach(function(item) {
         var wordToTranslate = words[i++];
-        var translatedWord = item[0];
+        var translatedWord = item;
             translatedMapJSON[wordToTranslate] = translatedWord;
     });
     return translatedMapJSON;
@@ -55,7 +55,7 @@ this.createTranslatedBrackets = function(words, translatedData, text) {
 
 EnglishTranslator.putTranslationInText = function(translatedWords, text, pattern){
     for(var key in translatedWords){
-        if(key.toLowerCase() != translatedWords[key].toLowerCase()){
+        if(key.toLowerCase() != translatedWords[key][0].toLowerCase()){
             text = textReplace(text, key, translatedWords[key], pattern);
         }
     }

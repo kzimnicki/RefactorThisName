@@ -16,7 +16,11 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration />
+      <configuration>
+        <fileset id="fileset1" name="My Fileset" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/test-spring-dataSource.xml</file>
+        </fileset>
+      </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
@@ -68,7 +72,7 @@
     <orderEntry type="library" name="Maven: javax.transaction:jta:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.0-api:sources:1.0.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-validator:4.1.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.6" level="project" />
+    <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.19" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.14" level="project" />
     <orderEntry type="library" name="Maven: javassist:javassist:3.11.0.GA" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:r09" level="project" />

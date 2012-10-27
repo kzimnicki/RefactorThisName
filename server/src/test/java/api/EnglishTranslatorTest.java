@@ -15,10 +15,7 @@ import server.api.WordExtractor;
 import server.model.newModel.*;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -356,6 +353,20 @@ public class EnglishTranslatorTest {
 
         assertTrue(exportedExcludedWords.contains("car;car cars;\n"));
         assertTrue(exportedExcludedWords.contains("cat;cats cat;\n"));
+    }
+
+    @Test
+    public void testTranslateWord() throws Exception {
+        createRegisterAndLoginUser();
+
+        List<String> words = Arrays.asList(new String[]{
+                "donors", "donkeys"
+        });
+
+        List<String[]> translatedWords = englishTranslator.translate(words);
+
+        assertEquals("dawców", translatedWords.get(0)[0]);
+        assertEquals("osły", translatedWords.get(1)[0]);
     }
 
         @Test

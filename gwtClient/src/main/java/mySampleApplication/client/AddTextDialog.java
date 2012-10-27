@@ -103,7 +103,7 @@ public class AddTextDialog extends CafaWidget implements Dialog {
              $wnd.ajaxExecutor.loadOptions(function(optionsData){
                 var pattern = optionsData['textTemplate'];
                 text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
-                $wnd.ajaxExecutor.sendTranslatedWords(translatedWords);
+//                $wnd.ajaxExecutor.sendTranslatedWords(translatedWords);
                 instance.@mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
              });
         });

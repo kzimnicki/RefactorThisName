@@ -52,7 +52,7 @@ public class LoginDropDown extends Composite {
             login.setVisible(false);
             register.setVisible(false);
             logout.setVisible(true);
-            logout.setText(usernameValue+" - logout");
+            logout.setText("logout");
         } else {
             username.setVisible(true);
             password.setVisible(true);

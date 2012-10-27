@@ -7,7 +7,7 @@ var CURRENT_TYPE_JSON = 'application/json; charset=UTF-8';
 var DATA_TYPE_JSON = 'JSON'
 //var SERVER_URL = "../";
 var SERVER_URL = "http://localhost:8881/";
-var TRANSLATE_URL = 'http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=pl'; //96 chars +  (word size +3 chars) * words counts
+var TRANSLATE_URL = 'http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&sl=en&tl=pl'; //96 chars +  (word size +3 chars) * words counts
 var isLogged = false;
 
 
@@ -30,7 +30,7 @@ this.setup = function() {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 commonUtils.hideDimmer();
-                window.errorHandler(xhr.responseText);
+//                window.errorHandler(xhr.responseText);
             }
         }
     );
@@ -46,20 +46,13 @@ ajaxExecutor.extractWords = function(dataToTranslate, callback) {
 }
 
 ajaxExecutor.translate = function(wordsArray, callback) {
-//    setup();
-//    var jCallback = function(data){
-//        commonUtils.hideDimmer();
-//        callback(data);
-//    };
-//
-//    $.ajax({
-//        url: createUrl(wordsArray),
-//        dataType: 'jsonp',
-//        type: AJAX_TYPE_POST,
-//        jsonpCallback: jCallback
-//    }).done(commonUtils.hideDimmer);
-
-    $.getJSON(createUrl(wordsArray), callback);
+    setup();
+    $.ajax({
+        url: SERVER_URL + "app/translate",
+        data: JSON.stringify(wordsArray),
+        type: AJAX_TYPE_POST,
+        success: callback
+    }).done(commonUtils.hideDimmer);
 }
 
 this.createUrl = function(wordsArray) {

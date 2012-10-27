@@ -1,10 +1,10 @@
 Pierwszy Release:
 - dolozyc sonde.
-- nastepuje wylgoowanie po zamknieicu przegladarki - dodac jakis expiry time.
-- zarejestrowac domene.
 - zrobic release na serwer
 
 Refactoring:
+- import.sql nie dziala.
+- dodac budowanie aplikacji z poziomu serwera, maven git i sama niech sie zbuduje. Jeden skrypt aby to ogarnac.
 - export slow zrobic na tym samej zasadzie co errory, generycznie, z uwzglednieniem roznych dialogow. handleError, handleInfo itp.
 - simple event bus
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
@@ -14,6 +14,7 @@ Refactoring:
 - - zrobic serwisy
 - - odciazyc fasade, za duzo tam logiki siedzi.
 - - Generic dao ale z wyszczegolnienem dao dla hqli.
+- nastepuje wylgoowanie po zamknieicu przegladarki - dodac jakis expiry time.
 
 
 

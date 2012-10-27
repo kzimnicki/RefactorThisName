@@ -43,7 +43,7 @@
           <element id="library" level="project" name="Maven: javax.transaction:jta:1.1" />
           <element id="library" level="project" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.0-api:sources:1.0.0.Final" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-validator:4.1.0.Final" />
-          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.6" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.19" />
           <element id="library" level="project" name="Maven: log4j:log4j:1.2.14" />
           <element id="library" level="project" name="Maven: javassist:javassist:3.11.0.GA" />
           <element id="library" level="project" name="Maven: com.google.guava:guava:r09" />
