@@ -30,7 +30,7 @@ this.setup = function() {
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 commonUtils.hideDimmer();
-//                window.errorHandler(xhr.responseText);
+                window.errorHandler(xhr.responseText);
             }
         }
     );

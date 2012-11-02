@@ -54,7 +54,7 @@ public class RegisterDialog extends CafaWidget implements Dialog {
 
     void registerCallback(String data) {
         if("SUCCESS".equals(data)){
-            getController().goTo(DialogName.EXCLUDE_WORDS);
+            getController().goTo(DialogName.CONTACT);
         }
     }
 

@@ -12,28 +12,28 @@
                            <g:Label styleName="control-label">Min: </g:Label>
 
                             <div class="controls">
-                                <g:TextBox ui:field="min" styleName="input-xlarge focused" text="0" />
+                                <g:TextBox ui:field="min" styleName="input-xlarge focused" text="" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Max: </label>
 
                             <div class="controls">
-                                <g:TextBox ui:field="max" styleName="input-xlarge focused" text="90"/>
+                                <g:TextBox ui:field="max" styleName="input-xlarge focused" text=""/>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Text template: </label>
 
                             <div class="controls">
-                                <g:TextBox ui:field="textTemplate" styleName="input span5 focused" text="(@@TRANSLETED_WORD@@)"/>
+                                <g:TextBox ui:field="textTemplate" styleName="input span5 focused" text=""/>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Subtitle template: </label>
 
                             <div class="controls">
-                                <g:TextBox ui:field="subtitleTemplate" styleName="input span5 focused" text="(@@TRANSLETED_WORD@@)"></g:TextBox>
+                                <g:TextBox ui:field="subtitleTemplate" styleName="input span5 focused" text=""></g:TextBox>
                             </div>
                         </div>
                         <div class="form-actions">

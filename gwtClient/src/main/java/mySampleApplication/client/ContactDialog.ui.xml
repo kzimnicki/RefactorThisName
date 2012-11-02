@@ -11,7 +11,7 @@
 
 
 
-        <div class="span8 well">
+        <div class="span10 well">
 
              <div id="myCarousel" class="carousel slide">
               <!-- Carousel items -->
@@ -35,11 +35,11 @@
             <h1>Możliwości aplikacji:</h1>
             <br />
             <ul>
-                <li>Tworzenie bazy pozanych wczesniej słówek </li>
+                <li>Tworzenie bazy poznanych wczesniej słówek </li>
                 <li>Tworzenie bazy nieznanych słówek</li>
                 <li>Wyeksportowanie baz słówek w formacie CSV </li>
                 <li>Wygodne wykluczanie słów pokrewnych (np. big, bigger, biggest)</li>
-                <li>Filtrowanie po częstości występowania słówek</li>
+                <li>Filtrowanie bazy po częstości występowania słówek</li>
                 <li>Konfigurowanie sposobu wyświetlania przetłumaczonych słówek</li>
             </ul>
 
@@ -48,9 +48,9 @@
             <br />
             <ol>
                 <li>Klikamy "Submit text" </li>
-                <li>Wklejamy napisy do filmu   </li>
+                <li>Wklejamy angielskie napisy(np. .srt) do filmu   </li>
                 <li>Klikamy niebieski przycisk "Submit text"  </li>
-                <li>Z tabelki usuwamy słówka której już znamy </li>
+                <li>Z tabelki usuwamy słówka, której już znamy </li>
                 <li>Klikamy "translate subtitle" </li>
                 <li>Kopiujemy tekst do pliku z napisamy </li>
                 <li>Zaczynamy oglądać film i poznawać nowe słówka :)</li>
@@ -59,7 +59,7 @@
 
 
 
-            <h1>Jak to działa aplikacja ?</h1>
+            <h1>Jak działa aplikacja ?</h1>
             <br />
             <ol>
                 <li>Pobiera tekst z formularza</li>
@@ -77,7 +77,7 @@
 
                <code>login: user@gmail.com</code> <br />
                <code> password: 123456  </code>  <br />
-                Konto zawiera wykluczone przeze mnie słówka (okolo 1000). Można w łatwy sposób przenieść je na własne konto. Należy tylko wyeksportowac tabelę do formatu CSV, zalogowac sie na własne konto, wkleić wyeksportowany tekst do "submit text", a nastepnie wcisnąc przycisk: "Add all words to exclude".
+                Konto zawiera wykluczone przeze mnie słówka (okolo 1500). Można w łatwy sposób przenieść je na własne konto. Należy tylko wyeksportowac tabelę do formatu CSV, zalogowac sie na własne konto, wkleić wyeksportowany tekst do "submit text", a nastepnie wcisnąc przycisk: "Add all words to exclude".
 
             </p>
 
@@ -85,6 +85,10 @@
             <br />
             <p>
                 Obecny wersja aplikacji to wczesna beta, dlatego wdzięczny będę za wszelkie uwagi, sugestie i znalezione błędy. Wszystkie informacje proszę wpisywać na grupę dyskusyjną: <a href="https://groups.google.com/forum/#!forum/explain_cc"><b>explain.cc google group</b></a>.
+
+            </p>
+            <p>
+               Życzę miłego użytkowania :)
 
             </p>
         </div>
