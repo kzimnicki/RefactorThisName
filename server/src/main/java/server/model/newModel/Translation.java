@@ -1,7 +1,6 @@
 package server.model.newModel;
 
 
-import edu.stanford.nlp.international.Languages;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import server.model.EntityObject;

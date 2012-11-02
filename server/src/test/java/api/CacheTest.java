@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.StopWatch;
-import server.api.WordExtractor;
+import server.api.ExplainCCApi;
+import server.api.TextService;
 import server.core.CommonDao;
-import server.api.EnglishTranslator;
 import server.model.newModel.Word;
 
 import java.util.Set;
-
-import static junit.framework.Assert.assertEquals;
 
 /**
  * User: kzimnick
@@ -30,33 +28,31 @@ import static junit.framework.Assert.assertEquals;
 })
 public class CacheTest {
 
-      @Autowired
-      EnglishTranslator englishTranslator;
+    @Autowired
+    ExplainCCApi api;
 
     @Autowired
-    WordExtractor wordExtractor;
+    TextService textService;
 
     @Autowired
     CommonDao commonDao;
 
     @Test
     public void testExtractWordsWithFrequency() throws Exception {
-                   StopWatch stopWatch = new StopWatch();
+        StopWatch stopWatch = new StopWatch();
         stopWatch.start();
-        for (int i=0; i< 200; i++){
-              StopWatch stopWatch2 = new StopWatch();
-        stopWatch2.start();
-            Set<Word> big = wordExtractor.getWordFamily("big");
+        for (int i = 0; i < 200; i++) {
+            StopWatch stopWatch2 = new StopWatch();
+            stopWatch2.start();
+            Set<Word> big = textService.getWordFamily("big");
             System.out.println(big);
-            Set<Word> make = wordExtractor.getWordFamily("make");
+            Set<Word> make = textService.getWordFamily("make");
             System.out.println(make);
-                 stopWatch2.stop();
-        System.err.println(stopWatch2.getTotalTimeMillis());
+            stopWatch2.stop();
+            System.err.println(stopWatch2.getTotalTimeMillis());
         }
         stopWatch.stop();
         System.err.println(stopWatch.getTotalTimeMillis());
-
-
     }
 
 }
