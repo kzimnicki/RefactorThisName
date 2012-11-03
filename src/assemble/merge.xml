@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<uberwar>
-  <wars>
-    <war>gwtClient:gwtClient</war>
-    <war>cc.explain.cc.refactor.server:cc.explain.cc.refactor.server</war>
-  </wars>
-</uberwar>
