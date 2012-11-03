@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.StopWatch;
-import server.api.ExplainCCApi;
-import server.api.TextService;
-import server.core.CommonDao;
-import server.model.newModel.Word;
+import cc.explain.server.api.ExplainCCApi;
+import cc.explain.server.api.TextService;
+import cc.explain.server.core.CommonDao;
+import cc.explain.server.model.newModel.Word;
 
 import java.util.Set;
 

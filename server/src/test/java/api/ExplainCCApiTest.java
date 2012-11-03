@@ -8,13 +8,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import server.api.*;
-import server.core.CommonDao;
-import server.api.TextService;
-import server.model.newModel.*;
+import cc.explain.server.api.*;
+import cc.explain.server.api.TextService;
+import cc.explain.server.core.CommonDao;
+import cc.explain.server.model.newModel.*;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;

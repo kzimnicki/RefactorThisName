@@ -18,7 +18,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <context:annotation-config/>
-    <context:component-scan base-package="server.api"/>
+    <context:component-scan base-package="cc.explain.server.api"/>
 
 
    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
@@ -39,7 +39,6 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
 				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
                 <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
-                <bean class="server.converter.CsvMessageConverter"/>
 			</list>
 		</property>
 	</bean>
@@ -61,7 +60,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         </property>
         <property name="packagesToScan">
             <list>
-                <value>server.model</value>
+                <value>cc.explain.server.model</value>
             </list>
         </property>
         <property name="hibernateProperties">
@@ -102,9 +101,11 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
     </bean>
 
 
-    <bean id="textService" class="server.api.TextService" init-method="init"/>
+    <bean id="textService" class="cc.explain.server.api.TextService"/>
+    <bean id="textDAO" class="cc.explain.server.api.TextDAO"/>
+    <bean id="luceneService" class="cc.explain.server.api.LuceneService" init-method="init"/>
 
-    <bean id="loginService" class="server.api.UserService"/>
+    <bean id="loginService" class="cc.explain.server.api.UserService"/>
 
 
 </beans>
