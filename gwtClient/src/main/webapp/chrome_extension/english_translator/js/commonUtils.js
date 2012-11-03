@@ -10,7 +10,7 @@ function log(arguments) {
 
 commonUtils.serverDown = function() {
 //    popup.writeError("Serwer nie odpowiada, prosze sprobowac pozniej.");
-    console.log("server down");
+    console.log("cc.explain.server down");
 }
 
 this.base64_encode = function(data) {

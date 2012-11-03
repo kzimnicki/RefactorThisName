@@ -1,12 +1,11 @@
 package mySampleApplication.client;
 
-import java.util.HashMap;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+
+import java.util.HashMap;
 
 public class Controller implements ValueChangeHandler<String> {
 

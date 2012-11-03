@@ -1199,7 +1199,7 @@ school;school schools schooled schooling;
 blink;blink blinking blinked blinks;
 wolf;wolf wolfed wolves wolfing;
 service;serviced services service servicing;
-server;servers server;
+cc.explain.cc.refactor.server;servers cc.explain.cc.refactor.server;
 serial;serials serial;
 sword;swords sword;
 journalism;journalism;

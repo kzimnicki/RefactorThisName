@@ -1,0 +1,11 @@
+/web/WEB-INF/classes
+/web/WEB-INF/lib
+/target
+.idea
+/.idea
+gwtClient/target/
+server/target/
+server/src/main/webapp/WEB-INF/lib
+server\src\webapp\WEB-INF\classes\
+web/gwtClient/war
+web/WEB-INF/lib/

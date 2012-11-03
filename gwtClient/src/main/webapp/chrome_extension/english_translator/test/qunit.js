@@ -531,7 +531,7 @@
         QUnit.urlParams = urlParams;
         config.filter = urlParams.filter;
 
-        // Figure out if we're running the tests from a server or not
+        // Figure out if we're running the tests from a cc.explain.server or not
         QUnit.isLocal = location.protocol === "file:";
     }());
 

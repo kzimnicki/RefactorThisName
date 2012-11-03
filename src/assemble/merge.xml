@@ -2,6 +2,6 @@
 <uberwar>
   <wars>
     <war>gwtClient:gwtClient</war>
-    <war>server:server</war>
+    <war>cc.explain.cc.refactor.server:cc.explain.cc.refactor.server</war>
   </wars>
 </uberwar>

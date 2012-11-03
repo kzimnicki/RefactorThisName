@@ -3,6 +3,7 @@ Pierwszy Release:
 - zrobic release na serwer
 
 Refactoring:
+- W DAOsach wiecej empty list zwracac przez co w serwicach bedzie mniej ifow.
 - import.sql nie dziala.
 - dodac budowanie aplikacji z poziomu serwera, maven git i sama niech sie zbuduje. Jeden skrypt aby to ogarnac.
 - export slow zrobic na tym samej zasadzie co errory, generycznie, z uwzglednieniem roznych dialogow. handleError, handleInfo itp.
@@ -10,7 +11,7 @@ Refactoring:
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - zmienic nazwe rootWord.getRootWord().getValue() => rootWord.getWord().getValue();
 - Zmienic nazwe projekty.
-- Refactoring - server side:
+- Refactoring - cc.explain.cc.refactor.server side:
 - - zrobic serwisy
 - - odciazyc fasade, za duzo tam logiki siedzi.
 - - Generic dao ale z wyszczegolnienem dao dla hqli.

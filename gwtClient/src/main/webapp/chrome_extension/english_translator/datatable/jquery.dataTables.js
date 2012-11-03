@@ -1779,7 +1779,7 @@
 		
 		
 		/**
-		 * Build up the parameters in an object needed for a server-side processing request
+		 * Build up the parameters in an object needed for a cc.explain.server-side processing request
 		 *  @param {object} oSettings dataTables settings object
 		 *  @returns {bool} block the table drawing or not
 		 *  @memberof DataTable#oApi
@@ -1847,7 +1847,7 @@
 		/**
 		 * Add Ajax parameters from plugins
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param array {objects} aoData name/value pairs to send to the server
+		 *  @param array {objects} aoData name/value pairs to send to the cc.explain.server
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnServerParams( oSettings, aoData )
@@ -1857,9 +1857,9 @@
 		
 		
 		/**
-		 * Data the data from the server (nuking the old) and redraw the table
+		 * Data the data from the cc.explain.server (nuking the old) and redraw the table
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param {object} json json data return from the server.
+		 *  @param {object} json json data return from the cc.explain.server.
 		 *  @param {string} json.sEcho Tracking flag for DataTables to match requests
 		 *  @param {int} json.iTotalRecords Number of records in the data set, not accounting for filtering
 		 *  @param {int} json.iTotalDisplayRecords Number of records in the data set, accounting for filtering
@@ -2012,7 +2012,7 @@
 				oPrevSearch.bCaseInsensitive = oFilter.bCaseInsensitive;
 			};
 		
-			/* In server-side processing all filtering is done by the server, so no point hanging around here */
+			/* In cc.explain.server-side processing all filtering is done by the cc.explain.server, so no point hanging around here */
 			if ( !oSettings.oFeatures.bServerSide )
 			{
 				/* Global filter */
@@ -2546,7 +2546,7 @@
 		/**
 		 * Draw the table for the first time, adding all required features
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param {object} [json] JSON from the server that completed the table, if using Ajax source
+		 *  @param {object} [json] JSON from the cc.explain.server that completed the table, if using Ajax source
 		 *    with client-side processing (optional)
 		 *  @memberof DataTable#oApi
 		 */
@@ -3773,7 +3773,7 @@
 				aoColumns = oSettings.aoColumns,
 				oAria = oSettings.oLanguage.oAria;
 			
-			/* No sorting required if server-side or no sorting array */
+			/* No sorting required if cc.explain.server-side or no sorting array */
 			if ( !oSettings.oFeatures.bServerSide && 
 				(oSettings.aaSorting.length !== 0 || oSettings.aaSortingFixed !== null) )
 			{
@@ -4901,8 +4901,8 @@
 		/**
 		 * Add a single new row or multiple rows of data to the table. Please note
 		 * that this is suitable for client-side processing only - if you are using 
-		 * server-side processing (i.e. "bServerSide": true), then to add data, you
-		 * must add it to the data source, i.e. the server-side, through an Ajax call.
+		 * cc.explain.server-side processing (i.e. "bServerSide": true), then to add data, you
+		 * must add it to the data source, i.e. the cc.explain.server-side, through an Ajax call.
 		 *  @param {array|object} mData The data to be added to the table. This can be:
 		 *    <ul>
 		 *      <li>1D array of data - add a single row with the data provided</li>
@@ -6260,7 +6260,7 @@
 			if ( oSettings.oFeatures.bServerSide && oSettings.oFeatures.bSort &&
 				   oSettings.oFeatures.bSortClasses )
 			{
-				/* Enable sort classes for server-side processing. Safe to do it here, since server-side
+				/* Enable sort classes for cc.explain.server-side processing. Safe to do it here, since cc.explain.server-side
 				 * processing must be enabled by the developer
 				 */
 				_fnCallbackReg( oSettings, 'aoDrawCallback', _fnSortingClasses, 'server_side_sort_classes' );
@@ -7965,7 +7965,7 @@
 	
 	
 		/**
-		 * Configure DataTables to use server-side processing. Note that the
+		 * Configure DataTables to use cc.explain.server-side processing. Note that the
 		 * sAjaxSource parameter must also be given in order to give DataTables a
 		 * source to obtain the required data for each draw.
 		 *  @type boolean
@@ -8276,7 +8276,7 @@
 		 * since that is obtained using an async XHR call.
 		 *  @type function
 		 *  @param {object} oSettings DataTables settings object
-		 *  @param {object} json The JSON object request from the server - only
+		 *  @param {object} json The JSON object request from the cc.explain.server - only
 		 *    present if client-side Ajax sourced data is used
 		 *  @dtopt Callbacks
 		 * 
@@ -8346,14 +8346,14 @@
 	
 		/**
 		 * This parameter allows you to override the default function which obtains
-		 * the data from the server ($.getJSON) so something more suitable for your
+		 * the data from the cc.explain.server ($.getJSON) so something more suitable for your
 		 * application. For example you could use POST data, or pull information from
 		 * a Gears or AIR database.
 		 *  @type function
 		 *  @member
 		 *  @param {string} sSource HTTP source to obtain the data from (sAjaxSource)
 		 *  @param {array} aoData A key/value pair object containing the data to send
-		 *    to the server
+		 *    to the cc.explain.server
 		 *  @param {function} fnCallback to be called on completion of the data get
 		 *    process that will draw the data on the page.
 		 *  @param {object} oSettings DataTables settings object
@@ -8361,7 +8361,7 @@
 		 *  @dtopt Server-side
 		 * 
 		 *  @example
-		 *    // POST data to server
+		 *    // POST data to cc.explain.server
 		 *    $(document).ready(function() {
 		 *      $('#example').dataTable( {
 		 *        "bProcessing": true,
@@ -8392,7 +8392,7 @@
 				"type": oSettings.sServerMethod,
 				"error": function (xhr, error, thrown) {
 					if ( error == "parsererror" ) {
-						alert( "DataTables warning: JSON data from server could not be parsed. "+
+						alert( "DataTables warning: JSON data from cc.explain.server could not be parsed. "+
 							"This is caused by a JSON formatting error." );
 					}
 				}
@@ -8401,16 +8401,16 @@
 	
 	
 		/**
-		 * It is often useful to send extra data to the server when making an Ajax
+		 * It is often useful to send extra data to the cc.explain.server when making an Ajax
 		 * request - for example custom filtering information, and this callback
-		 * function makes it trivial to send extra information to the server. The
+		 * function makes it trivial to send extra information to the cc.explain.server. The
 		 * passed in parameter is the data set that has been constructed by
 		 * DataTables, and you can add to this or modify it as you require.
 		 *  @type function
 		 *  @param {array} aoData Data array (array of objects which are name/value
 		 *    pairs) that has been constructed by DataTables and will be sent to the
-		 *    server. In the case of Ajax sourced data with server-side processing
-		 *    this will be an empty array, for server-side processing there will be a
+		 *    cc.explain.server. In the case of Ajax sourced data with cc.explain.server-side processing
+		 *    this will be an empty array, for cc.explain.server-side processing there will be a
 		 *    significant number of parameters!
 		 *  @returns {undefined} Ensure that you modify the aoData array passed in,
 		 *    as this is passed by reference.
@@ -8435,7 +8435,7 @@
 		/**
 		 * Load the table state. With this function you can define from where, and how, the
 		 * state of a table is loaded. By default DataTables will load from its state saving
-		 * cookie, but you might wish to use local storage (HTML5) or a server-side database.
+		 * cookie, but you might wish to use local storage (HTML5) or a cc.explain.server-side database.
 		 *  @type function
 		 *  @member
 		 *  @param {object} oSettings DataTables settings object
@@ -8449,7 +8449,7 @@
 		 *        "fnStateSave": function (oSettings, oData) {
 		 *          var o;
 		 *          
-		 *          // Send an Ajax request to the server to get the data. Note that
+		 *          // Send an Ajax request to the cc.explain.server to get the data. Note that
 		 *          // this is a synchronous request.
 		 *          $.ajax( {
 		 *            "url": "/state_load",
@@ -8538,7 +8538,7 @@
 		/**
 		 * Save the table state. This function allows you to define where and how the state
 		 * information for the table is stored - by default it will use a cookie, but you
-		 * might want to use local storage (HTML5) or a server-side database.
+		 * might want to use local storage (HTML5) or a cc.explain.server-side database.
 		 *  @type function
 		 *  @member
 		 *  @param {object} oSettings DataTables settings object
@@ -8550,7 +8550,7 @@
 		 *      $('#example').dataTable( {
 		 *        "bStateSave": true,
 		 *        "fnStateSave": function (oSettings, oData) {
-		 *          // Send an Ajax request to the server with the state object
+		 *          // Send an Ajax request to the cc.explain.server with the state object
 		 *          $.ajax( {
 		 *            "url": "/state_save",
 		 *            "data": oData,
@@ -8615,7 +8615,7 @@
 	
 	
 		/**
-		 * When enabled DataTables will not make a request to the server for the first
+		 * When enabled DataTables will not make a request to the cc.explain.server for the first
 		 * page draw - rather it will use the data already on the page (no sorting etc
 		 * will be applied to it), thus saving on an XHR at load time. iDeferLoading
 		 * is used to indicate that deferred loading is required, but it is also used
@@ -9030,7 +9030,7 @@
 			 * When using Ajax sourced data and during the first draw when DataTables is
 			 * gathering the data, this message is shown in an empty row in the table to
 			 * indicate to the end user the the data is being loaded. Note that this
-			 * parameter is not used when loading data by server-side processing, just
+			 * parameter is not used when loading data by cc.explain.server-side processing, just
 			 * Ajax sourced data with client-side processing.
 			 *  @type string
 			 *  @default Loading...
@@ -9102,7 +9102,7 @@
 		
 			/**
 			 * All of the language information can be stored in a file on the
-			 * server-side, which DataTables will look up if this parameter is passed.
+			 * cc.explain.server-side, which DataTables will look up if this parameter is passed.
 			 * It must store the URL of the language file, which is in a JSON format,
 			 * and the object has the same properties as the oLanguage object in the
 			 * initialiser object (i.e. the above parameters). Please refer to one of
@@ -9168,7 +9168,7 @@
 	
 		/**
 		 * By default DataTables will look for the property 'aaData' when obtaining
-		 * data from an Ajax source or for server-side processing - this parameter
+		 * data from an Ajax source or for cc.explain.server-side processing - this parameter
 		 * allows that property to be changed. You can use Javascript dotted object
 		 * notation to get a data source for multiple levels of nesting.
 		 *  @type string
@@ -9370,7 +9370,7 @@
 	
 	
 		/**
-		 * Set the HTTP method that is used to make the Ajax call for server-side
+		 * Set the HTTP method that is used to make the Ajax call for cc.explain.server-side
 		 * processing or Ajax sourced data.
 		 *  @type string
 		 *  @default GET
@@ -9911,12 +9911,12 @@
 	
 	
 		/**
-		 * This parameter is only used in DataTables' server-side processing. It can
+		 * This parameter is only used in DataTables' cc.explain.server-side processing. It can
 		 * be exceptionally useful to know what columns are being displayed on the
 		 * client side, and to map these to database fields. When defined, the names
-		 * also allow DataTables to reorder information from the server if it comes
+		 * also allow DataTables to reorder information from the cc.explain.server if it comes
 		 * back in an unexpected order (i.e. if you switch your columns around on the
-		 * client-side, your server-side code does not also need updating).
+		 * client-side, your cc.explain.server-side code does not also need updating).
 		 *  @type string
 		 *  @default <i>Empty string</i>
 		 *  @dtopt Columns
@@ -10145,7 +10145,7 @@
 			 * Delay the creation of TR and TD elements until they are actually
 			 * needed by a driven page draw. This can give a significant speed
 			 * increase for Ajax source and Javascript source data, but makes no
-			 * difference at all fro DOM and server-side processing tables.
+			 * difference at all fro DOM and cc.explain.server-side processing tables.
 			 * Note that this parameter will be set by the initialisation routine. To
 			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
@@ -10191,7 +10191,7 @@
 			
 			/**
 			 * Processing indicator enable flag whenever DataTables is enacting a
-			 * user request - typically an Ajax request for server-side processing.
+			 * user request - typically an Ajax request for cc.explain.server-side processing.
 			 * Note that this parameter will be set by the initialisation routine. To
 			 * set a default use {@link DataTable.defaults}.
 			 *  @type boolean
@@ -10200,7 +10200,7 @@
 			
 			/**
 			 * Server-side processing enabled flag - when enabled DataTables will
-			 * get all data from the server for every draw - there is no filtering,
+			 * get all data from the cc.explain.server for every draw - there is no filtering,
 			 * sorting or paging done on the client-side.
 			 * Note that this parameter will be set by the initialisation routine. To
 			 * set a default use {@link DataTable.defaults}.
@@ -10582,7 +10582,7 @@
 		"nTableWrapper": null,
 		
 		/**
-		 * Indicate if when using server-side processing the loading of data 
+		 * Indicate if when using cc.explain.server-side processing the loading of data
 		 * should be deferred until the second draw.
 		 * Note that this parameter will be set by the initialisation routine. To
 		 * set a default use {@link DataTable.defaults}.
@@ -10698,7 +10698,7 @@
 		
 		/**
 		 * Property from a given object from which to read the table data from. This
-		 * can be an empty string (when not server-side processing), in which case 
+		 * can be an empty string (when not cc.explain.server-side processing), in which case
 		 * it is  assumed an an array is given directly.
 		 * Note that this parameter will be set by the initialisation routine. To
 		 * set a default use {@link DataTable.defaults}.
@@ -10714,7 +10714,7 @@
 		"bAjaxDataGet": true,
 		
 		/**
-		 * The last jQuery XHR object that was used for server-side data gathering. 
+		 * The last jQuery XHR object that was used for cc.explain.server-side data gathering.
 		 * This can be used for working with the XHR information in one of the 
 		 * callbacks
 		 *  @type object
@@ -10723,7 +10723,7 @@
 		"jqXHR": null,
 		
 		/**
-		 * Function to get the server-side data.
+		 * Function to get the cc.explain.server-side data.
 		 * Note that this parameter will be set by the initialisation routine. To
 		 * set a default use {@link DataTable.defaults}.
 		 *  @type function
@@ -10732,7 +10732,7 @@
 		
 		/**
 		 * Functions which are called prior to sending an Ajax request so extra 
-		 * parameters can easily be sent to the server
+		 * parameters can easily be sent to the cc.explain.server
 		 *  @type array
 		 *  @default []
 		 */
@@ -10766,7 +10766,7 @@
 		
 		/**
 		 * Counter for the draws that the table does. Also used as a tracker for
-		 * server-side processing
+		 * cc.explain.server-side processing
 		 *  @type int
 		 *  @default 0
 		 */
@@ -10813,7 +10813,7 @@
 		 * Server-side processing - number of records in the result set
 		 * (i.e. before filtering), Use fnRecordsTotal rather than
 		 * this property to get the value of the number of records, regardless of
-		 * the server-side processing setting.
+		 * the cc.explain.server-side processing setting.
 		 *  @type int
 		 *  @default 0
 		 *  @private
@@ -10824,7 +10824,7 @@
 		 * Server-side processing - number of records in the current display set
 		 * (i.e. after filtering). Use fnRecordsDisplay rather than
 		 * this property to get the value of the number of records, regardless of
-		 * the server-side processing setting.
+		 * the cc.explain.server-side processing setting.
 		 *  @type boolean
 		 *  @default 0
 		 *  @private
@@ -11551,7 +11551,7 @@
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} oSettings DataTables settings object
-	 *  @param {object} json The JSON object request from the server - only
+	 *  @param {object} json The JSON object request from the cc.explain.server - only
 	 *    present if client-side Ajax sourced data is used</li></ol>
 	 */
 
@@ -11601,7 +11601,7 @@
 
 	/**
 	 * Ajax (XHR) event, fired whenever an Ajax request is completed from a request to 
-	 * made to the server for new data (note that this trigger is called in fnServerData,
+	 * made to the cc.explain.server for new data (note that this trigger is called in fnServerData,
 	 * if you override fnServerData and which to use this event, you need to trigger it in
 	 * you success function).
 	 *  @name DataTable#xhr
