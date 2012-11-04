@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;

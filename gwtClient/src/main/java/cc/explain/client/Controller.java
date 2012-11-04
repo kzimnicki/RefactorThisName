@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;

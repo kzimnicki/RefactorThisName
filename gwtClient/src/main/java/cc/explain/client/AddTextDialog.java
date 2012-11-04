@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -105,7 +105,7 @@ public class AddTextDialog extends CafaWidget implements Dialog {
              $wnd.ajaxExecutor.loadOptions(function(optionsData){
                 var pattern = optionsData['textTemplate'];
                 text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
-                instance.@mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
+                instance.@cc.explain.client.AddTextDialog::setText(Ljava/lang/String;)(text);
              });
         });
     }-*/;
@@ -118,7 +118,7 @@ public class AddTextDialog extends CafaWidget implements Dialog {
              $wnd.ajaxExecutor.loadOptions(function(optionsData){
                 var pattern = optionsData['subtitleTemplate'];
                 text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
-                instance.@mySampleApplication.client.AddTextDialog::setText(Ljava/lang/String;)(text);
+                instance.@cc.explain.client.AddTextDialog::setText(Ljava/lang/String;)(text);
              });
         });
     }-*/;

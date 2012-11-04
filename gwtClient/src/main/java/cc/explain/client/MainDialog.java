@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
@@ -117,7 +117,7 @@ public class MainDialog extends CafaWidget implements Dialog {
     private native void initErrorHandler() /*-{
          var that = this;
          $wnd.errorHandler = function(errorData) {
-            that.@mySampleApplication.client.MainDialog::handleError(Ljava/lang/String;)(errorData)
+            that.@cc.explain.client.MainDialog::handleError(Ljava/lang/String;)(errorData)
          }
      }-*/;
 }

@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -91,7 +91,7 @@ public class LoginDropDown extends Composite {
         var instance = this;
         $wnd.ajaxExecutor.login(username, password, function(data) {
             $wnd.commonUtils.saveCookie(username, password);
-            instance.@mySampleApplication.client.LoginDropDown::handleComponentsVisibility(Ljava/lang/String;)(username);
+            instance.@cc.explain.client.LoginDropDown::handleComponentsVisibility(Ljava/lang/String;)(username);
         });
     }-*/;
 }

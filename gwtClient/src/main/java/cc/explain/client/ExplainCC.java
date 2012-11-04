@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -6,7 +6,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 /**
  * Entry point classes define <code>onModuleLoad()</code>
  */
-public class MySampleApplication implements EntryPoint {
+public class ExplainCC implements EntryPoint {
 
     /**
      * This is the entry point method.

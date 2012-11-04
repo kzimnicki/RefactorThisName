@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -64,7 +64,7 @@ public class RegisterDialog extends CafaWidget implements Dialog {
     public native void register(String username, String password) /*-{
         var instance = this;
         $wnd.ajaxExecutor.register(username, password, function(data) {
-            instance.@mySampleApplication.client.RegisterDialog::registerCallback(Ljava/lang/String;)(data);
+            instance.@cc.explain.client.RegisterDialog::registerCallback(Ljava/lang/String;)(data);
         });
     }-*/;
 }

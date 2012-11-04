@@ -1,4 +1,4 @@
-package mySampleApplication.client;
+package cc.explain.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -76,7 +76,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     public native void loadOptions() /*-{
         var instance = this;
         $wnd.ajaxExecutor.loadOptions(function(optionsData){
-            instance.@mySampleApplication.client.OptionsDialog::initOptions(Lcom/google/gwt/core/client/JavaScriptObject;)(optionsData);
+            instance.@cc.explain.client.OptionsDialog::initOptions(Lcom/google/gwt/core/client/JavaScriptObject;)(optionsData);
         });
     }-*/;
 
@@ -89,7 +89,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         $wnd.console.log(json);
         console.log(json);
         $wnd.ajaxExecutor.saveOptions(json, function(data){
-            instance.@mySampleApplication.client.OptionsDialog::afterSave()();
+            instance.@cc.explain.client.OptionsDialog::afterSave()();
         });
     }-*/;
 
