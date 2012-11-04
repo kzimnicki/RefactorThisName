@@ -9,5 +9,7 @@ import com.google.gwt.event.shared.EventHandler;
  * Time: 15:40
  */
 public interface UserLoggedEventHandler extends EventHandler {
+
     public void onUserLoggedEvent();
+
 }

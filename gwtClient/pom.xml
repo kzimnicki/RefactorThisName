@@ -44,7 +44,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <runTarget>MySampleApplication.html</runTarget>
+                    <runTarget>index.html</runTarget>
                     <hostedWebapp>${webappDirectory}</hostedWebapp>
                 </configuration>
             </plugin>

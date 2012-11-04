@@ -1,23 +1,23 @@
 package cc.explain.client.event;
 
-import com.google.web.bindery.event.shared.Event;
+import com.google.gwt.event.shared.GwtEvent;
 
 /**
  * User: kzimnick
  * Date: 04.11.12
  * Time: 14:13
  */
-public class UserLoggedEvent extends Event {
+public class UserLoggedEvent extends GwtEvent<UserLoggedEventHandler> {
 
-    public static Type TYPE;
+    public static Type<UserLoggedEventHandler> TYPE = new Type<UserLoggedEventHandler>();
 
     @Override
-    public Type getAssociatedType() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Type<UserLoggedEventHandler> getAssociatedType() {
+        return TYPE;
     }
 
     @Override
-    protected void dispatch(Object handler) {
-
+    protected void dispatch(UserLoggedEventHandler handler) {
+        handler.onUserLoggedEvent();
     }
 }

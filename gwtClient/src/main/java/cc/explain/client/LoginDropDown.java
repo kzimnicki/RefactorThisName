@@ -1,5 +1,6 @@
 package cc.explain.client;
 
+import cc.explain.client.event.UserLoggedEvent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -25,16 +26,11 @@ public class LoginDropDown extends Composite {
     @UiField
     Button register;
 
-//    @UiField
-//    Label dropDownText;
-
     @UiTemplate("LoginDropDown.ui.xml")
     interface LoginDropDownUiBinder extends UiBinder<Widget, LoginDropDown> {
     }
 
     private static LoginDropDownUiBinder uiBinder = GWT.create(LoginDropDownUiBinder.class);
-
-    private Controller controller;
 
     private CafaWidget parent;
 
@@ -60,6 +56,10 @@ public class LoginDropDown extends Composite {
             register.setVisible(true);
             logout.setVisible(false);
         }
+    }
+
+    public void userLogged(){
+      parent.getController().getEventBus().fireEvent(new UserLoggedEvent());
     }
 
     @UiHandler("login")
@@ -92,6 +92,7 @@ public class LoginDropDown extends Composite {
         $wnd.ajaxExecutor.login(username, password, function(data) {
             $wnd.commonUtils.saveCookie(username, password);
             instance.@cc.explain.client.LoginDropDown::handleComponentsVisibility(Ljava/lang/String;)(username);
+            instance.@cc.explain.client.LoginDropDown::userLogged()();
         });
     }-*/;
 }

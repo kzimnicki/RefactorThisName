@@ -2,6 +2,7 @@ package cc.explain.client;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -12,12 +13,25 @@ public class Controller implements ValueChangeHandler<String> {
 	private static final String TAB_ACTIVE = "tab_active";
 	private static final String TAB_PREFIX = "tab_";
 	public HashMap<DialogName, Widget> widgets = new HashMap<DialogName, Widget>();
-//	private CafaServiceAsync service;
+
+    private EventBus eventBus;
+
+
+    public EventBus getEventBus() {
+        return eventBus;
+    }
+
+    public void setEventBus(EventBus eventBus) {
+        this.eventBus = eventBus;
+    }
+
+
 
     private MainDialog mainDialog;
 
-	public Controller(MainDialog mainDialog) {
+	public Controller(MainDialog mainDialog, EventBus eventBus) {
         this.mainDialog = mainDialog;
+        setEventBus(eventBus);
 		History.addValueChangeHandler(this);
 	}
 
@@ -53,18 +67,6 @@ public class Controller implements ValueChangeHandler<String> {
 			mainDialog.getContainer().clear();
 			mainDialog.getContainer().add(widget);
 		}
-//		setTabStyle(dialogName);
-	}
-	
-	private void setTabStyle(String selectedDialogName){
-//		DialogName[] names = DialogName.values();
-//		for(DialogName dialogName : names){
-//			Element elementById = DOM.getElementById(TAB_PREFIX+dialogName.getName());
-//			if(elementById != null){
-//					elementById.removeClassName(TAB_ACTIVE);
-//			}
-//		}
-//		DOM.getElementById(TAB_PREFIX+selectedDialogName).setClassName(TAB_ACTIVE);
 	}
 	
 	//TODO refactor: jedno wspolne miejsce dla empty stringow
