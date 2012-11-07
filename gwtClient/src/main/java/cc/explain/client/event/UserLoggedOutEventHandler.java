@@ -10,6 +10,6 @@ import com.google.gwt.event.shared.EventHandler;
  */
 public interface UserLoggedOutEventHandler extends EventHandler {
 
-    public void onUserLoggedEvent();
+    public void onUserLoggedOutEvent();
 
 }

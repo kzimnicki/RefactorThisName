@@ -7,17 +7,17 @@ import com.google.gwt.event.shared.GwtEvent;
  * Date: 04.11.12
  * Time: 14:13
  */
-public class UserLoggedOutEvent extends GwtEvent<UserLoggedEventHandler> {
+public class UserLoggedOutEvent extends GwtEvent<UserLoggedOutEventHandler> {
 
-    public static Type<UserLoggedEventHandler> TYPE = new Type<UserLoggedEventHandler>();
+    public static Type<UserLoggedOutEventHandler> TYPE = new Type<UserLoggedOutEventHandler>();
 
     @Override
-    public Type<UserLoggedEventHandler> getAssociatedType() {
+    public Type<UserLoggedOutEventHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(UserLoggedEventHandler handler) {
-        handler.onUserLoggedEvent();
+    protected void dispatch(UserLoggedOutEventHandler handler) {
+        handler.onUserLoggedOutEvent();
     }
 }
