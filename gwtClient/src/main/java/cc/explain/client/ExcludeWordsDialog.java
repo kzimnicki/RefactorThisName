@@ -1,18 +1,19 @@
 package cc.explain.client;
 
-import cc.explain.client.event.UserLoggedEvent;
-import cc.explain.client.event.UserLoggedEventHandler;
+import cc.explain.client.event.UserLoggedOutEvent;
+import cc.explain.client.event.UserLoggedOutEventHandler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Widget;
 
-public class ExcludeWordsDialog extends CafaWidget implements Dialog {
+public class ExcludeWordsDialog extends CafaWidget implements Dialog, UserLoggedOutEventHandler {
+
+
 
     @UiTemplate("ExcludeWordsDialog.ui.xml")
     interface ExcludeWordsDialogUiBinder extends UiBinder<Widget, ExcludeWordsDialog> {
@@ -29,19 +30,27 @@ public class ExcludeWordsDialog extends CafaWidget implements Dialog {
         initWidget(uiBinder.createAndBindUi(this));
     }
 
+    public void onUserLoggedOutEvent() {
+       clear();
+    }
+
     @UiHandler("exportButton")
     public void exportButtonClick(ClickEvent e){
         loadCSVContent();
     }
 
     public void init() {
+        clear();
         loadResults();
-        getController().getEventBus().addHandler(UserLoggedEvent.TYPE, new UserLoggedEventHandler() {
-            public void onUserLoggedEvent() {
-                Window.alert("User logged out!!!");
-            }
-        });
     }
+
+    public void initHandler(){
+         getController().getEventBus().addHandler(UserLoggedOutEvent.TYPE,this);
+    }
+
+    public native void clear() /*-{
+        $wnd.popup.clear('#excludedWords');
+    }-*/;
 
      public native void loadCSVContent() /*-{
         $wnd.ajaxExecutor.exportExcludedWords(function(data) {

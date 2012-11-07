@@ -55,6 +55,7 @@ public class Controller implements ValueChangeHandler<String> {
 	private Widget createDialog(DialogName dialogName) {
 		CafaWidget cafaWidget = dialogName.getDialog();
 		cafaWidget.setController(this);
+        cafaWidget.initHandler();
 		return cafaWidget;
 	}
 

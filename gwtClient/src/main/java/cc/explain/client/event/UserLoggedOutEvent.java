@@ -7,7 +7,7 @@ import com.google.gwt.event.shared.GwtEvent;
  * Date: 04.11.12
  * Time: 14:13
  */
-public class UserLoggedEvent extends GwtEvent<UserLoggedEventHandler> {
+public class UserLoggedOutEvent extends GwtEvent<UserLoggedEventHandler> {
 
     public static Type<UserLoggedEventHandler> TYPE = new Type<UserLoggedEventHandler>();
 

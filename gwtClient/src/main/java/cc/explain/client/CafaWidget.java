@@ -8,9 +8,9 @@ public class CafaWidget extends Composite {
 	private Controller controller;
 
 	
-	public void init(){
-		
-	}
+	public void init(){}
+    public void initHandler(){}
+
 	public void setController(Controller controller) {
 		this.controller = controller;
 	}

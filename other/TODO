@@ -1,48 +1,36 @@
-Pierwszy Release:
-- dolozyc sonde.
-- zrobic release na serwer
-
 Refactoring:
-- W DAOsach wiecej empty list zwracac przez co w serwicach bedzie mniej ifow.
 - import.sql nie dziala.
 - dodac budowanie aplikacji z poziomu serwera, maven git i sama niech sie zbuduje. Jeden skrypt aby to ogarnac.
-- export slow zrobic na tym samej zasadzie co errory, generycznie, z uwzglednieniem roznych dialogow. handleError, handleInfo itp.
 - simple event bus
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - zmienic nazwe rootWord.getRootWord().getValue() => rootWord.getWord().getValue();
-- Zmienic nazwe projekty.
-- Refactoring - cc.explain.cc.refactor.server side:
-- - zrobic serwisy
-- - odciazyc fasade, za duzo tam logiki siedzi.
-- - Generic dao ale z wyszczegolnienem dao dla hqli.
 - nastepuje wylgoowanie po zamknieicu przegladarki - dodac jakis expiry time.
-
-
-
-
-Skrypty javascript:
+- przeniesc newModel do wlasciwej galezi.
+- security przerobic z basic na jakies inne.
+- zrobic refactoring w skryptach - jsowych i dopisac testy.
 - wywalic for var in loop http://stackoverflow.com/questions/3010840/loop-through-array-in-javascript
+- versjonowanie static contentu skrypt.js?v=1231
+
 
 Chrome Plugin:
 - Jezeli uzywamy localStorage to wprowadzic jakis swoj prefix. np. etMax
 - czasami tlumaczy nawiasami dla .txt, moznaby wtedy zapytac czy sa to napisy ?
 
 Nowe pomysly-technologie:
-- Underscore.js - przeczytac i wprowadzic do projektu.
 - dodac optional http://code.google.com/p/guava-libraries/wiki/UsingAndAvoidingNullExplained
 - NoSQL
+- Kategoryzacja slow, numery, ubrania, kolory itp.
 - Youtube caption.http://video.google.com/timedtext?lang=en&v=XcT4yYu_TTs
 - Pons.de tlumaczy slowa, ktorych nie dał rady przedłumaczyć Google translate and Microsoft. Ale moze korzystac z innych slow i szukac synonimów WORDNET!!! http://webapps.stackexchange.com/questions/9156/database-of-english-synonyms
 
 
 Drugi Release:
-- Problem z kodowaniem  - zobaczymy co bedzie na serwerze, ale tylko z postem jest problem.
+- jakiś suwaczek czy coś z opisami typu "częściej występujące słowa" i "rzadziej występujące" czy coś w ten deseń, bo cyferki są mało intuicyjne.
 - phrasal verbs
 - Phrasal verbs - problem jezeli sa wiekszej odleglosci od siebie:  They TOPPED the building OFF with a tall flagpole juz nie podmieni tego phrasal verba.
 - PrePersist i PreUpdate nie zadzialalo - zastanowic sie nad EntityManagerem, dostaniemy TypedQuery.
 - dodac do kolumn create i update date w Entity Object.
-- jak klikam add all to exclude, wtedy powinien przycisk zniknac, albo loading bar sie pojawic. Co aby user nie klikal nie wiadomo ile.
-- versjonowanie static contentu skrypt.js?v=1231
+- w optionasch dodac jakies preview site.
 
 Zastanowic sie nad:
 - podczas exclude slowa, moznaby odrazu usuwac wszytskie wordfamily z tabelki addText
@@ -77,20 +65,6 @@ Jak jest jedno slowo to wezmie literke, a nie slowo. Dla google, napisac test do
 Przy zbyt duze ilosci strzalów jest sorry, nie moge  wtedy google translate tłumaczyc. Przetestowac ile strzalow mozna oddac zanim nastapi sorry :)
 -Error przy zbyt krótkim haśle: size must be between 6 and 20 -> powinno być Password ....
 -W "Add text" po kliknięciu w okienko tekst informacyjny powinien zniknąć
-
-Do retestu:
-+ po przetlumaczneiu, wywala blad apropo wysylania slow translatedSlow, wywalic.
-+ ucina screen na pelnoekranowy monitorze.
-+Tworzenie bazy pozanych wczesniej słówek
-+Filtrowanie po częstości występowania słówek -> Filtrowanie bazy po częstości...
-+Wklejamy napisy do filmu - coś trzeba dopisać/ zmienić, żeby było jasne.
-+Z tabelki usuwamy słówka której już znamy -> brak przecinka przed "której"
-+Jak to działa aplikacja ? -> hehehe :)
-+Konto zawiera wykluczone przeze mnie słówka (okolo 1000). -> 1500
-+na końcu dopisać coś w stylu: "Życzę miłego użytkowania" :)
-+Po utworzeniu konta pojawia się Error, że jesteśmy niezalogowani, a powinno nas zalogować lub zmienić słowo "Error" w nagłówku na np. Information :)
-+Nie dodaje do "Include words"
-
 
 Funkcjonalnosc, nowe pomysly:
 

@@ -119,6 +119,10 @@ popup.hidePopupMessage = function(data){
     $("#csvPopup").hide();
 }
 
+popup.clear = function(id){
+    popup.createSiteTable([],'',id);
+}
+
 popup.createTable = function(wordsMap) {
      var words = [];
     for (var key in wordsMap) {

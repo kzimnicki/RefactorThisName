@@ -42,6 +42,7 @@ public class AddTextDialog extends CafaWidget implements Dialog {
     }
 
     public void init() {
+        textArea.getElement().setPropertyString("placeholder","Put here english text or subtitles.");
         sendTextButton.setVisible(true);
         textArea.setVisible(true);
         translateTextButton.setVisible(false);

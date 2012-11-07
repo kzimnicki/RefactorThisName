@@ -20,7 +20,7 @@
 
                     <div class="controls">-->
                         <g:TextArea name="textToTranslate" ui:field="textArea" height="480px" width="770px">
-                            Put here english text or subtitles.
+
                         </g:TextArea>
                     <!--</div>-->
 

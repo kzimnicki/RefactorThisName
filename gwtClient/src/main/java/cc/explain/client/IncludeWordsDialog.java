@@ -1,5 +1,7 @@
 package cc.explain.client;
 
+import cc.explain.client.event.UserLoggedOutEvent;
+import cc.explain.client.event.UserLoggedOutEventHandler;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -9,7 +11,19 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Widget;
 
-public class IncludeWordsDialog extends CafaWidget implements Dialog {
+public class IncludeWordsDialog extends CafaWidget implements Dialog, UserLoggedOutEventHandler {
+
+    public void onUserLoggedOutEvent() {
+        clear();
+    }
+
+    public native void clear() /*-{
+        $wnd.popup.clear('#includedWords');
+    }-*/;
+
+    public void initHandler(){
+          getController().getEventBus().addHandler(UserLoggedOutEvent.TYPE,this);
+    }
 
     @UiTemplate("IncludeWordsDialog.ui.xml")
     interface IncludeWordsDialogUiBinder extends UiBinder<Widget, IncludeWordsDialog> {
@@ -26,6 +40,7 @@ public class IncludeWordsDialog extends CafaWidget implements Dialog {
     }
 
      public void init() {
+        clear();
         loadResults();
     }
 

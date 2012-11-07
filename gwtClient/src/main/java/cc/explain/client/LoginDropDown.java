@@ -1,6 +1,6 @@
 package cc.explain.client;
 
-import cc.explain.client.event.UserLoggedEvent;
+import cc.explain.client.event.UserLoggedOutEvent;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -58,8 +58,8 @@ public class LoginDropDown extends Composite {
         }
     }
 
-    public void userLogged(){
-      parent.getController().getEventBus().fireEvent(new UserLoggedEvent());
+    public void userLoggedOut(){
+      parent.getController().getEventBus().fireEvent(new UserLoggedOutEvent());
     }
 
     @UiHandler("login")
@@ -81,6 +81,7 @@ public class LoginDropDown extends Composite {
 
     public native void logout() /*-{
         $wnd.commonUtils.removeCookie();
+        this.@cc.explain.client.LoginDropDown::userLoggedOut()();
     }-*/;
 
     public native boolean isLogged() /*-{
@@ -92,7 +93,6 @@ public class LoginDropDown extends Composite {
         $wnd.ajaxExecutor.login(username, password, function(data) {
             $wnd.commonUtils.saveCookie(username, password);
             instance.@cc.explain.client.LoginDropDown::handleComponentsVisibility(Ljava/lang/String;)(username);
-            instance.@cc.explain.client.LoginDropDown::userLogged()();
         });
     }-*/;
 }
