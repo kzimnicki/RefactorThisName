@@ -21,6 +21,9 @@
         <webroots>
           <root url="file://$MODULE_DIR$/../gwtClient/src/main/webapp" relative="/" />
         </webroots>
+        <sourceRoots>
+          <root url="file://$MODULE_DIR$/../gwtClient/src/main/java" />
+        </sourceRoots>
       </configuration>
     </facet>
   </component>
