@@ -1,8 +1,8 @@
 package cc.explain.server.api;
 
-import cc.explain.server.model.newModel.Configuration;
-import cc.explain.server.model.newModel.RootWord;
-import cc.explain.server.model.newModel.User;
+import cc.explain.server.model.Configuration;
+import cc.explain.server.model.RootWord;
+import cc.explain.server.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
 import cc.explain.server.core.WordType;
-import cc.explain.server.model.newModel.*;
+import cc.explain.server.model.*;
 import com.google.common.collect.HashMultimap;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

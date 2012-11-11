@@ -1,8 +1,8 @@
 package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
-import cc.explain.server.model.newModel.Configuration;
-import cc.explain.server.model.newModel.User;
+import cc.explain.server.model.Configuration;
+import cc.explain.server.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

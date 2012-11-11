@@ -1,10 +1,10 @@
 package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
-import cc.explain.server.model.newModel.RootWord;
-import cc.explain.server.model.newModel.Translation;
-import cc.explain.server.model.newModel.Word;
-import cc.explain.server.model.newModel.WordRelation;
+import cc.explain.server.model.RootWord;
+import cc.explain.server.model.Translation;
+import cc.explain.server.model.Word;
+import cc.explain.server.model.WordRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

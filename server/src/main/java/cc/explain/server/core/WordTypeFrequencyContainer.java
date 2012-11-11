@@ -1,7 +1,7 @@
 package cc.explain.server.core;
 
-import cc.explain.server.model.newModel.Word;
-import cc.explain.server.model.newModel.WordFamily;
+import cc.explain.server.model.Word;
+import cc.explain.server.model.WordFamily;
 
 import java.util.Collections;
 import java.util.HashMap;
