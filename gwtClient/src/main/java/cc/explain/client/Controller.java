@@ -64,9 +64,9 @@ public class Controller implements ValueChangeHandler<String> {
 		if (isNotEmpty(dialogName)) {
 			DialogName view = DialogName.valueOf(dialogName);
 			Widget widget = getWidget(view);
-			((Dialog) widget).init();
 			mainDialog.getContainer().clear();
 			mainDialog.getContainer().add(widget);
+            ((Dialog) widget).init();
 		}
 	}
 	

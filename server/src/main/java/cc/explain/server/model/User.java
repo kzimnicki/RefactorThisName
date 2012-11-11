@@ -1,6 +1,5 @@
-package cc.explain.server.model.newModel;
+package cc.explain.server.model;
 
-import cc.explain.server.model.AuditableEntityObject;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

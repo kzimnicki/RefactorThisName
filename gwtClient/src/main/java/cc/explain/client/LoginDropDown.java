@@ -48,7 +48,7 @@ public class LoginDropDown extends Composite {
             login.setVisible(false);
             register.setVisible(false);
             logout.setVisible(true);
-            logout.setText("logout");
+            logout.setText("logout "+getUsername());
         } else {
             username.setVisible(true);
             password.setVisible(true);
@@ -57,6 +57,8 @@ public class LoginDropDown extends Composite {
             logout.setVisible(false);
         }
     }
+
+
 
     public void userLoggedOut(){
       parent.getController().getEventBus().fireEvent(new UserLoggedOutEvent());
@@ -86,6 +88,10 @@ public class LoginDropDown extends Composite {
 
     public native boolean isLogged() /*-{
         return $wnd.commonUtils.isLogged();
+    }-*/;
+
+    public native String getUsername() /*-{
+        return $wnd.commonUtils.getUsername();
     }-*/;
 
     public native void login(String username, String password) /*-{

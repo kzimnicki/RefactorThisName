@@ -1,7 +1,7 @@
-package cc.explain.server.model.newModel;
+package cc.explain.server.model;
 
-import cc.explain.server.model.EntityObject;
 import lombok.Data;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -15,20 +15,25 @@ import javax.validation.constraints.NotNull;
 /**
  * User: kzimnick
  * Date: 26.08.12
- * Time: 13:04
+ * Time: 12:20
  */
 @Entity
 @Data
 @Table(
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"rootWord_id"})},
-        name = "rootword"
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"word_id", "rootWord_id"})},
+        name="wordrelation"
 )
-@org.hibernate.annotations.Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
-public class RootWord extends EntityObject {
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
+public class WordRelation extends EntityObject {
 
     @NotNull
     @OneToOne
     @Cascade( { CascadeType.SAVE_UPDATE})
-    private Word rootWord;
+    private RootWord rootWord;
+
+    @NotNull
+    @OneToOne
+    @Cascade( { CascadeType.SAVE_UPDATE})
+    private Word word;
 
 }

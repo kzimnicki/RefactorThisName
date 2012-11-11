@@ -1,7 +1,6 @@
-package cc.explain.server.model.newModel;
+package cc.explain.server.model;
 
 import cc.explain.server.core.WordType;
-import cc.explain.server.model.EntityObject;
 import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

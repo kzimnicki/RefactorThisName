@@ -1,6 +1,4 @@
-package cc.explain.server.model.newModel;
-
-import cc.explain.server.model.EntityObject;
+package cc.explain.server.model;
 
 import javax.persistence.OneToOne;
 

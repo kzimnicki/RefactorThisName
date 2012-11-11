@@ -1,4 +1,4 @@
-package cc.explain.server.model.newModel;
+package cc.explain.server.model;
 
 /**
  * User: kzimnick

@@ -1,6 +1,5 @@
-package cc.explain.server.model.newModel;
+package cc.explain.server.model;
 
-import cc.explain.server.model.EntityObject;
 import lombok.Getter;
 import lombok.Setter;
 
