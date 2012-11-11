@@ -1,12 +1,12 @@
 package api;
 
+import cc.explain.server.model.RootWord;
+import cc.explain.server.model.Word;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import cc.explain.server.api.TextService;
-import cc.explain.server.model.newModel.RootWord;
-import cc.explain.server.model.newModel.Word;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

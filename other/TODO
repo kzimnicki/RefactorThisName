@@ -1,15 +1,15 @@
 Refactoring:
-- import.sql nie dziala.
-- dodac budowanie aplikacji z poziomu serwera, maven git i sama niech sie zbuduje. Jeden skrypt aby to ogarnac.
-- simple event bus
+- import.sql nie dziala. // z tym poczekac na rootWord.getRootWord .getValue // moze pczytac ksiazke tez.
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - zmienic nazwe rootWord.getRootWord().getValue() => rootWord.getWord().getValue();
-- nastepuje wylgoowanie po zamknieicu przegladarki - dodac jakis expiry time.
 - przeniesc newModel do wlasciwej galezi.
-- security przerobic z basic na jakies inne.
 - zrobic refactoring w skryptach - jsowych i dopisac testy.
 - wywalic for var in loop http://stackoverflow.com/questions/3010840/loop-through-array-in-javascript
+
+Przed releasem na serwer.
+- dodac budowanie aplikacji z poziomu serwera, maven git i sama niech sie zbuduje. Jeden skrypt aby to ogarnac. // dodac katalog ze skryptami budujacymi
 - versjonowanie static contentu skrypt.js?v=1231
+- jndi dla tomcata. i wywalic system.properties.
 
 
 Chrome Plugin:
@@ -31,6 +31,12 @@ Drugi Release:
 - PrePersist i PreUpdate nie zadzialalo - zastanowic sie nad EntityManagerem, dostaniemy TypedQuery.
 - dodac do kolumn create i update date w Entity Object.
 - w optionasch dodac jakies preview site.
+- dodac podpowiedzi co trzeba kliknac aby przetlumaczyc.
+ - - Na pierwszej stronie tylko informacja co to jest i przycisk zarejestruj sie. Uzyc slowa za darmo.
+
+ Trzeci release:
+ - security przerobic z basic na jakies inne.
+
 
 Zastanowic sie nad:
 - podczas exclude slowa, moznaby odrazu usuwac wszytskie wordfamily z tabelki addText

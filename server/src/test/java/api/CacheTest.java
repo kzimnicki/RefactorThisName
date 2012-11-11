@@ -1,5 +1,6 @@
 package api;
 
+import cc.explain.server.model.Word;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.util.StopWatch;
 import cc.explain.server.api.ExplainCCApi;
 import cc.explain.server.api.TextService;
 import cc.explain.server.core.CommonDao;
-import cc.explain.server.model.newModel.Word;
 
 import java.util.Set;
 

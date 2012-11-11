@@ -1,5 +1,7 @@
 package api;
 
+import cc.explain.server.model.Configuration;
+import cc.explain.server.model.User;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -11,7 +13,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import cc.explain.server.api.*;
 import cc.explain.server.api.TextService;
 import cc.explain.server.core.CommonDao;
-import cc.explain.server.model.newModel.*;
 
 import java.io.IOException;
 import java.util.Arrays;
