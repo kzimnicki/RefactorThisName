@@ -37,3 +37,18 @@ a {
 body {
     background: url('img/bg.png') left top repeat white;
 }
+
+
+#drop_zone {
+    border: 2px dashed #BBB;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 25px;
+    text-align: center;
+    font: 30pt bold;
+    color: #BBB;
+    height: 320px;
+    width: 720px;
+    cursor: move;
+}

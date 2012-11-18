@@ -49,7 +49,8 @@ public class MainDialog extends CafaWidget implements Dialog {
 	}
 
     public void setDefaultDialog(DialogName dialogName){
-       container.add(getController().getWidget(dialogName));
+        Widget widget = getController().getWidget(dialogName);
+        container.add(widget);
     }
 
 	public void init() {

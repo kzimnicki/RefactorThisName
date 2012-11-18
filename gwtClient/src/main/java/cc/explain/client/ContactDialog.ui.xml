@@ -4,91 +4,104 @@
         >
 
 
-
-
     <g:HTMLPanel styleName="row">
-
-
 
 
         <div class="span10 well">
 
-             <div id="myCarousel" class="carousel slide">
-              <!-- Carousel items -->
+            <div id="drop_zone">Drop movie here</div>
+            <div id="video"></div>
 
-            <div class="carousel-inner">
+            <br />
+
+            <div id="myCarousel" class="carousel slide">
+                <!-- Carousel items -->
+
+                <div class="carousel-inner">
                     <div class="item">
-                        <img src="img/got2.png" alt="" />
+                        <img src="img/got2.png" alt=""/>
                     </div>
                     <div class="item">
-                        <img src="img/thm.png" alt="" />
+                        <img src="img/thm.png" alt=""/>
                     </div>
                     <div class="active item">
-                        <img src="img/himym.png" alt="" />
+                        <img src="img/himym.png" alt=""/>
                     </div>
-                  </div>
-                  <!-- Carousel nav -->
-                  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-                  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                </div>
+                <!-- Carousel nav -->
+                <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
             </div>
 
             <h1>Możliwości aplikacji:</h1>
-            <br />
+            <br/>
             <ul>
-                <li>Tworzenie bazy poznanych wczesniej słówek </li>
+                <li>Tworzenie bazy poznanych wczesniej słówek</li>
                 <li>Tworzenie bazy nieznanych słówek</li>
-                <li>Wyeksportowanie baz słówek w formacie CSV </li>
+                <li>Wyeksportowanie baz słówek w formacie CSV</li>
                 <li>Wygodne wykluczanie słów pokrewnych (np. big, bigger, biggest)</li>
                 <li>Filtrowanie bazy po częstości występowania słówek</li>
                 <li>Konfigurowanie sposobu wyświetlania przetłumaczonych słówek</li>
             </ul>
 
-            <br />
+            <br/>
             <h1>Instrukcja obsługi</h1>
-            <br />
+            <br/>
             <ol>
-                <li>Klikamy "Submit text" </li>
-                <li>Wklejamy angielskie napisy(np. .srt) do filmu   </li>
-                <li>Klikamy niebieski przycisk "Submit text"  </li>
-                <li>Z tabelki usuwamy słówka, której już znamy </li>
-                <li>Klikamy "translate subtitle" </li>
-                <li>Kopiujemy tekst do pliku z napisamy </li>
+                <li>Klikamy "Submit text"</li>
+                <li>Wklejamy angielskie napisy(np. .srt) do filmu</li>
+                <li>Klikamy niebieski przycisk "Submit text"</li>
+                <li>Z tabelki usuwamy słówka, której już znamy</li>
+                <li>Klikamy "translate subtitle"</li>
+                <li>Kopiujemy tekst do pliku z napisamy</li>
                 <li>Zaczynamy oglądać film i poznawać nowe słówka :)</li>
             </ol>
-           <br />
-
+            <br/>
 
 
             <h1>Jak działa aplikacja ?</h1>
-            <br />
+            <br/>
             <ol>
                 <li>Pobiera tekst z formularza</li>
-                <li>Filtruje wszystkie słowa, które mieszczą się w zakresie "częstości występowania". Zakres pobierany jest z ustawień użytkownika</li>
-                <li>Usuwa słówka, które użytkownik już zna.                                                                            </li>
-                <li>Tworzy tabelę ze słówkami                                                                            </li>
-                <li>Użytkownik może samodzielnie usunąć z tabeli słówka, które już zna                                 </li>
-                <li>Po kliknięciu "translate subtitle", w napisach wyszukiwane są słówka z tabeli i automatycznie tłumaczone. Przetłumaczone zwroty zapsiywane są w bazie nieznanych słówek</li>
+                <li>Filtruje wszystkie słowa, które mieszczą się w zakresie "częstości występowania". Zakres pobierany
+                    jest z ustawień użytkownika
+                </li>
+                <li>Usuwa słówka, które użytkownik już zna.</li>
+                <li>Tworzy tabelę ze słówkami</li>
+                <li>Użytkownik może samodzielnie usunąć z tabeli słówka, które już zna</li>
+                <li>Po kliknięciu "translate subtitle", w napisach wyszukiwane są słówka z tabeli i automatycznie
+                    tłumaczone. Przetłumaczone zwroty zapsiywane są w bazie nieznanych słówek
+                </li>
             </ol>
-               <br />
+            <br/>
 
-             <h1>Konto testowe</h1>
-            <br />
+            <h1>Konto testowe</h1>
+            <br/>
             <p>
 
-               <code>login: user@gmail.com</code> <br />
-               <code> password: 123456  </code>  <br />
-                Konto zawiera wykluczone przeze mnie słówka (okolo 1500). Można w łatwy sposób przenieść je na własne konto. Należy tylko wyeksportowac tabelę do formatu CSV, zalogowac sie na własne konto, wkleić wyeksportowany tekst do "submit text", a nastepnie wcisnąc przycisk: "Add all words to exclude".
+                <code>login: user@gmail.com</code>
+                <br/>
+                <code>password: 123456</code>
+                <br/>
+                Konto zawiera wykluczone przeze mnie słówka (okolo 1500). Można w łatwy sposób przenieść je na własne
+                konto. Należy tylko wyeksportowac tabelę do formatu CSV, zalogowac sie na własne konto, wkleić
+                wyeksportowany tekst do "submit text", a nastepnie wcisnąc przycisk: "Add all words to exclude".
 
             </p>
 
             <h1>Uwagi</h1>
-            <br />
+            <br/>
             <p>
-                Obecny wersja aplikacji to wczesna beta, dlatego wdzięczny będę za wszelkie uwagi, sugestie i znalezione błędy. Wszystkie informacje proszę wpisywać na grupę dyskusyjną: <a href="https://groups.google.com/forum/#!forum/explain_cc"><b>explain.cc google group</b></a>.
+                Obecny wersja aplikacji to wczesna beta, dlatego wdzięczny będę za wszelkie uwagi, sugestie i znalezione
+                błędy. Wszystkie informacje proszę wpisywać na grupę dyskusyjną:
+                <a href="https://groups.google.com/forum/#!forum/explain_cc">
+                    <b>explain.cc google group</b>
+                </a>
+                .
 
             </p>
             <p>
-               Życzę miłego użytkowania :)
+                Życzę miłego użytkowania :)
 
             </p>
         </div>

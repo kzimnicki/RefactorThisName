@@ -1,8 +1,12 @@
 package cc.explain.server.api;
 
+import antlr.StringUtils;
+import cc.explain.server.core.OpenSubtitlesHasher;
+import cc.explain.server.core.XmlRpcService;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.User;
+import org.apache.xmlrpc.XmlRpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -180,6 +184,21 @@ public class ExplainCCApi {
     public List<String[]> translate(@RequestBody List<String> words) {
         saveIncludedWords(words);
         return textService.getTranslatedWord(words);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/subtitle",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @Transactional
+    public String downloadSubtitle(@RequestBody HashData data) {
+        String movieHash = OpenSubtitlesHasher.computeHash(data);
+        try {
+            return new XmlRpcService().doTest(movieHash, data.getSize());
+        } catch (XmlRpcException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return "";
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

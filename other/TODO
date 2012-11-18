@@ -18,7 +18,7 @@ Chrome Plugin:
 Nowe pomysly-technologie:
 - dodac optional http://code.google.com/p/guava-libraries/wiki/UsingAndAvoidingNullExplained
 - NoSQL
-- Kategoryzacja slow, numery, ubrania, kolory itp.
+- Kategoryzacja slow, numery, ubrania, kolory itp.  //wordnet sciagnalem plik ktory obsluguje kategoryzacje.
 - Youtube caption.http://video.google.com/timedtext?lang=en&v=XcT4yYu_TTs
 - Pons.de tlumaczy slowa, ktorych nie dał rady przedłumaczyć Google translate and Microsoft. Ale moze korzystac z innych slow i szukac synonimów WORDNET!!! http://webapps.stackexchange.com/questions/9156/database-of-english-synonyms
 

@@ -1,5 +1,7 @@
 package api;
 
+import cc.explain.server.api.*;
+import cc.explain.server.core.CommonDao;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
 import junit.framework.Assert;
@@ -10,9 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import cc.explain.server.api.*;
-import cc.explain.server.api.TextService;
-import cc.explain.server.core.CommonDao;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -159,7 +158,6 @@ public class ExplainCCApiTest {
     }
 
 
-
     @Test
     public void testSaveIncludedWords() throws Exception {
         createRegisterAndLoginUser();
@@ -269,7 +267,7 @@ public class ExplainCCApiTest {
         Map<String, WordDetails> results = api.extractWords(dataToTranslate);
 
         assertNotNull(results.get("department"));
-        assertEquals(87,  results.get("department").getFrequency().intValue());
+        assertEquals(87, results.get("department").getFrequency().intValue());
     }
 
 
@@ -289,7 +287,7 @@ public class ExplainCCApiTest {
     @Test
     public void testExportsAllExcludeWordsToCSVFormat() throws Exception {
         createRegisterAndLoginUser();
-            List<String> excludedwords = Arrays.asList(new String[]{
+        List<String> excludedwords = Arrays.asList(new String[]{
                 "car", "cat"
         });
         api.saveExcludeWords(excludedwords);
@@ -314,10 +312,10 @@ public class ExplainCCApiTest {
         assertEquals("osły", translatedWords.get(1)[0]);
     }
 
-        @Test
+    @Test
     public void testExportsAllIncludeWordsToCSVFormat() throws Exception {
         createRegisterAndLoginUser();
-            List<String> excludedwords = Arrays.asList(new String[]{
+        List<String> excludedwords = Arrays.asList(new String[]{
                 "truck", "ship"
         });
         api.saveIncludedWords(excludedwords);

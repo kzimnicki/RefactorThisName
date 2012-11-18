@@ -11,7 +11,7 @@ var TRANSLATE_URL = 'http://translate.googleapis.com/translate_a/t?anno=3&client
 var isLogged = false;
 
 
-var INCLUDED_WORDS = "app/includedWords";
+var INCLUDED_WORDS =  "app/includedWords";
 var EXCLUDED_WORDS = "app/excludedWords";
 var EXTARCT_WORDS = "app/extractWords";
 var INCLUDED_PHRASAL_VERB = "app/includedPhrasalVerbs";
@@ -29,17 +29,11 @@ this.setup = function() {
                 xhr.setRequestHeader("Authorization", "Basic " + getBase64());
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                  errorHandling(xhr);
+                commonUtils.hideDimmer();
+                window.errorHandler(xhr.responseText);
             }
         }
     );
-}
-
-this.errorHandling = function(xhr) {
-    commonUtils.hideDimmer();
-    if (window.errorHandler) {
-        window.errorHandler(xhr.responseText);
-    }
 }
 
 ajaxExecutor.extractWords = function(dataToTranslate, callback) {
@@ -51,14 +45,13 @@ ajaxExecutor.extractWords = function(dataToTranslate, callback) {
     }).done(commonUtils.hideDimmer);
 }
 
-ajaxExecutor.hash = function(hashData, callback) {
+ajaxExecutor.extractWords = function(size,head,tail) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/subtitle",
-        data: JSON.stringify(hashData),
-        dataType: "html",
+        url: SERVER_URL + "app/hash",
+        data: JSON.stringify(head+tail+size),
         success: callback
-    }).done(commonUtils.hideDimmer);
+    });
 }
 
 ajaxExecutor.translate = function(wordsArray, callback) {
@@ -124,7 +117,7 @@ ajaxExecutor.exportExcludedWords = function(callback) {
     $.ajax({
         url: SERVER_URL + "app/exportExcludedWords",
         type: AJAX_TYPE_GET,
-        dataType: 'HTML',
+         dataType: 'HTML',
         success: callback
     }).success(commonUtils.hideDimmer);
 }
@@ -134,7 +127,7 @@ ajaxExecutor.exportIncludedWords = function(callback) {
     $.ajax({
         url: SERVER_URL + "app/exportIncludedWords",
         type: AJAX_TYPE_GET,
-        dataType: 'HTML',
+         dataType: 'HTML',
         success: callback
     }).success(commonUtils.hideDimmer);
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <title>Show File Data</title>
+    <style type='text/css'>
+        body {
+            font-family: sans-serif;
+        }
+    </style>
+
+     <script type="text/javascript" language="javascript"
+            src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="js/commonUtils.js"></script>
+    <script type="text/javascript" language="javascript"
+            src="js/ajaxExecutor.js"></script>
+    <script src='js/popup.js'></script>
+    <script src='js/englishTranslator.js'></script>
+
+    <script type='text/javascript'>
+
+        function loadFile() {
+            var input, file, fr;
+
+
+            input = document.getElementById('fileinput');
+            file = input.files[0];
+            fr = new FileReader();
+
+
+            fr.onload = function(e){
+                console.log(e.target.result.length);
+                console.log(e.target.result);
+            }
+
+//            var blob = file.slice(0, 64*1024);
+            var blob = file.slice(file.size - 64*1024, file.size );
+            console.log(blob);
+            fr.readAsBinaryString(blob);
+        }
+
+    </script>
+</head>
+<body>
+<form action='#' onsubmit="return false;">
+    <input type='file' id='fileinput'>
+    <input type='button' id='btnLoad' value='Load' onclick='loadFile();'>
+</form>
+</body>
+</html>

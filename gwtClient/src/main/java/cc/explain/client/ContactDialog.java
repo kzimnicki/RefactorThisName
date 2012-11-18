@@ -19,6 +19,14 @@ public class ContactDialog extends CafaWidget implements Dialog {
     }
 
     public void init() {
+        initDragDropListeners();
     }
+
+    public native void initDragDropListeners() /*-{
+        debugger;
+         var dropZone = $wnd.document.getElementById('drop_zone');
+        dropZone.addEventListener('dragover', $wnd.dragDrop.handleDragOver, false);
+        dropZone.addEventListener('drop', $wnd.dragDrop.handleFileSelect, false);
+    }-*/;
 
 }

@@ -70,31 +70,3 @@ this.textReplace = function(text, oldString, newString, pattern) {
     text = text.replace(regex, "$1" + pattern);
     return text;
 }
-
-EnglishTranslator.loadFile = function(file) {
-
-        if (file.type != "video/mp4") {
-            console.log(file.type + " is wrong type!");
-            return;
-        }
-
-        var fileURL = URL.createObjectURL(file);
-
-        var fr = new FileReader();
-        var fr2 = new FileReader();
-
-        fr.onload = function(e) {
-            fr2.onload = function(z) {
-                var hashData = {"size":file.size,"head":e.target.result,"tail":z.target.result};
-                ajaxExecutor.hash(hashData, function(subtitle) {
-                    $("#drop_zone").hide();
-                    $('#video').append('<video width="770" height="450" src="' + fileURL + '" type="video/mp4" id="player1" controls="controls"></video>');
-                    videoSub.videosub_main(subtitle);
-                });
-            }
-            var blob = file.slice(file.size - 64 * 1024, file.size);
-            fr2.readAsDataURL(blob);
-        }
-        var blob = file.slice(0, 64 * 1024);
-        fr.readAsDataURL(blob);
-}
