@@ -9,29 +9,31 @@
         <div class="span8">
             <form class="form-horizontal" action="">
 
+                <div id="drop_zone">Drop movie here</div>
+                <div id="video"></div>
 
                 <g:HTMLPanel ui:field="tablePanel" styleName="span8">
-                    <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable"
+                    <table cellpadding="0" cellspacing="0" border="0"
+                           class="table table-striped table-bordered dataTable"
                            id="words"></table>
                 </g:HTMLPanel>
 
                 <fieldset>
-                <!--    <g:Label styleName="control-label">Text:</g:Label>
+                    <!--    <g:Label styleName="control-label">Text:</g:Label>
 
-                    <div class="controls">-->
-                        <g:TextArea name="textToTranslate" ui:field="textArea" height="480px" width="770px">
+                   <div class="controls">-->
+                    <g:TextArea name="textToTranslate" ui:field="textArea" height="280px" width="770px">
 
-                        </g:TextArea>
+                    </g:TextArea>
                     <!--</div>-->
 
                     <div class="form-actions">
                         <g:Button ui:field="sendTextButton" styleName="btn btn-primary">Submit Text</g:Button>
                         <g:Button ui:field="translateTextButton" styleName="btn btn-primary">Translate Text</g:Button>
-                        <g:Button ui:field="translateSubtitlesButton" styleName="btn btn-primary">Translate Subtitles</g:Button>
+                        <g:Button ui:field="translateSubtitlesButton" styleName="btn btn-primary">Translate Subtitles </g:Button>
                     </div>
                 </fieldset>
             </form>
-
 
 
         </div>

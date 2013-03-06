@@ -2,6 +2,7 @@ package cc.explain.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONString;
@@ -27,7 +28,13 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     TextBox max;
 
     @UiField
-    TextBox textTemplate;
+    Button preview;
+//
+//    @UiField
+//    Button restore;
+
+//    @UiField
+//    TextBox textTemplate;
 
     @UiField
     TextBox subtitleTemplate;
@@ -48,39 +55,65 @@ public class OptionsDialog extends CafaWidget implements Dialog {
 
     public void init() {
         loadOptions();
+        min.getElement().setAttribute("type", "range");
+        min.getElement().setAttribute("min", "1");
+        min.getElement().setAttribute("max", "100");
     }
 
-   @UiHandler("save")
+    @UiHandler("min")
+    public void changeSlider(ChangeEvent e) {
+        max.setValue(min.getValue());
+    }
+
+    @UiHandler("preview")
+    public void previewClick(ClickEvent e) {
+        String exampleSubtitle = "<div style='color:white; background-color: black;'>This is example## subtitle.</div>";
+        String pattern = subtitleTemplate.getText().replace("@@TRANSLATED_TEXT@@","przyklad");
+        exampleSubtitle = exampleSubtitle.replace("##",pattern);
+        getController().getMainDialog().handleError(exampleSubtitle);
+    }
+//
+    @UiHandler("restore")
+    public void restore(ClickEvent e) {
+        max.setValue(String.valueOf(89));
+        min.setValue(String.valueOf(89));
+        subtitleTemplate.setText("<font color=\"yellow\">(@@TRANSLATED_TEXT@@)</font>");
+    }
+
+    @UiHandler("max")
+    public void changeMax(ChangeEvent e) {
+        min.setValue(max.getValue());
+    }
+
+    @UiHandler("save")
     public void registerClick(ClickEvent e) {
-       JSONObject jsonObject = new JSONObject();
-       jsonObject.put(TEXT_TEMPLATE, new JSONString(textTemplate.getText()));
-       jsonObject.put(SUBTITLE_TEMPLATE, new JSONString(subtitleTemplate.getText()));
-       jsonObject.put(MIN, new JSONString(min.getText()));
-       jsonObject.put(MAX, new JSONString(max.getText()));
-       saveOptions(jsonObject.toString());
+        JSONObject jsonObject = new JSONObject();
+//       jsonObject.put(TEXT_TEMPLATE, new JSONString(textTemplate.getText()));
+        jsonObject.put(SUBTITLE_TEMPLATE, new JSONString(subtitleTemplate.getText()));
+        jsonObject.put(MIN, new JSONString(String.valueOf(5)));
+        jsonObject.put(MAX, new JSONString(max.getText()));
+        saveOptions(jsonObject.toString());
     }
 
-    public void initOptions(JavaScriptObject jsObject){
+    public void initOptions(JavaScriptObject jsObject) {
         JSONObject jsonObject = new JSONObject(jsObject);
         min.setText(jsonObject.get(MIN).isNumber().toString());
         max.setText(jsonObject.get(MAX).isNumber().toString());
-        textTemplate.setText(jsonObject.get(TEXT_TEMPLATE).isString().stringValue());
+//        textTemplate.setText(jsonObject.get(TEXT_TEMPLATE).isString().stringValue());
         subtitleTemplate.setText(jsonObject.get(SUBTITLE_TEMPLATE).isString().stringValue());
     }
 
-    public void afterSave(){
-          Window.alert("SAVED :)");
-          loadOptions();
+    public void afterSave() {
+        Window.alert("SAVED :)");
+        loadOptions();
     }
 
     public native void loadOptions() /*-{
         var instance = this;
-        $wnd.ajaxExecutor.loadOptions(function(optionsData){
+        $wnd.ajaxExecutor.loadOptions(function(optionsData) {
             instance.@cc.explain.client.OptionsDialog::initOptions(Lcom/google/gwt/core/client/JavaScriptObject;)(optionsData);
         });
     }-*/;
-
-
 
 
     public native void saveOptions(String json) /*-{
@@ -88,7 +121,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         console.log("saveOptions");
         $wnd.console.log(json);
         console.log(json);
-        $wnd.ajaxExecutor.saveOptions(json, function(data){
+        $wnd.ajaxExecutor.saveOptions(json, function(data) {
             instance.@cc.explain.client.OptionsDialog::afterSave()();
         });
     }-*/;

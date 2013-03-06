@@ -61,7 +61,7 @@ public class ExcludeWordsDialog extends CafaWidget implements Dialog, UserLogged
     public native void loadResults() /*-{
         $wnd.ajaxExecutor.loadExcludedWords(function(data) {
             var rows = $wnd.popup.createExcludedSiteRows(data);
-            $wnd.popup.createSiteTable(rows, "Excluded Word", "#excludedWords");
+            $wnd.popup.createSiteTable(rows, "Known Word", "#excludedWords");
         });
     }-*/;
 }

@@ -4,43 +4,41 @@
         >
 
     <g:HTMLPanel styleName="row">
-        <div class="span8">
-             <form class="form-horizontal" action="">
-                    <fieldset>
-                        <legend>Options</legend>
-                        <div class="control-group">
-                           <g:Label styleName="control-label">Min: </g:Label>
+        <div class="span12">
+            <form class="form-horizontal" action="">
+                <fieldset>
+                    <legend>Options</legend>
+                    <div class="control-group">
+                        <label class="control-label">Words occurrence level: </label>
 
-                            <div class="controls">
-                                <g:TextBox ui:field="min" styleName="input-xlarge focused" text="" />
-                            </div>
+                        <div class="controls">
+                            <g:TextBox ui:field="max" styleName="input-mini focused" text=""/>
+                            <g:Label styleName="help-inline">Rare words</g:Label>
+                            <g:TextBox ui:field="min" styleName="input focused inline" text=""/>
+                            <g:Label styleName="help-inline">Common words</g:Label>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Max: </label>
+                    </div>
+                    <!--<div class="control-group">
+                        <label class="control-label">Text template:</label>
 
-                            <div class="controls">
-                                <g:TextBox ui:field="max" styleName="input-xlarge focused" text=""/>
-                            </div>
+                        <div class="controls">
+                            <g:TextBox ui:field="textTemplate" styleName="input span5 focused" text=""/>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Text template: </label>
+                    </div>-->
+                    <div class="control-group">
+                        <label class="control-label">Subtitle template:</label>
 
-                            <div class="controls">
-                                <g:TextBox ui:field="textTemplate" styleName="input span5 focused" text=""/>
-                            </div>
+                        <div class="controls">
+                            <g:TextBox ui:field="subtitleTemplate" styleName="input span5 focused" text=""></g:TextBox>
+                            <g:Button ui:field="preview" styleName="btn">Preview</g:Button>
                         </div>
-                        <div class="control-group">
-                            <label class="control-label">Subtitle template: </label>
-
-                            <div class="controls">
-                                <g:TextBox ui:field="subtitleTemplate" styleName="input span5 focused" text=""></g:TextBox>
-                            </div>
-                        </div>
-                        <div class="form-actions">
-                            <g:Button ui:field="save" styleName="btn btn-primary">Save</g:Button>
-                        </div>
-                    </fieldset>
-                </form>
+                    </div>
+                    <div class="form-actions">
+                        <g:Button ui:field="save" styleName="btn btn-primary">Save</g:Button>
+                        <g:Button ui:field="restore" styleName="btn">Restore default options</g:Button>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </g:HTMLPanel>
 </ui:UiBinder> 

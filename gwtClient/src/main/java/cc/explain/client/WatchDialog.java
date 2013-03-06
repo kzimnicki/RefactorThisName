@@ -7,34 +7,22 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 
 public class WatchDialog extends CafaWidget implements Dialog {
 
-    @UiTemplate("AddTextDialog.ui.xml")
-    interface AddTextDialogUiBinder extends UiBinder<Widget, WatchDialog> {
+    @UiTemplate("WatchDialog.ui.xml")
+    interface WatchDialogUiBinder extends UiBinder<Widget, WatchDialog> {
     }
 
-    private static AddTextDialogUiBinder uiBinder = GWT.create(AddTextDialogUiBinder.class);
-
-
-    @UiField
-    TextArea textArea;
+    private static WatchDialogUiBinder uiBinder = GWT.create(WatchDialogUiBinder.class);
 
     @UiField
-    HTMLPanel tablePanel;
+    Button start;
 
     @UiField
-    Button sendTextButton;
-
-    @UiField
-    Button translateTextButton;
-
-    @UiField
-    Button translateSubtitlesButton;
+    Button more;
 
     public WatchDialog() {
         super();
@@ -42,87 +30,23 @@ public class WatchDialog extends CafaWidget implements Dialog {
     }
 
     public void init() {
-        textArea.getElement().setPropertyString("placeholder","Put here english text or subtitles.");
-        sendTextButton.setVisible(true);
-        textArea.setVisible(true);
-        translateTextButton.setVisible(false);
-        translateSubtitlesButton.setVisible(false);
-        tablePanel.setVisible(false);
+        initDragDropListeners();
     }
 
-    @UiHandler("textArea")
-   public void textAreaClick(ClickEvent e) {
-        textArea.setHeight("480px");
-   }
-
-
-     @UiHandler("sendTextButton")
-	public void sendTextButtonClick(ClickEvent e) {
-         tablePanel.setVisible(true);
-         textArea.setVisible(false);
-         sendTextButton.setVisible(false);
-         translateTextButton.setVisible(true);
-         translateSubtitlesButton.setVisible(true);
-         process(textArea.getText());
-	}
-
-    @UiHandler("translateTextButton")
-	public void translateTextButtonClick(ClickEvent e) {
-        setComponentVisibility();
-         translateText(textArea.getText());
-	}
-
-        @UiHandler("translateSubtitlesButton")
-	public void translateSubtitlesButtonClick(ClickEvent e) {
-         setComponentVisibility();
-         translateSubtitles(textArea.getText());
-	}
-
-    private void setComponentVisibility() {
-        textArea.setVisible(true);
-        sendTextButton.setVisible(true);
-        translateTextButton.setVisible(false);
-        translateSubtitlesButton.setVisible(false);
-        tablePanel.setVisible(false);
+    @UiHandler("start")
+    public void startClick(ClickEvent e) {
+        getController().goTo(DialogName.ADD_TEXT);
     }
 
-    public native void process(String text) /*-{
-         $wnd.EnglishTranslator.extractWords(text, function(words){
-             $wnd.popup.createTable(words);
-         });
-    }-*/;
-
-
-    public void setText(String text){
-        textArea.setText(text);
+    @UiHandler("more")
+    public void moreClick(ClickEvent e) {
+        getController().goTo(DialogName.CONTACT);
     }
 
 
-    public native String translateText(String text) /*-{
-         var words = $wnd.popup.listWordsFromTable();
-        var instance = this;
-
-        $wnd.EnglishTranslator.translate(words, function(translatedWords) {
-             $wnd.ajaxExecutor.loadOptions(function(optionsData){
-                var pattern = optionsData['textTemplate'];
-                text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
-                instance.@cc.explain.client.WatchDialog::setText(Ljava/lang/String;)(text);
-             });
-        });
+    public native void initDragDropListeners() /*-{
+        var dropZone = $wnd.document.getElementById('drop_zone');
+        dropZone.addEventListener('dragover', $wnd.dragDrop.handleDragOver, false);
+        dropZone.addEventListener('drop', $wnd.dragDrop.handleFileSelect, false);
     }-*/;
-
-     public native String translateSubtitles(String text) /*-{
-         var words = $wnd.popup.listWordsFromTable();
-        var instance = this;
-
-        $wnd.EnglishTranslator.translate(words, function(translatedWords) {
-             $wnd.ajaxExecutor.loadOptions(function(optionsData){
-                var pattern = optionsData['subtitleTemplate'];
-                text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
-                instance.@cc.explain.client.WatchDialog::setText(Ljava/lang/String;)(text);
-             });
-        });
-    }-*/;
-
-
 }

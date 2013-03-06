@@ -22,6 +22,9 @@ public class MainDialog extends CafaWidget implements Dialog {
 	@UiField
     Anchor contact;
 
+	@UiField
+    Anchor watch;
+
     @UiField
 	Anchor options;
 
@@ -59,6 +62,11 @@ public class MainDialog extends CafaWidget implements Dialog {
     @UiHandler("options")
 	public void optionsClick(ClickEvent e) {
 		changeDialog(options, DialogName.OPTIONS);
+	}
+
+    @UiHandler("watch")
+	public void watchClick(ClickEvent e) {
+		changeDialog(watch, DialogName.WATCH);
 	}
 
     @UiHandler("excludeWords")
@@ -110,7 +118,7 @@ public class MainDialog extends CafaWidget implements Dialog {
         errorPanel.clear();
         String[] messages = errorData.split("\\|");
         for(String m : messages){
-            errorPanel.add(new Label(m));
+            errorPanel.add(new InlineHTML(m));
         }
     }
 

@@ -8,8 +8,8 @@
 
     <g:HTMLPanel>
 
-        <div id="progressBar" class="darkenBackground hide" >
-            <img style="top: 50%;"  alt = "loading..." src="img/loading.gif" />
+        <div id="progressBar" class="darkenBackground hide">
+            <img style="top: 50%;" alt="loading..." src="img/loading.gif"/>
         </div>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
@@ -27,19 +27,21 @@
 
                         <ul class="nav">
                             <li>
-                                <g:Anchor ui:field="contact">
+                                <g:Anchor ui:field="watch">
                                     <span>Home</span>
                                 </g:Anchor>
                             </li>
+
+
                             <li>
                                 <g:Anchor ui:field="excludeWords">
-                                    <span>Exclude Words</span>
+                                    <span>Known Words</span>
                                 </g:Anchor>
                             </li>
 
                             <li>
                                 <g:Anchor ui:field="includeWords">
-                                    <span>Include Words</span>
+                                    <span>Unknown Words</span>
                                 </g:Anchor>
                             </li>
 
@@ -51,6 +53,12 @@
                             <li>
                                 <g:Anchor ui:field="options">
                                     <span>Options</span>
+                                </g:Anchor>
+                            </li>
+
+                            <li>
+                                <g:Anchor ui:field="contact">
+                                    <span>About</span>
                                 </g:Anchor>
                             </li>
                         </ul>
@@ -70,14 +78,14 @@
 
         <div>
             <div>
-                 <div id="POPUP" class="modal hide fade in" style="display: none;">
-                  <div class="modal-header">
-                    <h3>Error</h3>
-                  </div>
-                   <g:HTMLPanel ui:field="errorPanel" styleName="modal-body" />
-                  <div class="modal-footer">
-                    <a href="#" class="btn" onclick="$('#POPUP').hide();">Close</a>
-                  </div>
+                <div id="POPUP" class="modal hide fade in" style="display: none;">
+                    <div class="modal-header">
+                        <h3>Error</h3>
+                    </div>
+                    <g:HTMLPanel ui:field="errorPanel" styleName="modal-body"/>
+                    <div class="modal-footer">
+                        <a href="#" class="btn" onclick="$('#POPUP').hide();">Close</a>
+                    </div>
                 </div>
                 <g:SimplePanel ui:field="container"/>
             </div>
