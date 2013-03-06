@@ -15,7 +15,7 @@ import static junit.framework.Assert.assertEquals;
  * Date: 15.11.12
  * Time: 13:16
  */
-public class OpenSubtitlesHashTest {
+public class OpenSubtitlesServiceTest {
 
     @Test
     public void shouldReturnCorrectHash() throws IOException {
