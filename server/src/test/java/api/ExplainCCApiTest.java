@@ -214,6 +214,21 @@ public class ExplainCCApiTest {
         Assert.assertTrue(loadedExcludedWords.containsKey("ship"));
     }
 
+     @Test
+    public void testRemoveExcludedWordAndCheckIncludedWords() throws Exception {
+        createRegisterAndLoginUser();
+        List<String> excludedwords = Arrays.asList(new String[]{
+                "car", "dog", "cat", "ship"
+        });
+        api.saveExcludeWords(excludedwords);
+        api.removeExcludedWord("dog");
+
+        Map<String, Set<String>> loadedIncludedWords = api.loadIncludedWords();
+
+        assertEquals(1, loadedIncludedWords.size());
+        Assert.assertTrue(loadedIncludedWords.containsKey("dog"));
+    }
+
     @Test
     public void testRemoveIncludedWord() throws Exception {
         createRegisterAndLoginUser();
@@ -230,6 +245,22 @@ public class ExplainCCApiTest {
         Assert.assertTrue(loadedIncludedWords.containsKey("car"));
         Assert.assertTrue(loadedIncludedWords.containsKey("cat"));
         Assert.assertTrue(loadedIncludedWords.containsKey("ship"));
+    }
+
+
+     @Test
+    public void testRemoveIncludedWordAndCheckInExcluded() throws Exception {
+        createRegisterAndLoginUser();
+        List<String> includedWords = Arrays.asList(new String[]{
+                "car", "dog", "cat", "ship"
+        });
+        api.saveIncludedWords(includedWords);
+        api.removeIncludedWords("dog");
+
+        Map<String, Set<String>> loadedExcludedWords = api.loadExcludedWords();
+
+        assertEquals(1, loadedExcludedWords.size());
+        Assert.assertTrue(loadedExcludedWords.containsKey("dog"));
     }
 
     @Test

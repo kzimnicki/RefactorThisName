@@ -21,30 +21,30 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
     <context:component-scan base-package="cc.explain.server.api"/>
 
 
-   <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
-		<property name="order" value="0" />
-	</bean>
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="order" value="0"/>
+    </bean>
 
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-		<property name="webBindingInitializer">
-			<bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
-				<property name="validator" ref="validator" />
-			</bean>
-		</property>
-		<property name="messageConverters">
-			<list>
-				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="webBindingInitializer">
+            <bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+                <property name="validator" ref="validator"/>
+            </bean>
+        </property>
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
                 <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
-			</list>
-		</property>
-	</bean>
+                <bean class="org.springframework.http.converter.FormHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
 
-	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-	<bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+    <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+    <bean id="conversion-service" class="org.springframework.format.support.FormattingConversionServiceFactoryBean"/>
 
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -77,20 +77,20 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
         <property name="exitMessage" value="Leaving $[methodName](): time: $[invocationTime] $[returnValue]"/>
     </bean>
 
-     <bean id="performanceMonitor"
-              class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor" />
+    <bean id="performanceMonitor"
+          class="org.springframework.aop.interceptor.PerformanceMonitorInterceptor"/>
 
     <aop:config>
-        <aop:pointcut id="allMethods" expression="execution(* server.api.*.*(..))"/>
+        <aop:pointcut id="allMethods" expression="execution(* cc.explain.server.api.*.*(..))"/>
         <aop:advisor pointcut-ref="allMethods" advice-ref="performanceMonitor" order="2"/>
     </aop:config>
 
     <bean id="jmxExporter" class="org.springframework.jmx.export.MBeanExporter">
-    <property name="beans">
-        <map>
-            <entry key="Hibernate:application=Statistics" value-ref="hibernateStatisticsBean"/>
-        </map>
-    </property>
+        <property name="beans">
+            <map>
+                <entry key="Hibernate:application=Statistics" value-ref="hibernateStatisticsBean"/>
+            </map>
+        </property>
     </bean>
 
     <bean id="hibernateStatisticsBean" class="org.hibernate.jmx.StatisticsService">
@@ -103,9 +103,21 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
 
     <bean id="textService" class="cc.explain.server.api.TextService"/>
     <bean id="textDAO" class="cc.explain.server.api.TextDAO"/>
+    <bean id="subtitleService" class="cc.explain.server.api.SubtitleService"/>
     <bean id="luceneService" class="cc.explain.server.api.LuceneService" init-method="init"/>
-
     <bean id="loginService" class="cc.explain.server.api.UserService"/>
+
+    <bean id="openSubtitlesService" class="cc.explain.server.api.OpenSubtitlesService" init-method="init">
+        <property name="login" value=""/>
+        <property name="password" value=""/>
+        <property name="apiUrl" value="http://api.opensubtitles.org/xml-rpc"/>
+        <property name="userAgent" value="OS Test User Agent"/>
+    </bean>
+
+    <bean id="sublightService" class="cc.explain.server.api.SublightService" init-method="init">
+        <property name="clientId" value="explainCC"/>
+        <property name="clientKey" value="cf9f9b79-461f-442b-abd2-0a4d0079446c"/>
+    </bean>
 
 
 </beans>
