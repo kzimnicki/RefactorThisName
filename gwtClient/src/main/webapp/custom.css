@@ -48,7 +48,14 @@ body {
     text-align: center;
     font: 30pt bold;
     color: #BBB;
-    height: 320px;
+    height: 180px;
     width: 720px;
     cursor: move;
+}
+
+.big-button {
+    width: 370px;
+    height: 70px;
+    font-size: 30px;
+    margin: 5px;
 }
