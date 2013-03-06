@@ -1,5 +1,8 @@
 package cc.explain.server.api;
 
+import cc.explain.server.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -9,11 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SubtitleService {
 
+    private static Logger LOG = LoggerFactory.getLogger(SubtitleService.class);
+
+
     @Autowired
     OpenSubtitlesService openSubtitlesService;
 
-    public String computeHash(HashData data) {
-        String hash = openSubtitlesService.calculateHash(data);
-        return hash;
+    @Autowired
+    SublightService sublightService;
+
+    public String downloadSubtitles(HashData data) {
+        String subtitle = openSubtitlesService.downloadSubtitles(data);
+        LOG.debug("Downloaded From opensubtitles: %s", subtitle);
+        if (!StringUtils.hasText(subtitle)) {
+            subtitle = sublightService.downloadSubtitles(data);
+            LOG.debug("Downloaded From sublight: %s", subtitle);
+        }
+        return subtitle;
     }
 }

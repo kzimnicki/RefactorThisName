@@ -58,7 +58,7 @@ popup.createExcludedSiteRows = function(wordFamilies) {
     var rows = [];
     for (var key in  wordFamilies) {
         var wordFamilyArray = (wordFamilies[key]);
-        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">Delete</a>'];
+        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">I don\'t know this word</a>'];
         rows.push(row);
     }
     return rows;
@@ -68,7 +68,7 @@ popup.createIncludedSiteRows = function(wordFamilies) {
     var rows = [];
     for (var key in  wordFamilies) {
         var wordFamilyArray = (wordFamilies[key]);
-        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeIncludedWord(this)">Delete</a>'];
+        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeIncludedWord(this)">I know this word</a>'];
         rows.push(row);
     }
     return rows;
@@ -102,9 +102,9 @@ popup.createSiteTable = function(rows, title, id) {
         "aaData": rows,
         "bDestroy":true,
         "aoColumns":[
-            { "sTitle": title, "sWidth": "200px"},
+            { "sTitle": title, "sWidth": "150px"},
             { "sTitle": "Word family", "sWidth": "400px"},
-            { "sTitle": "action", "sWidth": "100px"}
+            { "sTitle": "action", "sWidth": "220px"}
         ]
     });
 }
@@ -126,12 +126,12 @@ popup.clear = function(id){
 popup.createTable = function(wordsMap) {
      var words = [];
     for (var key in wordsMap) {
-        var excludeButton = '<a class="btn btn-warning" href="#" onclick="popup.removeThisRow(this)">Exclude</a>';
+        var excludeButton = '<a class="btn btn-warning" href="#" onclick="popup.removeThisRow(this)">I know this word</a>';
         var row = [key,wordsMap[key]["frequency"],excludeButton];
         words.push(row);
     }
     oTable = $('#words').dataTable({
-        "sDom": "<'row'<'span8'><'span8'f>r>t<'row'<'span8'><'span8'p>>",
+        "sDom": "<'row'<'span8'><'span8'f>r>t<'row'<'span8'><'span8'pi>>",
         "sPaginationType": "bootstrap",
         "iDisplayLength": 10,
         "iDisplayStart":0,
@@ -149,5 +149,5 @@ popup.createTable = function(wordsMap) {
 
         ]
     });
-    $('#words').after("<a id='excludeAllButton' class='btn btn-danger' href='#' onclick='popup.addAllToExclude();'>Add all words to exclude</a>");
+    $('#words').after("<a id='excludeAllButton' class='btn btn-danger' href='#' onclick='popup.addAllToExclude();'>I know all words</a>");
 }

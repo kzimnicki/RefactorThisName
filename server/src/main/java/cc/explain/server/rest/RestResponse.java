@@ -1,26 +1,35 @@
 package cc.explain.server.rest;
 
-import java.io.IOException;
-
-import org.apache.http.ParseException;
+import cc.explain.server.exception.TechnicalException;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.message.BasicHttpResponse;
-import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import org.apache.http.util.EntityUtils;
 public class RestResponse {
-    
+
     private static final String EMPTY_STRING = "";
     private static final String SEMICOLON = ";";
     private BasicHttpResponse response;
-    
-    protected RestResponse(BasicHttpResponse response) {
-       this.response = response;
+    private RestRequest request;
+    private ClientConnectionManager conManager;
+
+    protected RestResponse(BasicHttpResponse response, RestRequest request, ClientConnectionManager connectionManager) {
+        this.response = response;
+        this.request = request;
+        this.conManager = connectionManager;
     }
 
     public String getContentType() {
         String value = response.getEntity().getContentType().getValue();
         return value.split(SEMICOLON)[0];
     }
-    
+
     public int getStatusCode() {
         return response.getStatusLine().getStatusCode();
     }
@@ -33,14 +42,35 @@ public class RestResponse {
         return response.getEntity().getContentLength();
     }
 
-    public String getContent() {
+
+    public InputStream getContent() {
         try {
-            return EntityUtils.toString(response.getEntity()).trim();
-        } catch (ParseException e) {
-            e.printStackTrace();
+            return response.getEntity().getContent();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new TechnicalException(e.getCause());
         }
-        return EMPTY_STRING;
+    }
+
+    public String getZipContent() {
+        try {
+            InputStream content = response.getEntity().getContent();
+            ZipInputStream zis = new ZipInputStream(content);
+
+            ZipEntry entry;
+            StringBuilder builder = new StringBuilder();
+            while ((entry = zis.getNextEntry()) != null) {
+                int size;
+                byte[] buffer = new byte[1024];
+                while ((size = zis.read(buffer, 0, buffer.length)) != -1) {
+                    builder.append(new String(buffer, "UTF-8"));
+                }
+            }
+            zis.close();
+            content.close();
+            EntityUtils.consume(response.getEntity());
+            return builder.toString();
+        } catch (IOException e) {
+            throw new TechnicalException(e.getCause());
+        }
     }
 }

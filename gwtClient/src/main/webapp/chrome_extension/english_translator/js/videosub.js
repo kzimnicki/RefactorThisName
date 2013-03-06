@@ -90,7 +90,8 @@ var videoSub = videoSub || {};
 					'width': videowidth+'px',
 					'padding': '0 25px 0 25px',
 					'textAlign': 'center',
-					'backgroundColor': 'transparent',
+					'backgroundColor': 'black',
+                    'opacity': 0.8,
 					'color': '#ffffff',
 					'fontFamily': 'Helvetica, Arial, sans-serif',
 					'fontSize': fontsize+'px',
@@ -98,6 +99,7 @@ var videoSub = videoSub || {};
                     'display':'block',
                     'z-index': 2147483647,
                     'line-height': '100%'
+
 				});
 				$VIDEOSUB(subcontainer).addClass('videosubbar');
 				$VIDEOSUB(subcontainer).appendTo(videocontainer);
@@ -105,11 +107,11 @@ var videoSub = videoSub || {};
 				// called on AJAX load onComplete (to work around element reference issues)
 				el.update = function(req) {
 					el.subtitles = new Array();
-					records = req.split('\r\n\r\n');
+					records = req.split('\n\n');
 					for (var r=0;r<records.length;r++) {
 						record = records[r];
 						el.subtitles[r] = new Array();
-						el.subtitles[r] = record.split('\r\n');
+						el.subtitles[r] = record.split('\n');
 					}
 				}
 
@@ -140,9 +142,20 @@ var videoSub = videoSub || {};
 					// check if the next subtitle is in the current time range
 					if (this.currentTime.toFixed(1) > videosub_timecode_min(el.subtitles[el.subcount][1])  &&  this.currentTime.toFixed(1) < videosub_timecode_max(el.subtitles[el.subcount][1])) {
 						subtitle = el.subtitles[el.subcount][2];
-                        if(el.subtitles[el.subcount][3])
-                        subtitle += "<br />" +el.subtitles[el.subcount][3];
+                        if(el.subtitles[el.subcount][3]){
+                            subtitle += "<br />" +el.subtitles[el.subcount][3];
+                        }
+
+                        if(subtitle.split("(").length > 2){
+                            console.log(subtitle);
+                                $("#player1")[0].playbackRate = 0.5;
+                        }else{
+                              $("#player1")[0].playbackRate = 1.0;
+                        }
 					}
+                    else{
+                        $("#player1")[0].playbackRate = 1.0;
+                    }
 					// is there a next timecode?
 					if (this.currentTime.toFixed(1) > videosub_timecode_max(el.subtitles[el.subcount][1])  && el.subcount < (el.subtitles.length-1)) {
 						el.subcount++;

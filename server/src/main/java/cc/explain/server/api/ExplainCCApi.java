@@ -1,7 +1,5 @@
 package cc.explain.server.api;
 
-import antlr.StringUtils;
-import cc.explain.server.core.OpenSubtitlesHasher;
 import cc.explain.server.core.XmlRpcService;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.RootWord;
@@ -40,6 +38,9 @@ public class ExplainCCApi {
 
     @Autowired
     TextService textService;
+
+    @Autowired
+    SubtitleService subtitleService;
 
     @Autowired
     UserService userService;
@@ -100,6 +101,7 @@ public class ExplainCCApi {
         User user = userService.getLoggedUser();
         RootWord rootWord = textService.getRootWord(wordValue);
         user.getExcludedWords().remove(rootWord);
+        user.getIncludedWords().add(rootWord);
         userService.save(user);
     }
 
@@ -154,6 +156,7 @@ public class ExplainCCApi {
         User user = userService.getLoggedUser();
         RootWord rootWord = textService.getRootWord(wordValue);
         user.getIncludedWords().remove(rootWord);
+        user.getExcludedWords().add(rootWord);
         userService.save(user);
     }
 
@@ -172,7 +175,7 @@ public class ExplainCCApi {
     @Secured(Role.USER)
     @Transactional
     public String exportIncludedWords() {
-        User user =  userService.getLoggedUser();
+        User user = userService.getLoggedUser();
         Map<String, Set<String>> includedWords = textService.getIncludedWords(user);
         return textService.createCSVString(includedWords);
     }
@@ -186,19 +189,11 @@ public class ExplainCCApi {
         return textService.getTranslatedWord(words);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/subtitle",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, value = "/subtitle", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional
     public String downloadSubtitle(@RequestBody HashData data) {
-        String movieHash = OpenSubtitlesHasher.computeHash(data);
-        try {
-            return new XmlRpcService().doTest(movieHash, data.getSize());
-        } catch (XmlRpcException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return "";
+        return subtitleService.downloadSubtitles(data);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -235,6 +230,7 @@ public class ExplainCCApi {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public void handleException(Exception e, Writer writer) throws IOException {
+        e.printStackTrace();
         LOG.error(e.getMessage());
         writer.write(String.format("%s", e.getMessage()));
     }

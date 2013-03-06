@@ -1,7 +1,6 @@
 package cc.explain.server.core;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -25,7 +23,7 @@ public class XmlRpcService {
 
     private static Logger LOG = LoggerFactory.getLogger(XmlRpcService.class);
 
-    public String doTest(String movieHash, String length) throws XmlRpcException, IOException {
+    public String doTest(String filename, String movieHash, String length) throws XmlRpcException, IOException {
 
         XmlRpcClient xmlrpc = new XmlRpcClient();
         XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
@@ -42,13 +40,29 @@ public class XmlRpcService {
         map1.put("sublanguageid", "eng");
         params = new Object[]{token, new Object[]{map1}};
         Map<String, Object> result2 = (Map<String, Object>) xmlrpc.execute("SearchSubtitles", params);
-        Map<String, Object> data = (Map<String, Object>) ((Object[]) result2.get("data"))[0];
-        String idSubtitleFile = (String) data.get("IDSubtitleFile");
 
+        String idSubtitleFile = "";
+
+        if (result2.get("data") instanceof Map) {
+            System.err.println("FROM HASH");
+            Map<String, Object> data = (Map<String, Object>) ((Object[]) result2.get("data"))[0];
+            idSubtitleFile = (String) data.get("IDSubtitleFile");
+        } else {
+            System.err.println("FROM FILENAME");
+            map1 = new HashMap<String, Object>();
+            map1.put("query", filename);
+            map1.put("sublanguageid", "eng");
+
+            params = new Object[]{token, new Object[]{map1}};
+            result2 = (Map<String, Object>) xmlrpc.execute("SearchSubtitles", params);
+
+            Map<String, Object> data = (Map<String, Object>) ((Object[]) result2.get("data"))[0];
+            idSubtitleFile = (String) data.get("IDSubtitleFile");
+        }
 
         params = new Object[]{token, new String[]{idSubtitleFile}};
         HashMap<String, Object> res = (HashMap<String, Object>) xmlrpc.execute("DownloadSubtitles", params);
-        data = (Map<String, Object>) ((Object[]) res.get("data"))[0];
+         Map<String, Object> data = (Map<String, Object>) ((Object[]) res.get("data"))[0];
         Object data1 = data.get("data");
         byte[] bytes = Base64.decodeBase64((String) data1);
 
@@ -65,7 +79,9 @@ public class XmlRpcService {
         }
         byte[] uncompressed = byteout.toByteArray();
         String subtitles = new String(uncompressed);
+
         return subtitles;
+
     }
 
 }

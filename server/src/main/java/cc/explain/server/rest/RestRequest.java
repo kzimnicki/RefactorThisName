@@ -1,14 +1,16 @@
 package cc.explain.server.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import cc.explain.server.exception.TechnicalException;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.apache.http.client.utils.URIBuilder;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class RestRequest extends HttpEntityEnclosingRequestBase {
 
     private HttpMethod httpMethod;
+    private URIBuilder builder;
 
     public RestRequest(HttpMethod httpMethod) {
         this.httpMethod = httpMethod;
@@ -20,13 +22,26 @@ public class RestRequest extends HttpEntityEnclosingRequestBase {
 
 
     public RestRequest setUrl(String path) {
-        URI uri = null;
         try {
-            uri = new URI(path);
+            builder = new URIBuilder(path);
         } catch (URISyntaxException e) {
             throw new TechnicalException(e.getCause());
         }
-        setURI(uri);
+        setURI(build());
+        return this;
+    }
+
+    private URI build() {
+        try {
+            return builder.build();
+        } catch (URISyntaxException e) {
+            throw new TechnicalException(e.getCause());  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    public RestRequest addParam(String key, String value) {
+        builder.addParameter(key, value);
+        setURI(build());
         return this;
     }
 }

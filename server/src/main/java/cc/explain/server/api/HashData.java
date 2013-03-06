@@ -10,6 +10,7 @@ public class HashData {
     private String size;
     private String head;
     private String tail;
+    private String filename;
 
     public String getSize() {
         return size;
@@ -33,5 +34,13 @@ public class HashData {
 
     public void setTail(String tail) {
         this.tail = tail;
+    }
+
+    public void setFilename(String filename){
+        this.filename = filename;
+    }
+
+    public String getFilename(){
+        return filename;
     }
 }

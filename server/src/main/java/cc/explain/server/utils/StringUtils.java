@@ -5,5 +5,9 @@ package cc.explain.server.utils;
  * Date: 24.11.12
  * Time: 23:29
  */
-public class StringUtils {
+public class StringUtils extends org.springframework.util.StringUtils {
+
+    public static final String EMPTY = "";
+
+
 }

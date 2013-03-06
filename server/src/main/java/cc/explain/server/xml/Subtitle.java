@@ -23,16 +23,10 @@ public class Subtitle {
     private int downloads;
     private int reports;
     private int votes;
-    private double rate;
+    private String rate;
     private String publisher;
     private String published;
-
-      @XmlElementWrapper(name = "Releases")
-    @XmlElement(name="Release")
     private Release[] releases;
-//      <Releases>
-//        <Release>Madagascar.3.Europes.Most.Wanted.2012.DVDRip.XViD-PLAYNOW</Release>
-//      </Releases>
 
 
     @XmlElement(name = "Id")
@@ -108,11 +102,11 @@ public class Subtitle {
     }
 
     @XmlElement(name = "Rate")
-    public double getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate(double rate) {
+    public void setRate(String rate) {
         this.rate = rate;
     }
 
@@ -150,5 +144,15 @@ public class Subtitle {
 
     public void setEpisode(int episode) {
         this.episode = episode;
+    }
+
+    @XmlElementWrapper(name = "Releases")
+    @XmlElement(name = "Release")
+    public Release[] getReleases() {
+        return releases;
+    }
+
+    public void setReleases(Release[] releases) {
+        this.releases = releases;
     }
 }
