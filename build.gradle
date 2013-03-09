@@ -1,5 +1,6 @@
 allprojects  {
   apply plugin: 'maven'
+  apply plugin: 'idea'
 
   group = 'RefactorThisName'
   version = '1.0'
