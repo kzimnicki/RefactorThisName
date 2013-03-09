@@ -2,12 +2,13 @@
 /web/WEB-INF/lib
 /target
 .idea
-/.idea
+.idea/libraries
 .gradle
 gwtClient/target/
 gwtClient/build/
 server/target/
 server/build/
 server/src/main/webapp/WEB-INF/lib
+server/src/main/webapp/WEB-INF/classes
 server\src\webapp\WEB-INF\classes\
 web/WEB-INF/lib/

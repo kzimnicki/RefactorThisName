@@ -2,7 +2,6 @@
   <artifact type="exploded-war" name="server:war exploded">
     <output-path>$PROJECT_DIR$/server/target/server-1.0</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="server/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="server" />
@@ -34,7 +33,6 @@
           <element id="library" level="project" name="Maven: com.google.gwt:gwt-servlet:2.4.0" />
           <element id="library" level="project" name="Maven: cglib:cglib-nodep:2.2" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-core:3.6.4.Final" />
-          <element id="library" level="project" name="Maven: antlr:antlr:2.7.6" />
           <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.1" />
           <element id="library" level="project" name="Maven: dom4j:dom4j:1.6.1" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-commons-annotations:3.2.0.Final" />
