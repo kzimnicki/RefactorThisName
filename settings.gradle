@@ -1,0 +1,5 @@
+rootProject.name = 'RefactorThisName'
+include ':gwtClient', ':server'
+
+project(':gwtClient').projectDir = "$rootDir/gwtClient" as File
+project(':server').projectDir = "$rootDir/server" as File

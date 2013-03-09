@@ -3,8 +3,11 @@
 /target
 .idea
 /.idea
+.gradle
 gwtClient/target/
+gwtClient/build/
 server/target/
+server/build/
 server/src/main/webapp/WEB-INF/lib
 server\src\webapp\WEB-INF\classes\
 web/WEB-INF/lib/
