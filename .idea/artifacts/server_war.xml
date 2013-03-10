@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="war" build-on-make="true" name="server:war">
-    <output-path>$PROJECT_DIR$/server/target</output-path>
+    <output-path>$PROJECT_DIR$/server/build/libs</output-path>
     <root id="archive" name="server-1.0.war">
       <element id="artifact" artifact-name="server:war exploded" />
     </root>

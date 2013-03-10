@@ -4,10 +4,13 @@
 .idea
 .idea/libraries
 .gradle
+.settings
 gwtClient/target/
 gwtClient/build/
+gwtClient/bin/
 server/target/
 server/build/
+server/bin/
 server/src/main/webapp/WEB-INF/lib
 server/src/main/webapp/WEB-INF/classes
 server\src\webapp\WEB-INF\classes\

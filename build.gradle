@@ -1,24 +1,55 @@
-allprojects  {
-  apply plugin: 'maven'
-  apply plugin: 'idea'
+ buildscript {
+        repositories {
+            mavenCentral()
+        }
 
-  group = 'RefactorThisName'
-  version = '1.0'
-  
+        dependencies {
+            classpath 'org.gradle.api.plugins:gradle-tomcat-plugin:0.9.7'
+        }
 }
 
-subprojects {
-  apply plugin: 'java'
-  sourceCompatibility = 1.5
-  targetCompatibility = 1.5
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'war'
+apply plugin: 'tomcat'
 
-  
-  repositories {
+
+ repositories {
+    mavenCentral()
     mavenLocal()
     mavenRepo url: "http://repo.maven.apache.org/maven2"
   }
 
-  
-  
-  
+
+
+allprojects  {
+  apply plugin: 'maven'
+  apply plugin: 'eclipse'
+  apply plugin: 'groovy'
+
+  group = 'RefactorThisName'
+  version = '1.0'
+}
+
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'war'
+  apply plugin: 'tomcat'
+  sourceCompatibility = 1.5
+  targetCompatibility = 1.5
+
+  dependencies {
+    def tomcatVersion = '6.0.29'
+    tomcat "org.apache.tomcat:catalina:${tomcatVersion}",
+           "org.apache.tomcat:coyote:${tomcatVersion}",
+           "org.apache.tomcat:jasper:${tomcatVersion}"
+    }
+
+
+  repositories {
+    mavenCentral()
+    mavenLocal()
+    mavenRepo url: "http://repo.maven.apache.org/maven2"
+  }
 }
