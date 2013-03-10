@@ -21,7 +21,12 @@ apply plugin: 'tomcat'
     mavenRepo url: "http://repo.maven.apache.org/maven2"
   }
 
-
+  dependencies {
+    def tomcatVersion = '6.0.29'
+    tomcat "org.apache.tomcat:catalina:${tomcatVersion}",
+           "org.apache.tomcat:coyote:${tomcatVersion}",
+           "org.apache.tomcat:jasper:${tomcatVersion}"
+    }
 
 allprojects  {
   apply plugin: 'maven'
@@ -53,3 +58,18 @@ subprojects {
     mavenRepo url: "http://repo.maven.apache.org/maven2"
   }
 }
+
+task explodedDist(dependsOn: assemble) << {
+    File explodedDist = mkdir("$buildDir/explodedDist")
+
+	subprojects.each {project ->
+        project.tasks.withType(War).each {archiveTask ->
+			ant.unzip(src: archiveTask.archivePath, dest: "$buildDir/explodedDist")
+        }
+    }
+    ant.zip(destfile: "$buildDir/libs/RefactorThisName-1.0.war") {
+        fileset(dir: "$buildDir/explodedDist")
+    }
+}
+
+[tomcatRun, tomcatRunWar]*.configFile = file('config/context.xml')

@@ -1,4 +1,5 @@
 Refactoring:
+- dodac JNDI aby pobieral z tomcata ale takze dla testow.
 - import.sql nie dziala. // z tym poczekac na rootWord.getRootWord .getValue // moze pczytac ksiazke tez.
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
 - zmienic nazwe rootWord.getRootWord().getValue() => rootWord.getWord().getValue();

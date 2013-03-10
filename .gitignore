@@ -5,6 +5,7 @@
 .idea/libraries
 .gradle
 .settings
+build
 gwtClient/target/
 gwtClient/build/
 gwtClient/bin/
