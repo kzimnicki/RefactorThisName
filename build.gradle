@@ -1,4 +1,11 @@
- buildscript {
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'war'
+apply plugin: 'tomcat'
+
+
+buildscript {
         repositories {
             mavenCentral()
         }
@@ -8,55 +15,51 @@
         }
 }
 
-apply plugin: 'java'
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'war'
-apply plugin: 'tomcat'
 
 
- repositories {
+repositories {
     mavenCentral()
     mavenLocal()
     mavenRepo url: "http://repo.maven.apache.org/maven2"
-  }
+}
 
-  dependencies {
+dependencies {
     def tomcatVersion = '6.0.29'
     tomcat "org.apache.tomcat:catalina:${tomcatVersion}",
            "org.apache.tomcat:coyote:${tomcatVersion}",
-           "org.apache.tomcat:jasper:${tomcatVersion}"
-    }
+           "org.apache.tomcat:jasper:${tomcatVersion}",
+           "org.apache.tomcat:dbcp:${tomcatVersion}"
+}
 
 allprojects  {
-  apply plugin: 'maven'
-  apply plugin: 'eclipse'
-  apply plugin: 'groovy'
+    apply plugin: 'maven'
+    apply plugin: 'eclipse'
+    apply plugin: 'groovy'
 
-  group = 'RefactorThisName'
-  version = '1.0'
+    group = 'RefactorThisName'
+    version = '1.0'
 }
 
 subprojects {
-  apply plugin: 'java'
-  apply plugin: 'war'
-  apply plugin: 'tomcat'
-  sourceCompatibility = 1.5
-  targetCompatibility = 1.5
+    apply plugin: 'java'
+    apply plugin: 'war'
+    apply plugin: 'tomcat'
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 
-  dependencies {
-    def tomcatVersion = '6.0.29'
-    tomcat "org.apache.tomcat:catalina:${tomcatVersion}",
+    dependencies {
+        def tomcatVersion = '6.0.29'
+        tomcat "org.apache.tomcat:catalina:${tomcatVersion}",
            "org.apache.tomcat:coyote:${tomcatVersion}",
-           "org.apache.tomcat:jasper:${tomcatVersion}"
-    }
+           "org.apache.tomcat:jasper:${tomcatVersion}",
+           "org.apache.tomcat:dbcp:${tomcatVersion}"
+        }
 
-
-  repositories {
-    mavenCentral()
-    mavenLocal()
-    mavenRepo url: "http://repo.maven.apache.org/maven2"
-  }
+        repositories {
+            mavenCentral()
+            mavenLocal()
+            mavenRepo url: "http://repo.maven.apache.org/maven2"
+        }
 }
 
 task explodedDist(dependsOn: assemble) << {

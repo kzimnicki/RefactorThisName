@@ -1,4 +1,10 @@
+Nowe funkcjonalnosci:
+- Typ slowa, location, noun, verb etc.
+- Praser srt i innych napisow. Teraz wstawianie slow bedzie po stronie servera.
+- Phrasal verbs.
+
 Refactoring:
+- TomcatRunWar nie dziala, bo zawsze wywolouje war przed soba, ktory niszczy explodedDist , jednym slowem war jest maly.
 - dodac JNDI aby pobieral z tomcata ale takze dla testow.
 - import.sql nie dziala. // z tym poczekac na rootWord.getRootWord .getValue // moze pczytac ksiazke tez.
 - Dodac testy z uwzglednieniem optionsow. Czyli jak zmniejsze maxa to zeby nie uwzglednialo tych slow.
@@ -17,6 +23,8 @@ Chrome Plugin:
 - czasami tlumaczy nawiasami dla .txt, moznaby wtedy zapytac czy sa to napisy ?
 
 Nowe pomysly-technologie:
+- Przerobic aby projekt uzywal wirtualnej maszyny z cook czy chef tak aby, mysqla, neo4j, gradle (?), tomcat tam sie odpala, ewentualnie odpalac to na Continues integration, wtedy cala maszyna by startowala.
+- Przerobic testy na Spocka z Groovym. - prezentacja Kena Sipa  z 33rd degree.
 - dodac optional http://code.google.com/p/guava-libraries/wiki/UsingAndAvoidingNullExplained
 - NoSQL
 - Kategoryzacja slow, numery, ubrania, kolory itp.  //wordnet sciagnalem plik ktory obsluguje kategoryzacje.
@@ -36,7 +44,6 @@ Drugi Release:
 
  Trzeci release:
  - security przerobic z basic na jakies inne.
-
 
 Zastanowic sie nad:
 - podczas exclude slowa, moznaby odrazu usuwac wszytskie wordfamily z tabelki addText

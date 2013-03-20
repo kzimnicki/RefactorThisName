@@ -12,6 +12,6 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
 	<bean id="txManager"
 	class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="appDataSource" />
+		<property name="dataSource" ref="dbDataSource" />
 	</bean>
 </beans>

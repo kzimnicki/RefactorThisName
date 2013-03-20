@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="gwtClient:war">
-    <output-path>$PROJECT_DIR$/gwtClient/target</output-path>
-    <root id="archive" name="gwtClient-1.0.war">
-      <element id="artifact" artifact-name="gwtClient:war exploded" />
-    </root>
-  </artifact>
-</component>

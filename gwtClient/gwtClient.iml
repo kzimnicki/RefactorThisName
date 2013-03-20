@@ -6,52 +6,15 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/bin" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/com.google.gwt/gwt-user/2.4.0/jar/949dcb5d14cb0e2c8dec98efc0760be68753c124/gwt-user-2.4.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/com.google.gwt/gwt-user/2.4.0/source/a2ed957cde9b9d0647ed4912220f9f623f5fa5a9/gwt-user-2.4.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/com.google.gwt/gwt-dev/2.4.0/jar/c0f88ffb55c1fdc87abbbbdb5ca56008b7a37a48/gwt-dev-2.4.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/com.google.gwt/gwt-dev/2.4.0/source/3b45bdbd082008b6e418f41152adca4a053bfeac/gwt-dev-2.4.0-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/javax.validation/validation-api/1.0.0.GA/jar/7a561191db2203550fbfa40d534d4997624cd369/validation-api-1.0.0.GA-sources.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/javax.validation/validation-api/1.0.0.GA/jar/b6bd7f9d78f6fdaa3c37dae18a4bd298915f328e/validation-api-1.0.0.GA.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/.gradle/caches/artifacts-23/filestore/javax.validation/validation-api/1.0.0.GA/source/7a561191db2203550fbfa40d534d4997624cd369/validation-api-1.0.0.GA-sources.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
+    <orderEntry type="library" exported="" name="validation-api-1.0.0.GA-sources" level="project" />
+    <orderEntry type="library" exported="" name="gwt-user-2.4.0" level="project" />
+    <orderEntry type="library" exported="" name="gwt-dev-2.4.0" level="project" />
+    <orderEntry type="library" exported="" name="validation-api-1.0.0.GA" level="project" />
   </component>
 </module>
 

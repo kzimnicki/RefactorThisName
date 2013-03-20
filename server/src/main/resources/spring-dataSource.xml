@@ -9,10 +9,14 @@
         <property name="username" value="${jdbc.login}"/>
         <property name="password" value="${jdbc.password}"/>
    </bean>
+
+   <bean id="dbDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/jdbc/mysql"/>
+   </bean>
    
     
    <bean id="jdbcTemplate" name="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <constructor-arg ref="appDataSource"></constructor-arg>
+        <constructor-arg ref="dbDataSource"></constructor-arg>
    </bean>
   
   <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
