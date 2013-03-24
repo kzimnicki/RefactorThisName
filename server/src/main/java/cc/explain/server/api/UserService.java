@@ -10,13 +10,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserService {
-
-
     @Autowired
     CommonDao commonDao;
 
     @Autowired
     AuthenticationManager authenticationManager;
+
+    public static final User DUMMY_USER = new User();
 
     public LoginServiceResult register(User user) {
         user.setRole(Role.USER);
@@ -33,8 +33,9 @@ public class UserService {
 
     public User getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(">>>>>"+authentication);
         if (authentication == null) {
-            return null;
+            return DUMMY_USER;
         }
         String username = authentication.getName();
         //Todo refactor
@@ -44,6 +45,10 @@ public class UserService {
 
     public void save(User user) {
         commonDao.saveOrUpdate(user);
+    }
+
+    public void clearAutentication(){
+         SecurityContextHolder.clearContext();
     }
 
     public void save(User user, Configuration config) {

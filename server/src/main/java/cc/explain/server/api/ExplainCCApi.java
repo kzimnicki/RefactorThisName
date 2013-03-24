@@ -47,7 +47,6 @@ public class ExplainCCApi {
 
     @RequestMapping(method = RequestMethod.POST, value = "/extractWords", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @Secured(Role.USER)
     @Transactional
     public Map<String, WordDetails> extractWords(@RequestBody DataToTranslate data) throws IOException {
         User user = userService.getLoggedUser();
@@ -108,7 +107,6 @@ public class ExplainCCApi {
 
     @RequestMapping(method = RequestMethod.GET, value = "/options", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    @Secured(Role.USER)
     @Transactional
     public Configuration loadOptions() {
         User user = userService.getLoggedUser();
@@ -182,10 +180,12 @@ public class ExplainCCApi {
 
     @RequestMapping(method = RequestMethod.POST, value = "/translate")
     @ResponseBody
-    @Secured(Role.USER)
     @Transactional
     public List<String[]> translate(@RequestBody List<String> words) {
-        saveIncludedWords(words);
+        User user = userService.getLoggedUser();
+        if(user != UserService.DUMMY_USER){
+            saveIncludedWords(words);
+        }
         return textService.getTranslatedWord(words);
     }
 

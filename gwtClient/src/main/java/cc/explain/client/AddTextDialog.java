@@ -144,15 +144,13 @@ public class AddTextDialog extends CafaWidget implements Dialog {
 
         $wnd.EnglishTranslator.translate(words, function(translatedWords) {
             $wnd.ajaxExecutor.loadOptions(function(optionsData) {
-                debugger;
                 var pattern = optionsData['subtitleTemplate'];
                 text = $wnd.EnglishTranslator.putTranslationInText(translatedWords, text, pattern);
                 instance.@cc.explain.client.AddTextDialog::setText(Ljava/lang/String;)(text);
-                if (fileURL) {
-                    debugger;
-                    $wnd.$('#video').append('<video width="770" height="450" src="' + fileURL + '" type="video/mp4" id="player1" controls="controls"></video>');
-                    $wnd.videoSub.videosub_main(text);
-                }
+//                if (fileURL) {
+//                    $wnd.$('#video').append('<video width="770" height="450" src="' + fileURL + '" type="video/mp4" id="player1" controls="controls"></video>');
+//                    $wnd.videoSub.videosub_main(text);
+//                }
             });
         });
     }-*/;

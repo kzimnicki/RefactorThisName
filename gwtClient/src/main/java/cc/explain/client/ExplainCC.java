@@ -19,7 +19,7 @@ public class ExplainCC implements EntryPoint {
         MainDialog mainDialog = GWT.create(MainDialog.class);
         Controller controller = new Controller(mainDialog, eventBus);
         mainDialog.setController(controller);
-        mainDialog.setDefaultDialog(DialogName.CONTACT);
+        mainDialog.setDefaultDialog(DialogName.WATCH);
         RootPanel.get("et").add(mainDialog);
     }
 }

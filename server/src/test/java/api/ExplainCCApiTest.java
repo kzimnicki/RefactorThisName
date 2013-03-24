@@ -48,6 +48,9 @@ public class ExplainCCApiTest {
     @Autowired
     CommonDao commonDao;
 
+    @Autowired
+    UserService userService;
+
     @Before
     public void setUp() throws Exception {
         cleanDatabase();
@@ -72,6 +75,26 @@ public class ExplainCCApiTest {
         user.setPassword("123456");
         return user;
     }
+
+    @Test
+    public void testExtractWordsWithoutLogin() throws Exception {
+        String text = "What began as a one-time jolt in 2008, an unprecedented effort to revive economic activity, " +
+                "has become an uncomfortable status quo, an enduring reality in which savers are punished and borrowers rewarded by a permafrost of low interest rates." +
+                "And the Fed, acutely uneasy with this new role in the American economy, " +
+                "may now find itself unable to avoid doubling down." +
+                "Although Fed officials have said repeatedly that they were reluctant to expand what has already been a substantial campaign to stimulate growth, " +
+                "the slowing rate of job creation suggests that they have not done enough. And there’s little prospect that Congress will rise to the occasion.";
+        DataToTranslate data = new DataToTranslate();
+        data.setText(text);
+        data.setUrl("http://www.nytimes.com/2012/06/02/business/jobs-report-makes-federal-reserve-more-likely-to-act.html?hp");
+
+        Map<String, WordDetails> extractedWords = api.extractWords(data);
+
+        assertEquals(14, extractedWords.size());
+        assertEquals(76, extractedWords.get("quo").getFrequency().intValue());
+    }
+
+
 
     @Test
     public void testExtractWordsWithFrequency() throws Exception {
@@ -121,7 +144,6 @@ public class ExplainCCApiTest {
 
         assertEquals(13, extractedWords.size());
     }
-
 
     @Test
     public void testSaveExcludeWords() throws Exception {
@@ -282,6 +304,19 @@ public class ExplainCCApiTest {
 
 
     @Test
+    public void testLoadOptionsWithoutAuthentication() throws Exception {
+        userService.clearAutentication();
+
+        Configuration options = api.loadOptions();
+
+        assertEquals(89, options.getMax());
+        assertEquals(5, options.getMin());
+        assertEquals("(@@TRANSLATED_TEXT@@)", options.getTextTemplate());
+        assertEquals("<font color=\"yellow\">(@@TRANSLATED_TEXT@@)</font>", options.getSubtitleTemplate());
+    }
+
+
+    @Test
     public void testGetWordsAccordingToOptionsBoundaryTest() throws Exception {
         createRegisterAndLoginUser();
         Configuration config = new Configuration();
@@ -342,6 +377,20 @@ public class ExplainCCApiTest {
         assertEquals("dawców", translatedWords.get(0)[0]);
         assertEquals("osły", translatedWords.get(1)[0]);
     }
+
+    @Test
+    public void testTranslateWordWithoutAuthentication() throws Exception {
+        List<String> words = Arrays.asList(new String[]{
+                "donors", "donkeys"
+        });
+        userService.clearAutentication();
+
+        List<String[]> translatedWords = api.translate(words);
+
+        assertEquals("dawców", translatedWords.get(0)[0]);
+        assertEquals("osły", translatedWords.get(1)[0]);
+    }
+
 
     @Test
     public void testExportsAllIncludeWordsToCSVFormat() throws Exception {

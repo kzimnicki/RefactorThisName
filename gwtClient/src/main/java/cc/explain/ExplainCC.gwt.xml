@@ -9,4 +9,6 @@
 
     <entry-point class='cc.explain.client.ExplainCC'/>
 
+    <set-property name="user.agent" value="safari"/>
+
 </module>
