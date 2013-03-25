@@ -97,8 +97,8 @@ public class OptionsDialog extends CafaWidget implements Dialog {
 
     public void initOptions(JavaScriptObject jsObject) {
         JSONObject jsonObject = new JSONObject(jsObject);
-        min.setText(jsonObject.get(MIN).isNumber().toString());
-        max.setText(jsonObject.get(MAX).isNumber().toString());
+        min.setValue(jsonObject.get(MAX).isNumber().toString());
+        max.setValue(jsonObject.get(MAX).isNumber().toString());
 //        textTemplate.setText(jsonObject.get(TEXT_TEMPLATE).isString().stringValue());
         subtitleTemplate.setText(jsonObject.get(SUBTITLE_TEMPLATE).isString().stringValue());
     }
