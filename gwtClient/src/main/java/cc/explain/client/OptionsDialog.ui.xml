@@ -18,6 +18,8 @@
                             <g:Label styleName="help-inline">Common words</g:Label>
                         </div>
                     </div>
+                    <script src='ui/html5slider.js'></script>
+
                     <!--<div class="control-group">
                         <label class="control-label">Text template:</label>
 
