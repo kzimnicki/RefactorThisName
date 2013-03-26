@@ -47,7 +47,7 @@
 
                             <li>
                                 <g:Anchor ui:field="submitText">
-                                    <span>Submit</span>
+                                    <span>Translate</span>
                                 </g:Anchor>
                             </li>
                             <li>
