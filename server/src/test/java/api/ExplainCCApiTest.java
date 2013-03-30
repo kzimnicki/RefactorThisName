@@ -87,6 +87,7 @@ public class ExplainCCApiTest {
         DataToTranslate data = new DataToTranslate();
         data.setText(text);
         data.setUrl("http://www.nytimes.com/2012/06/02/business/jobs-report-makes-federal-reserve-more-likely-to-act.html?hp");
+        userService.clearAutentication();
 
         Map<String, WordDetails> extractedWords = api.extractWords(data);
 

@@ -1,0 +1,28 @@
+{
+   "captions":[
+      {
+         "duration":3000,
+         "content":"This is really a two-hour presentation I give to high school students,",
+         "startOfParagraph":false,
+         "startTime":0
+      },
+      {
+         "duration":1000,
+         "content":"cut down to three minutes.",
+         "startOfParagraph":false,
+         "startTime":3000
+      },
+      {
+         "duration":3000,
+         "content":"And it all started one day on a plane, on my way to TED,",
+         "startOfParagraph":false,
+         "startTime":4000
+      },
+      {
+         "duration":1000,
+         "content":"seven years ago.",
+         "startOfParagraph":false,
+         "startTime":7000
+      }
+   ]
+}

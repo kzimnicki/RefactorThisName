@@ -164,7 +164,7 @@ public class SublightServiceTest {
     }
 
     @Test
-    public void shouldDownloadSubtitlesTwite() throws IOException {
+    public void shouldDownloadSubtitlesTwice() throws IOException {
         HashData data = new HashData();
         List<String> lines = IOUtils.readLines(Thread.currentThread().getContextClassLoader().getResourceAsStream("HashData.txt"));
         data.setSize(lines.get(0).split("=")[1]);
