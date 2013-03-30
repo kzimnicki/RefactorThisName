@@ -18,7 +18,7 @@ __resource__   = xbmc.translatePath( os.path.join( __cwd__, 'resources', 'lib' )
 
 sys.path.append (__resource__)
 
-print "Hello World explaincc"
+print "Hello World explaincc 222"
 
 
   
