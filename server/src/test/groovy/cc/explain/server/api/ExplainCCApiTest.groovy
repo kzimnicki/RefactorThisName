@@ -3,6 +3,7 @@ package cc.explain.server.api
 import spock.lang.Unroll
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Specification
 
 /**
  * User: kzimnick
@@ -16,24 +17,45 @@ import org.springframework.beans.factory.annotation.Autowired
         "classpath:spring-security.xml",
         "classpath:spring-tx.xml"
 ])
-class ExplainCCApiTest {
+class ExplainCCApiTest extends Specification{
 
     @Autowired
     ExplainCCApi api;
 
     @Unroll
    def "Should translate SRT subtitles using quick method"() {
-        String subtitle = "What began as a one-time jolt in 2008, an unprecedented effort to revive economic activity, " +
-                "has become an uncomfortable status quo, an enduring reality in which savers are punished and borrowers rewarded by a permafrost of low interest rates." +
-                "And the Fed, acutely uneasy with this new role in the American economy, " +
-                "may now find itself unable to avoid doubling down." +
-                "Although Fed officials have said repeatedly that they were reluctant to expand what has already been a substantial campaign to stimulate growth, " +
-                "the slowing rate of job creation suggests that they have not done enough. And there’s little prospect that Congress will rise to the occasion.";
-        createRegisterAndLoginUser();
+       given:
+       def subtitle = """4
+                          |00:00:10,622 --> 00:00:12,484
+                          |The night started like any other.
+                          |
+                          |5
+                          |00:00:12,584 --> 00:00:14,131
+                          |We were downstairs at the Bar.
+                          |
+                          |6
+                          |00:00:18,239 --> 00:00:19,408
+                          |On the house.
+                          |
+                          |
+                          """.stripMargin()
 
-
+        when:
         String translated = api.quickSubtitleTranslate(subtitle);
 
-        assertEquals(13, extractedWords.size());
+        then:
+          """4
+          |00:00:10,622 --> 00:00:12,484
+          |The night started like any other.
+          |
+          |5
+          |00:00:12,584 --> 00:00:14,131
+          |We were downstairs <font color="yellow">(na dół)</font> at the Bar <font color="yellow">(bar)</font>.
+          |
+          |6
+          |00:00:18,239 --> 00:00:19,408
+          |On the house.
+          |
+          |""".stripMargin()  == translated.stripMargin()
     }
 }

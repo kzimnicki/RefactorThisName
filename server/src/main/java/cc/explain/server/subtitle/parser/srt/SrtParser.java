@@ -1,5 +1,6 @@
 package cc.explain.server.subtitle.parser.srt;
 
+import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.subtitle.Subtitle;
 import cc.explain.server.subtitle.SubtitleElement;
 import cc.explain.server.subtitle.parser.SubtitleParser;
@@ -28,7 +29,7 @@ public class SrtParser implements SubtitleParser {
 				subtitle.add(subtitleElement);
 			}
 		} catch (RecognitionException e) {
-			e.printStackTrace(); // TODO change to technical exception.
+			throw new TechnicalException(e);
 		}
 		return subtitle;
 	}

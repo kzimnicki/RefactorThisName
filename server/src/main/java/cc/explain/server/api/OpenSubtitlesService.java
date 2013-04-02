@@ -24,7 +24,6 @@ import java.util.zip.GZIPInputStream;
  * Date: 24.11.12
  * Time: 20:05
  */
-@Data
 public class OpenSubtitlesService {
 
     private static final int HASH_CHUNK_SIZE = 64 * 1024;
@@ -163,5 +162,21 @@ public class OpenSubtitlesService {
             return (String) data.get("IDSubtitleFile");
         }
         return StringUtils.EMPTY;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
+    public void setApiUrl(String apiUrl) {
+        this.apiUrl = apiUrl;
     }
 }

@@ -4,6 +4,8 @@ Nowe funkcjonalnosci:
 - Phrasal verbs.
 
 Refactoring:
+- zrobic porzadek ze struktura danych - raz jest lista, raz jest mapa, raz jest SET, poczytac i doprowadzic do normalnej struktury danych.
+- Czy parser composer trzymac jako bean, czy moze stowrzyc w klasie w ktorej tego potrzebujemy
 - TomcatRunWar nie dziala, bo zawsze wywolouje war przed soba, ktory niszczy explodedDist , jednym slowem war jest maly.
 - dodac JNDI aby pobieral z tomcata ale takze dla testow.
 - import.sql nie dziala. // z tym poczekac na rootWord.getRootWord .getValue // moze pczytac ksiazke tez.

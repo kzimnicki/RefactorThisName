@@ -22,9 +22,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: kzimnick
@@ -111,6 +110,26 @@ public class ExplainCCApi {
     public Configuration loadOptions() {
         User user = userService.getLoggedUser();
         return user.getConfig();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/quickSubtitleTranslate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @Transactional
+    public String quickSubtitleTranslate(String subtitle) throws IOException {
+        //TODO refactor this
+        User user = userService.getLoggedUser();
+        Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, subtitle);
+        Set<String> words = wordsToTranslate.keySet();
+        ArrayList<String> strings = new ArrayList<String>(words.size());
+        strings.addAll(words);
+        List<String[]> translatedWords = translate(strings);
+
+        Map<String, String> map = new ConcurrentHashMap<String, String>();
+        for (int i = 0; i<strings.size(); i++){
+            map.put(strings.get(i), translatedWords.get(i)[0]);
+        }
+        String translated = subtitleService.addTranslation(subtitle, map, user.getConfig().getSubtitleTemplate());
+        return translated;
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/options", produces = MediaType.APPLICATION_JSON_VALUE)

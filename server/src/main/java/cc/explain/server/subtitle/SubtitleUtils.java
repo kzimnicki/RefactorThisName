@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class SubtitleUtils {
 	
-	public static final String PATTERN_CORE = "@@TRANSLATED_WORD@@";
+	public static final String PATTERN_CORE = "@@TRANSLATED_TEXT@@";
 
 	private SubtitleUtils(){
 		// do nothing

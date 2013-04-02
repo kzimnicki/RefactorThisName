@@ -1,9 +1,16 @@
 package cc.explain.server.api;
 
+import cc.explain.server.subtitle.InTextTranslationSubtitleStrategy;
+import cc.explain.server.subtitle.PreTranslateSubtitleStrategy;
+import cc.explain.server.subtitle.Subtitle;
+import cc.explain.server.subtitle.composer.SrtComposer;
+import cc.explain.server.subtitle.parser.srt.SrtParser;
 import cc.explain.server.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Map;
 
 /**
  * User: kzimnick
@@ -29,5 +36,12 @@ public class SubtitleService {
             LOG.debug("Downloaded From sublight: %s", subtitle);
         }
         return subtitle;
+    }
+
+    public String addTranslation(String srt, Map<String, String> translations, String pattern){
+        Subtitle subtitle = new SrtParser().parse(srt);
+        subtitle = new PreTranslateSubtitleStrategy().addTranslation(subtitle, translations);
+        Subtitle processed = new InTextTranslationSubtitleStrategy().process(subtitle, pattern);
+        return new SrtComposer().compose(processed);
     }
 }

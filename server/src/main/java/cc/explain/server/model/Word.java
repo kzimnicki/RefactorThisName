@@ -21,7 +21,6 @@ import javax.validation.constraints.NotNull;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"value", "wordType"})},
         name="word"
 )
-@Data
 @Cache(usage= CacheConcurrencyStrategy.READ_ONLY)
 public class Word extends EntityObject {
 
@@ -35,4 +34,27 @@ public class Word extends EntityObject {
 
     private int frequency=0;
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public WordType getWordType() {
+        return wordType;
+    }
+
+    public void setWordType(WordType wordType) {
+        this.wordType = wordType;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
+    }
 }

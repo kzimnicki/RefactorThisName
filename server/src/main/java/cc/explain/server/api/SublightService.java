@@ -22,7 +22,6 @@ import java.util.zip.Adler32;
  * Date: 25.11.12
  * Time: 17:39
  */
-@Data
 public class SublightService {
 
     private String clientId;
@@ -141,5 +140,13 @@ public class SublightService {
             logout();
         }
         return subtitle;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setClientKey(String clientKey) {
+        this.clientKey = clientKey;
     }
 }
