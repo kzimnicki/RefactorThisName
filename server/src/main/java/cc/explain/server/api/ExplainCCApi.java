@@ -112,7 +112,7 @@ public class ExplainCCApi {
         return user.getConfig();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/quickSubtitleTranslate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, value = "/quickSubtitleTranslate", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional
     public String quickSubtitleTranslate(String subtitle) throws IOException {
