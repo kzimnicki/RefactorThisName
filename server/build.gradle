@@ -89,5 +89,6 @@ task generateWithANTLR3(type:Exec) {
   commandLine = ['java', '-cp',  configurations.antlr3.getAsPath(), 'org.antlr.Tool', '-o', 'build/generated-sources/antlr3/srt', 'src/main/antlr/Antrl3Srt.g']
 }
 
+compileJava.dependsOn(generateWithANTLR3)
 sourceSets.main.java.srcDirs 'build/generated-sources/antlr3'
 
