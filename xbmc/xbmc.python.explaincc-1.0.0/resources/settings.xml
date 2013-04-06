@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <category label="Settings">
+            <setting label="Login" type="text"   id="login" default="user@gmail.com"/>
+            <setting label="Password" type="text"   id="password" option="hidden" default="123456"/>
+    </category>
+</settings>

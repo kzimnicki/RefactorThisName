@@ -9,12 +9,25 @@ import xbmcaddon
 import time
 import urllib
 import urllib2
+import base64
 
+TRANSLATED_SUBTITLE_FILE_NAME = "translatedSubtitle.srt"
+PLUGIN_SUBTITLE_FILENAME = "temp_sub.en.srt"
+PLUGIN_SUBTITLE_PATH = xbmc.translatePath('special://userdata/addon_data/script.xbmc.subtitles/sub_stream/temp_sub.en.srt')
+TRANSLATING_TEXT = 'Translating...'
 QUICK_TRANSLATE_URL ='http://localhost:8080/RefactorThisName/app/quickSubtitleTranslate'
+HEAD = 'Explain.CC'
 TRANSLATED_SUBTITLE_FILENAME = xbmc.translatePath('special://userdata/addon_data/translatedSubtitle.srt')
 
+
+cachedSubtitle = ""
+
 def isPluginSubtitles(subtitlesName):
-    return "temp_sub.en.srt" == subtitlesName
+    return PLUGIN_SUBTITLE_FILENAME == subtitlesName
+
+
+def isTranslatedSubtitles(subtitlesName):
+    return TRANSLATED_SUBTITLE_FILE_NAME == subtitlesName
 
 def readFile(path) :
     f = open(path,'r')
@@ -32,36 +45,69 @@ def saveSubtitles(content) :
 
 
 def getSubtitleContentFromPluginFile() :
-    return readFile(xbmc.translatePath('special://userdata/addon_data/script.xbmc.subtitles/sub_stream/temp_sub.en.srt'))
+    return readFile(PLUGIN_SUBTITLE_PATH)
+
+def getTranslatedSubtitleContent() :
+    return readFile(TRANSLATED_SUBTITLE_FILENAME)
 
 def quickSubtitleTranslate(subtitle) :
+    popup = xbmcgui.DialogProgress()
+    popup.create(HEAD, TRANSLATING_TEXT)
+    request = urllib2.Request(QUICK_TRANSLATE_URL)
+    request.add_header("Authorization",getBasicAuthentication())
     params = urllib.urlencode({
-      'subtitle': subtitle
+      'subtitle': subtitle,
     })
-    response = urllib2.urlopen(QUICK_TRANSLATE_URL, params).read()
+    response = urllib2.urlopen(request, params).read()
+    popup.close()
     return response
+
 def setTranslatedSubtitle(subtitle) :
     translatedSubtitle = quickSubtitleTranslate(subtitle)
     saveSubtitles(translatedSubtitle)
     player.setSubtitles(TRANSLATED_SUBTITLE_FILENAME)
+    return translatedSubtitle
+
+def saveSubtitleInCache(subtitle) :
+    global cachedSubtitle
+    cachedSubtitle = subtitle
 
 def isUserAgreeToTranslateSubtitles() :
     dialog = xbmcgui.Dialog()
-    return dialog.yesno('Explain.CC', 'Do you want translate subtitles ?')
+    return dialog.yesno(HEAD, 'Do you want translate subtitles ?')
+
+def getBasicAuthentication() :
+     addon = xbmcaddon.Addon()
+     login = addon.getSetting('login')
+     password = addon.getSetting('password')
+     print login
+     print password
+     auth = base64.encodestring('%s:%s' % (login, password)).replace('\n','')
+     return 'Basic %s' % auth
+
+
+def readSubtitle(subtitleName) :
+    if isPluginSubtitles(subtitleName) :
+        subtitle = getSubtitleContentFromPluginFile()
+    elif isTranslatedSubtitles(subtitleName) :
+        subtitle = getTranslatedSubtitleContent()
+    else :
+        subtitle = readFile(subtitleName)
+    return subtitle
+
+def isSubtitleChanged(subtitleName) :
+    print len(readSubtitle(subtitleName))
+    print len(cachedSubtitle)
+    return readSubtitle(subtitleName) != cachedSubtitle
 
 player = xbmc.Player()
+
 while(1):
-    print "running"
     time.sleep(2)
-    subtitleName = player.getSubtitles()
-    if player.isPlayingVideo() and subtitleName :
-        if isUserAgreeToTranslateSubtitles() :
-            subtitle = ""
-            if isPluginSubtitles(subtitleName) :
-                print ">>Plugin "+subtitleName
-                subtitle = getSubtitleContentFromPluginFile()
-            else :
-                print ">> File " + subtitleName
-                subtitle = readFile(subtitleName)
-            setTranslatedSubtitle(subtitle)
-        break
+    if player.isPlayingVideo() and player.getSubtitles() :
+        subtitleName = player.getSubtitles()
+        if isSubtitleChanged(subtitleName) :
+            subtitle = readSubtitle(subtitleName)
+            if isUserAgreeToTranslateSubtitles() :
+                subtitle = setTranslatedSubtitle(subtitle)
+            saveSubtitleInCache(subtitle)
