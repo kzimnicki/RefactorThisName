@@ -28,11 +28,13 @@ def isPluginSubtitles(subtitlesName):
 
 def isTranslatedSubtitles(subtitlesName):
     return TRANSLATED_SUBTITLE_FILE_NAME == subtitlesName
-
+	
 def readFile(path) :
-    f = open(path,'r')
-    content = f.read()
-    return content
+	if os.path.isfile(path) :
+		f = open(path,'r')
+		content = f.read()
+		return content
+	return ""
 
 def writeFile(absoluteFilename, content) :
     f = open(absoluteFilename,'w')
