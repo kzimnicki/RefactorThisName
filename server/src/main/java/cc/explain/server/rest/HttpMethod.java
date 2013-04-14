@@ -20,7 +20,7 @@ public enum HttpMethod {
     private HttpMethod(String methodName) {
         this.methodName = methodName;
     }
-    
+
     public String getName(){
         return methodName;
     }

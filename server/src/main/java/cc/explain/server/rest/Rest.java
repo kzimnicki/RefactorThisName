@@ -1,9 +1,79 @@
 package cc.explain.server.rest;
 
+import cc.explain.server.exception.TechnicalException;
+import com.google.gson.Gson;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
+import org.eclipse.core.filesystem.URIUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.commons.io.IOUtils;
+
 /**
  * User: kzimnick
  * Date: 07.04.13
  * Time: 17:06
  */
 public class Rest {
+    private final HttpRequestBase requestBase;
+    private final DefaultHttpClient client;
+    private URIBuilder uriBuilder;
+    private final Map<String, String> parameters = new HashMap<String, String>();
+
+    private Rest(HttpRequestBase httpMethod){
+        this.requestBase = httpMethod;
+        this.client =  new DefaultHttpClient(new PoolingClientConnectionManager());
+    }
+
+    public static Rest get(){
+        Rest rest = new Rest(new HttpGet());
+        return rest;
+    }
+
+    public static Rest post(){
+        Rest rest = new Rest(new HttpPost());
+        return rest;
+    }
+
+    public Rest url(String url){
+        try {
+            uriBuilder = new URIBuilder(url);
+        } catch (URISyntaxException e) {
+            throw new TechnicalException(e);
+        }
+        return this;
+    }
+
+    public Rest addParameter(String key, String value){
+        uriBuilder.addParameter(key, value);
+        return this;
+    }
+
+    public String[] execute(){
+        try {
+            requestBase.setURI(uriBuilder.build());
+            BasicHttpResponse response = (BasicHttpResponse)client.execute(requestBase);
+
+            String content = IOUtils.toString(response.getEntity().getContent());
+            client.getConnectionManager().shutdown();
+            String[] results = new Gson().fromJson(content, String[].class);
+            return results;
+        } catch (IOException e) {
+           throw new TechnicalException(e);
+        } catch (URISyntaxException e) {
+             throw new TechnicalException(e);
+        }
+    }
 }

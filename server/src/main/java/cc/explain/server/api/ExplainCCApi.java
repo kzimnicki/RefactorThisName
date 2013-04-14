@@ -4,6 +4,8 @@ import cc.explain.server.core.XmlRpcService;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.User;
+import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import org.apache.xmlrpc.XmlRpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -126,7 +128,9 @@ public class ExplainCCApi {
 
         Map<String, String> map = new ConcurrentHashMap<String, String>();
         for (int i = 0; i<strings.size(); i++){
-            map.put(strings.get(i), translatedWords.get(i)[0]);
+            if(!Objects.equal(strings.get(i), translatedWords.get(i)[0])){
+                map.put(strings.get(i), translatedWords.get(i)[0]);
+            }
         }
         String translated = subtitleService.addTranslation(subtitle, map, user.getConfig().getSubtitleTemplate());
         return translated;
