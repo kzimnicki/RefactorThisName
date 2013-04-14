@@ -8,68 +8,62 @@ import org.hibernate.type.Type
 
 import cc.explain.server.rest.Rest
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-/**
- * User: kzimnick
- * Date: 07.04.13
- * Time: 14:15
- */
-@ContextConfiguration(locations = [
-        "classpath:spring-context.xml",
-        "classpath:spring-dao.xml",
-        "classpath:test-spring-dataSource.xml",
-        "classpath:spring-security.xml",
-        "classpath:spring-tx.xml"
-])
+import org.springframework.context.support.ClassPathXmlApplicationContext
+import java.util.concurrent.Callable
+import java.util.concurrent.Future
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.FutureCallback
+import com.google.common.util.concurrent.ListeningExecutorService
+import com.google.common.util.concurrent.MoreExecutors
+import com.google.common.util.concurrent.ListenableFuture
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
+import com.google.common.base.Charsets
+import java.nio.charset.Charset;
+
 class GoogleWordTranslator {
 
     private CommonDao commonDao;
 
-    private int MAX_PART_SIZE = 1850;
-
-
-    def findNotTranslatedWords (int start, int offset) {
-        List something = commonDao.executeSQL(String.format("SELECT * FROM Word w LEFT JOIN translation on value = sourceWord WHERE w.id between %d AND %d AND transWord IS NULL",start, offset), new String[0], new Type[0])
-        print something
+    def synchronized findNotTranslatedWords (int start, int offset) {
+        println " >>> $start - $offset "
+        List something = commonDao.executeSQL(String.format(" SELECT * FROM Word w WHERE w.value NOT IN ( SELECT sourceWord FROM Translation) AND w.id between %d AND %d",start, offset), new String[0], new Type[0])
         def wordList = new ArrayList<String>(something.size())
         something.each {x -> wordList.add(x[2]) }
-        print wordList
         return wordList
     }
 
-    def Map<String,String> translateWords(List<String> words){
-        def request = Rest.get().url("http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=pl&sl=en")
-        for (w in words){
-            request.addParameter("q",w);
-        }
-        def response = request.execute()
-        for(int i = 0; i<words.size(); i++){
-            println words[i]+" - " + response[i]
-        }
-        println response;
+    def synchronized save(Map<String, String> translatedWords){
+        println ">>> save "
+        translatedWords.each { key, value -> save(key, value)}
     }
 
-    def save(Map<String, String> translatedWords){
-        translatedWords.each { k,v -> println "${k} - ${v}"}
-    }
+    def save(String key, String value){
+        try{
+            commonDao.executeSQL(String.format("INSERT INTO TRANSLATION(sourceLang, sourceWord, transLang, transWord) VALUES('en','%s','pl','%s')", key, value.toLowerCase()))
+        }catch (MySQLIntegrityConstraintViolationException e){
+            println "Exception" + e.getMessage()
+        }
 
-    def "test"(){
-        when:
-        String a = "";
 
-        def words = findNotTranslatedWords(0,150)
-        translateWords(words)
-
-        then:
-        true
     }
 
     def init () {
-        def context = new ClassPathXmlApplicationContext("classpath:spring-dao.xml");
+        println ">>> init"
+        def context = new ClassPathXmlApplicationContext("classpath:spring-dao.xml", "test-spring-dataSource.xml");
         commonDao = context.getBean("commonDao")
     }
 
     public static void main(String[] args){
-        new GoogleWordTranslator().init();
+        ExpandoMetaClass.disableGlobally()  //for debug purpose
+        def translator = new GoogleWordTranslator()
+        translator.init();
+
+        ExecutorService service = Executors.newFixedThreadPool(10);
+        for(int i = 0; i<1160; i++){
+            service.submit(new Translator(i*200, i*200+200, translator));
+        }
+        service.shutdown();
     }
 }
