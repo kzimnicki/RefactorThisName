@@ -2,6 +2,7 @@ package tools
 
 import java.util.concurrent.Callable
 import cc.explain.server.rest.Rest
+import cc.explain.server.api.TranslateService
 
 /**
  * User: kzimnick
@@ -11,25 +12,23 @@ import cc.explain.server.rest.Rest
 class Translator implements Runnable {
 
 
-    List<String> words;
+    List<String> words
     GoogleWordTranslator translator
     int offset
     int start
+    TranslateService translateService
 
-    public Translator(int start, int offset, GoogleWordTranslator translator) {
+    public Translator(int start, int offset, GoogleWordTranslator translator, TranslateService translateService) {
         this.start = start;
         this.offset = offset;
         this.translator = translator;
+        this.translateService = translateService;
     }
 
     void run() {
-        def words = translator.findNotTranslatedWords(start, offset);
-        println " >>> translating"
-        def request = Rest.get().url("http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=pl&sl=en&ie=UTF-8&oe=UTF-8")
-        for (w in words){
-            request.addParameter("q",w);
-        }
-        def response = request.execute()
+        String[] words = translator.findNotTranslatedWords(start, offset);
+        println " >>> translating words size "+ words.size();
+        def response = translateService.translate(words);
         def translatedWords = [:]
         for(int i = 0; i<words.size(); i++){
             if(!words[i].equalsIgnoreCase(response[i])){

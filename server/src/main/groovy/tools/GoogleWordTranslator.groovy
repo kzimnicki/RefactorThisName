@@ -20,7 +20,8 @@ import com.google.common.util.concurrent.MoreExecutors
 import com.google.common.util.concurrent.ListenableFuture
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException
 import com.google.common.base.Charsets
-import java.nio.charset.Charset;
+import java.nio.charset.Charset
+import cc.explain.server.api.TranslateService;
 
 class GoogleWordTranslator {
 
@@ -45,8 +46,6 @@ class GoogleWordTranslator {
         }catch (MySQLIntegrityConstraintViolationException e){
             println "Exception" + e.getMessage()
         }
-
-
     }
 
     def init () {
@@ -60,9 +59,9 @@ class GoogleWordTranslator {
         def translator = new GoogleWordTranslator()
         translator.init();
 
-        ExecutorService service = Executors.newFixedThreadPool(10);
+        ExecutorService service = Executors.newFixedThreadPool(6);
         for(int i = 0; i<1160; i++){
-            service.submit(new Translator(i*200, i*200+200, translator));
+            service.submit(new Translator(i*200, i*200+200, translator, new TranslateService()));
         }
         service.shutdown();
     }

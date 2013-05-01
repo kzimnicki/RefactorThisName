@@ -30,7 +30,7 @@ public class Rest {
     private final HttpRequestBase requestBase;
     private final DefaultHttpClient client;
     private URIBuilder uriBuilder;
-    private final Map<String, String> parameters = new HashMap<String, String>();
+    private int parameterCount = 0;
 
     private Rest(HttpRequestBase httpMethod){
         this.requestBase = httpMethod;
@@ -57,8 +57,13 @@ public class Rest {
     }
 
     public Rest addParameter(String key, String value){
+        parameterCount++;
         uriBuilder.addParameter(key, value);
         return this;
+    }
+
+    private boolean shouldReturnSingleElement(){
+        return parameterCount == 1;
     }
 
     public String[] execute(){
@@ -68,12 +73,22 @@ public class Rest {
 
             String content = IOUtils.toString(response.getEntity().getContent());
             client.getConnectionManager().shutdown();
-            String[] results = new Gson().fromJson(content, String[].class);
-            return results;
+            return parseResponse(content);
         } catch (IOException e) {
            throw new TechnicalException(e);
         } catch (URISyntaxException e) {
              throw new TechnicalException(e);
         }
+    }
+
+    private String[] parseResponse(String content) {
+        String[] results;
+        if(shouldReturnSingleElement()){
+            results = new String[1];
+            results[0]=new Gson().fromJson(content, String.class);
+        }else{
+             results = new Gson().fromJson(content, String[].class);
+        }
+        return results;
     }
 }

@@ -2,6 +2,7 @@ Przed 3 releasem:
 - duzo slow ma takie znaczenie jak po polsku jak po ang dating(dating), ale o dziwo google translate tlumaczy to slowo.
 - wyrzucic drop video here po wcisnieciu submit
 - dodac mozliwosc logowania za pomoca xbmc.
+- xbmc plugin jesli service nie zyje - wywala sie.
 
 Nowe funkcjonalnosci:
 - Typ slowa, location, noun, verb etc.
