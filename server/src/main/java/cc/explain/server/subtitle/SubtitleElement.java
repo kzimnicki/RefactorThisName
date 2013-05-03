@@ -11,6 +11,7 @@ public class SubtitleElement {
 	private LocalTime end;
 	private String text;
 	private Map<String,String> translations = new HashMap<String,String>();
+    private Map<String,String> phrasalVerbs = new HashMap<String, String>();
 	
 
 	public Integer getId() {
@@ -28,7 +29,6 @@ public class SubtitleElement {
 	public void setText(String text) {
 		this.text = text;
 	}
-
 	public LocalTime getStart() {
 		return start;
 	}
@@ -61,5 +61,14 @@ public class SubtitleElement {
 	public void setTranslations(Map<String,String> translations) {
 		this.translations = translations;
 	}
+
+    public Map<String,String> getPhrasalVerbs(){
+        return this.phrasalVerbs;
+    }
+
+    public void setPhrasalVerbs(Map<String, String> phrasalVerbs){
+        this.phrasalVerbs = phrasalVerbs;
+    }
+
 
 }

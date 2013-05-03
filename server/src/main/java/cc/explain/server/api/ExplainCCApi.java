@@ -126,7 +126,7 @@ public class ExplainCCApi {
         strings.addAll(words);
         List<String[]> translatedWords = translate(strings);
 
-        Map<String, String> map = new ConcurrentHashMap<String, String>();
+        Map<String, String> map = new HashMap<String, String>();
         for (int i = 0; i<strings.size(); i++){
             if(!Objects.equal(strings.get(i), translatedWords.get(i)[0])){
                 map.put(strings.get(i), translatedWords.get(i)[0]);

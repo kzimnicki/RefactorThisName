@@ -32,13 +32,12 @@ public class SubtitleServiceTest extends Specification {
                           """.stripMargin()
 
         when:
-        def translatedSubtitle = new SubtitleService().addTranslation(subtitle, translations, "(@@TRANSLATED_WORD@@)")
+        def translatedSubtitle = new SubtitleService().addTranslation(subtitle, translations, "(@@TRANSLATED_TEXT@@)")
 
         then:
         translatedSubtitle.stripMargin() == """4
                                               |00:00:10,622 --> 00:00:12,484
                                               |The night started (wystartował) like any other.
-                                              |
                                               |
                                               |5
                                               |00:00:12,584 --> 00:00:14,131
@@ -46,7 +45,9 @@ public class SubtitleServiceTest extends Specification {
                                               |
                                               |6
                                               |00:00:18,239 --> 00:00:19,408
-                                              |On the house(dom).
+                                              |On the house (dom).
+                                              |
+                                              |
                                               """.stripMargin()
 
 

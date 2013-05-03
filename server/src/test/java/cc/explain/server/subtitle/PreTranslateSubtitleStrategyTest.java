@@ -3,6 +3,7 @@ package cc.explain.server.subtitle;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class PreTranslateSubtitleStrategyTest extends AbstractTest{
 		translation.put("started", "wystartowa�a");
 		translation.put("house", "dom");
 
-		Subtitle processedSubtitle = new PreTranslateSubtitleStrategy().addTranslation(subtitle, translation);
+		Subtitle processedSubtitle = new PreTranslateSubtitleStrategy().addTranslation(subtitle, translation, Collections.<String, String>emptyMap());
 		
 		assertEquals(2,processedSubtitle.getSubtitleElements().get(0).getTranslations().size());
 		assertEquals(2,processedSubtitle.getSubtitleElements().get(0).getTranslations().size());
@@ -40,7 +41,7 @@ public class PreTranslateSubtitleStrategyTest extends AbstractTest{
 		translations.put("world", "�wiat");
 		translations.put("bazinga", "bazinga");
 
-		SubtitleElement processedElement = new PreTranslateSubtitleStrategy().addTranslation(subtitleElement, translations);
+		SubtitleElement processedElement = new PreTranslateSubtitleStrategy().addTranslations(subtitleElement, translations);
 		
 		assertEquals(2,processedElement.getTranslations().size());
 		assertEquals("kr�l", processedElement.getTranslations().get("king"));

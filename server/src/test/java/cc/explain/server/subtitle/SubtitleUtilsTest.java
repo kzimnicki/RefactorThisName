@@ -14,18 +14,18 @@ public class SubtitleUtilsTest {
 
 	@Test
 	public void shouldReplaceTextForLowerCaseWord() {
-		String text = "I'm hungry. Let�s get a taco.";
+		String text = "I'm hungry. Let's get a taco.";
 		String english = "hungry";
-		String translated = "g�odny";
+		String translated = "głodny";
 		
 		String replacedText = SubtitleUtils.replaceText(text, english, translated, PATTERN);
 		
-		assertEquals(replacedText, "I'm hungry (g�odny). Let�s get a taco.");
+		assertEquals(replacedText, "I'm hungry (głodny). Let's get a taco.");
 	}
 	
 	@Test
 	public void shouldFindTextForLowerCaseWord() {
-		String text = "I'm hungry. Let�s get a taco.";
+		String text = "I'm hungry. Let's get a taco.";
 		String english = "hungry";
 		
 		boolean result = SubtitleUtils.findText(text, english);
@@ -35,7 +35,7 @@ public class SubtitleUtilsTest {
 	
 	@Test
 	public void shouldNotFindTextForNotExisingWord() {
-		String text = "I'm hungry. Let�s get a taco.";
+		String text = "I'm hungry. Let's get a taco.";
 		String english = "someOtherWord";
 		
 		boolean result = SubtitleUtils.findText(text, english);
@@ -66,18 +66,18 @@ public class SubtitleUtilsTest {
 	
 	@Test
 	public void shouldReplaceTextForMarkAtTheBegginig() {
-		String text = "I�m kind of a -big deal";
+		String text = "I'm kind of a -big deal";
 		String english = "big";
 		String translated = "duzy";
 		
 		String replacedText = SubtitleUtils.replaceText(text, english, translated, PATTERN);
 		
-		assertEquals(replacedText, "I�m kind of a -big (duzy) deal");
+		assertEquals(replacedText, "I'm kind of a -big (duzy) deal");
 	}
 	
 	@Test
 	public void shouldFindTextForMarkAtTheBegginig() {
-		String text = "I�m kind of a -big deal";
+		String text = "I'm kind of a -big deal";
 		String english = "big";
 		
 		boolean result = SubtitleUtils.findText(text, english);
@@ -110,7 +110,7 @@ public class SubtitleUtilsTest {
 	public void shouldNotReplaceWordContainsTranslatedWord() {
 		String text = "I aim to misbehave.";
 		String english = "behave";
-		String translated = "zachowa� si�";
+		String translated = "zachować się";
 		
 		String replacedText = SubtitleUtils.replaceText(text, english, translated, PATTERN);
 		
@@ -131,12 +131,32 @@ public class SubtitleUtilsTest {
 	public void shouldReplaceTextForMultiplyWords() {
 		String text = "I'm the king of the world!!";
 		Map<String, String> translations = new HashMap<String, String>();
-		translations.put("king", "kr�l");
-		translations.put("world", "�wiat");
-		
+		translations.put("king", "król");
+		translations.put("world", "świat");
+
 		String replacedText = SubtitleUtils.replaceText(text, translations, PATTERN);
-		
-		assertEquals(replacedText, "I'm the king (kr�l) of the world (�wiat)!!");
+
+		assertEquals(replacedText, "I'm the king (król) of the world (świat)!!");
+	}
+
+    @Test
+	public void shouldRFindPhrasalVerb() {
+		String text = "Sawyer, you’re going out a youngster, but you’ve got to come back a star!”";
+		String phrasalVerb = "going out";
+
+		boolean result = SubtitleUtils.findPhrasalVerb(text,phrasalVerb);
+
+		assertEquals(result, true);
+	}
+
+    @Test
+	public void shouldRFindSeparetedPhrasalVerb() {
+		String text = "Lenard! Switch it on!";
+		String phrasalVerb = "switch on";
+
+		boolean result = SubtitleUtils.findPhrasalVerb(text,phrasalVerb);
+
+		assertEquals(result, true);
 	}
 
 }

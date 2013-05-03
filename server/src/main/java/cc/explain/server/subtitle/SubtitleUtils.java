@@ -23,6 +23,8 @@ public class SubtitleUtils {
 		Pattern compile = Pattern.compile("\\b"+english+"\\b", Pattern.CASE_INSENSITIVE);
 		return compile.matcher(text).find();
 	}
+
+
 	
 	public static String replaceText(String text, Map<String,String> translations, String pattern){
 		for (Entry<String, String> entry : translations.entrySet()) {
@@ -30,4 +32,15 @@ public class SubtitleUtils {
 		}
 		return text;
 	}
+
+    public static String replacePhrasalVerb(String text, Map<String, String> translations, String pattern) {
+        return null;
+    }
+
+    public static boolean findPhrasalVerb(String text, String phrasalVerb){
+       String phrasalVerbPattern = phrasalVerb.replaceAll(" ","(.*?)");
+       Pattern compile = Pattern.compile("\\b"+phrasalVerbPattern+"\\b", Pattern.CASE_INSENSITIVE);
+	   return compile.matcher(text).find();
+    }
+
 }

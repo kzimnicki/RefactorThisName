@@ -11,9 +11,13 @@ public class InTextTranslationSubtitleStrategy implements SubtitleStrategy {
 		List<SubtitleElement> subtitleElements = subtitle.getSubtitleElements();
 		for (SubtitleElement element : subtitleElements) {
 			Map<String, String> translations = element.getTranslations();
-			for (Entry<String, String> entry : translations.entrySet()) {
+            Map<String, String> phrasalVerbs = element.getPhrasalVerbs();
+            for (Entry<String, String> entry : translations.entrySet()) {
 				element.setText(SubtitleUtils.replaceText(element.getText(), entry.getKey(), entry.getValue(), pattern));
 			}
+            for(Entry<String, String> entry : phrasalVerbs.entrySet()){
+                element.setText(String.format("%s \n %s = %s", element.getText(), entry.getKey(), entry.getValue()));
+            }
 		}
 		return subtitle;
 	}

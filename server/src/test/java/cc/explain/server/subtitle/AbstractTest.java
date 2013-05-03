@@ -1,10 +1,12 @@
 package cc.explain.server.subtitle;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 
 import antlr.RecognitionException;
 import cc.explain.server.subtitle.parser.srt.SrtParser;
+import edu.stanford.nlp.util.Maps;
 import org.apache.commons.io.IOUtils;
 
 public abstract class AbstractTest {
@@ -26,8 +28,13 @@ public abstract class AbstractTest {
 	}
 	
 	protected Subtitle createSubtitleFromFileWithTranslations(String filename, Map<String, String> translations) throws IOException, RecognitionException {
+		return createSubtitleFromFile(filename, translations, Collections.<String, String>emptyMap());
+	}
+
+    protected Subtitle createSubtitleFromFile(String filename, Map<String, String> translations, Map<String, String> phrasalVerbs) throws IOException, RecognitionException {
 		Subtitle subtitle = createSubtitleFromFile(filename);
-		subtitle = new PreTranslateSubtitleStrategy().addTranslation(subtitle, translations);
+        PreTranslateSubtitleStrategy preTranslateSubtitleStrategy = new PreTranslateSubtitleStrategy();
+        subtitle = preTranslateSubtitleStrategy.addTranslation(subtitle, translations, phrasalVerbs);
 		return subtitle;
 	}
 

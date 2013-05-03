@@ -3,6 +3,7 @@ package cc.explain.server.subtitle;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,17 @@ public class InTextTranslationSubtitleStrategyTest extends AbstractTest{
 		assertEquals("The night (noc) started (wystartowała) like any other.", processedSubtitle.getSubtitleElements().get(0).getText());
 		assertEquals("We were downstairs at the Bar.", processedSubtitle.getSubtitleElements().get(1).getText());
 		assertEquals("On the house (dom).", processedSubtitle.getSubtitleElements().get(2).getText());
+	}
+
+    	@Test
+	public void shouldProcessSubtitleForTestPhrasalVerbs() throws IOException, RecognitionException {
+		Map<String, String> phraslaVerbs = new HashMap<String, String>();
+		phraslaVerbs.put("get away", "odejdz");
+
+		Subtitle subtitle = createSubtitleFromFile("/subtitleWithPhrasalVerbs.srt", Collections.<String, String>emptyMap(), phraslaVerbs);
+		Subtitle processedSubtitle = new InTextTranslationSubtitleStrategy().process(subtitle, SubtitleUtilsTest.PATTERN);
+
+		assertEquals("to get away from me. \n get away = odejdz", processedSubtitle.getSubtitleElements().get(1).getText());
 	}
 
 }
