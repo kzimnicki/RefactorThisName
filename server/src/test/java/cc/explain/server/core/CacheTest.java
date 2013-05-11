@@ -1,4 +1,4 @@
-package api;
+package cc.explain.server.core;
 
 import cc.explain.server.model.Word;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class CacheTest {
     @Autowired
     CommonDao commonDao;
 
-    @Test
+    @Test //TODO refactor
     public void testExtractWordsWithFrequency() throws Exception {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();

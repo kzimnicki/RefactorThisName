@@ -1,4 +1,4 @@
-package api;
+package cc.explain.server.core;
 
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.Word;
@@ -30,10 +30,10 @@ import static org.junit.Assert.assertTrue;
         "classpath:spring-security.xml",
         "classpath:spring-tx.xml"
 })
-public class TestServiceTest {
+public class TextServiceTest {
 
     @Inject
-    TextService testService;
+    TextService textService;
 
     @Test
     public void shouldReturnWordFamiliesForTwoRootWords() throws Exception {
@@ -41,7 +41,7 @@ public class TestServiceTest {
          rootWordValues.add("cart");
          rootWordValues.add("truck");
 
-         Map<String, Set<String>> wordFmilies = testService.getStringWordFamilyForIds(rootWordValues);
+         Map<String, Set<String>> wordFmilies = textService.getStringWordFamilyForIds(rootWordValues);
 
          assertTrue(wordFmilies.get("truck").contains("trucks"));
          assertTrue(wordFmilies.get("cart").contains("carts"));
@@ -52,7 +52,7 @@ public class TestServiceTest {
     public void shouldReturnRootWordForWord() throws Exception {
          String word = "falling";
 
-         RootWord rootWord = testService.getRootWord(word);
+         RootWord rootWord = textService.getRootWord(word);
 
          assertEquals("fall", rootWord.getRootWord().getValue());
     }
@@ -61,7 +61,7 @@ public class TestServiceTest {
     public void shouldReturnEmptyWordFamiliesForEmptyList() throws Exception {
          List<String> rootWordValues = new ArrayList<String>();
 
-         Map<String, Set<String>> wordFmilies = testService.getStringWordFamilyForIds(rootWordValues);
+         Map<String, Set<String>> wordFmilies = textService.getStringWordFamilyForIds(rootWordValues);
 
          assertEquals(0, wordFmilies.size());
     }
@@ -70,20 +70,19 @@ public class TestServiceTest {
     public void shouldReturnEmptyListOfWordsForEmptyStringList() throws Exception {
          List<String> wordValues = new ArrayList<String>();
 
-           List<Word> words = testService.getWords(wordValues);
+           List<Word> words = textService.getWords(wordValues);
 
            assertEquals(0, words.size());
     }
 
-     @Test
+    @Test
     public void shouldReturnTranslatedWord() throws Exception {
            String word = "doghouse";
 
-           String translatedWord = testService.getTranslatedWord(word);
+           String translatedWord = textService.getTranslatedWord(word);
 
            assertEquals("psia buda", translatedWord);
     }
-
 
     @Test
     public void shouldReturn2WordsFor2String() throws Exception {
@@ -91,7 +90,7 @@ public class TestServiceTest {
         wordValues.add("car");
         wordValues.add("dog");
 
-           List<Word> words = testService.getWords(wordValues);
+        List<Word> words = textService.getWords(wordValues);
 
         assertEquals(2, words.size());
         assertEquals("car", words.get(0).getValue());
