@@ -5,7 +5,9 @@ import cc.explain.server.model.Configuration;
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.User;
 import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
 import org.apache.xmlrpc.XmlRpcException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +44,9 @@ public class ExplainCCApi {
 
     @Autowired
     SubtitleService subtitleService;
+
+    @Autowired
+    TranslateService translationService;
 
     @Autowired
     UserService userService;
@@ -121,10 +126,18 @@ public class ExplainCCApi {
         //TODO refactor this
         User user = userService.getLoggedUser();
         Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, subtitle);
+        List<String> phrasalVerbs = textService.getPhrasalVerbs(subtitle);
+
+        for(String pv : phrasalVerbs){
+            String phrasalVerbFirstPart = pv.split(" ")[0];//only first word
+            wordsToTranslate.remove(phrasalVerbFirstPart);
+        }
+
         Set<String> words = wordsToTranslate.keySet();
         ArrayList<String> strings = new ArrayList<String>(words.size());
         strings.addAll(words);
         List<String[]> translatedWords = translate(strings);
+        Map<String, String> translatedPhrasalVerbs = translationService.translate(phrasalVerbs);
 
         Map<String, String> map = new HashMap<String, String>();
         for (int i = 0; i<strings.size(); i++){
@@ -132,7 +145,9 @@ public class ExplainCCApi {
                 map.put(strings.get(i), translatedWords.get(i)[0]);
             }
         }
-        String translated = subtitleService.addTranslation(subtitle, map, user.getConfig().getSubtitleTemplate());
+        String wordPattern = user.getConfig().getSubtitleTemplate();
+        String phrasalVerbPattern = "<font color='red'>@@TRANSLATED_TEXT@@</font>";
+        String translated = subtitleService.addTranslation(subtitle, map, translatedPhrasalVerbs, wordPattern, phrasalVerbPattern);
         return translated;
     }
 
@@ -209,7 +224,7 @@ public class ExplainCCApi {
         if(user != UserService.DUMMY_USER){
             saveIncludedWords(words);
         }
-        return textService.getTranslatedWord(words);
+        return translationService.getTranslatedWord(words);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/subtitle", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -3,6 +3,6 @@ package cc.explain.server.subtitle;
 
 public interface SubtitleStrategy {
 	
-	Subtitle process(Subtitle subtitle, String pattern);
+	Subtitle process(Subtitle subtitle, String pattern, String phrasalVerbPattern);
 
 }

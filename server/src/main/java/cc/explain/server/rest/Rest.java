@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.http.message.BasicHttpResponse;
@@ -71,7 +72,7 @@ public class Rest {
             requestBase.setURI(uriBuilder.build());
             BasicHttpResponse response = (BasicHttpResponse)client.execute(requestBase);
 
-            String content = IOUtils.toString(response.getEntity().getContent());
+            String content = IOUtils.toString(response.getEntity().getContent(), "UTF-8");
             client.getConnectionManager().shutdown();
             return parseResponse(content);
         } catch (IOException e) {

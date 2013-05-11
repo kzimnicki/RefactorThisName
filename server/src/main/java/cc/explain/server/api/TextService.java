@@ -1,9 +1,11 @@
 package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
+import cc.explain.server.core.StanfordNLP;
 import cc.explain.server.core.WordType;
 import cc.explain.server.model.*;
 import com.google.common.collect.HashMultimap;
+import edu.stanford.nlp.ling.HasWord;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,6 +22,12 @@ public class TextService {
 
     @Autowired
     LuceneService luceneService;
+
+    private StanfordNLP stanfordNLP;
+
+    public TextService(){
+        stanfordNLP = new StanfordNLP();
+    }
 
     public Set<String> getExcludeSet(User user) {
         Map<String, Set<String>> excludedWords = getExcludedWords(user);
@@ -49,6 +57,11 @@ public class TextService {
                 user.getConfig().getMax());
 
         return wordsToTranslate;
+    }
+
+    public List<String> getPhrasalVerbs(String text){
+        List<List<HasWord>> sentences = stanfordNLP.getSentences(text);
+        return  stanfordNLP.getPhrasalVerbs(sentences);
     }
 
     public Map<String, WordDetails> filterWordsToTranslateWithFrequency(List<String> list, int minFrequency, int maxFrequency) {
@@ -125,19 +138,4 @@ public class TextService {
         return getStringWordFamilyForIds(rootWordValues);
     }
 
-    public String getTranslatedWord(String word) {
-        List<Translation> translatedWords = textDAO.findTranslations(word);
-        if (translatedWords.size() > 0) {
-            return translatedWords.get(0).getTransWord();
-        }
-        return word;
-    }
-
-    public List<String[]> getTranslatedWord(List<String> words) {
-        ArrayList<String[]> translatedWords = new ArrayList<String[]>(words.size());
-        for (String w : words) {
-            translatedWords.add(new String[]{getTranslatedWord(w)});
-        }
-        return translatedWords;
-    }
 }

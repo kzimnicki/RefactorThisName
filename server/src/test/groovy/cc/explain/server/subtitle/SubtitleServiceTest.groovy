@@ -1,13 +1,9 @@
 package cc.explain.server.subtitle
 
 import spock.lang.Specification
-import org.junit.runner.RunWith
-import org.springframework.beans.factory.annotation.Autowired
+
 import cc.explain.server.api.SubtitleService
 import spock.lang.Unroll
-import org.springframework.test.context.ContextConfiguration
-import java.util.concurrent.ConcurrentHashMap
-import cc.explain.server.xml.Subtitle
 
 public class SubtitleServiceTest extends Specification {
 
@@ -32,7 +28,7 @@ public class SubtitleServiceTest extends Specification {
                           """.stripMargin()
 
         when:
-        def translatedSubtitle = new SubtitleService().addTranslation(subtitle, translations, "(@@TRANSLATED_TEXT@@)")
+        def translatedSubtitle = new SubtitleService().addTranslation(subtitle, translations, Collections.<String, String> emptyMap(), "(@@TRANSLATED_TEXT@@)", phrasalVerbPattern)
 
         then:
         translatedSubtitle.stripMargin() == """4
@@ -49,7 +45,5 @@ public class SubtitleServiceTest extends Specification {
                                               |
                                               |
                                               """.stripMargin()
-
-
     }
 }

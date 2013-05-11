@@ -18,6 +18,10 @@ public class SubtitleUtils {
 		String replacement = String.format("$1 %s", translated);
 		return text.replaceAll(replacePattern, replacement);
 	}
+
+    public static String replacePhrasalVerb(String pattern, String english, String translated){
+		return pattern.replace(PATTERN_CORE, String.format("%s = %s",english, translated));
+	}
 	
 	public static boolean findText(String text, String english){
 		Pattern compile = Pattern.compile("\\b"+english+"\\b", Pattern.CASE_INSENSITIVE);

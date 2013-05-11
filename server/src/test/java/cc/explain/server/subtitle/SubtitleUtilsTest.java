@@ -22,6 +22,17 @@ public class SubtitleUtilsTest {
 		
 		assertEquals(replacedText, "I'm hungry (głodny). Let's get a taco.");
 	}
+
+    @Test
+	public void shouldReplaceTextForPhrasalVerb() {
+		String pattern = String.format("<font color='red'>%s</font>",SubtitleUtils.PATTERN_CORE);
+        String english = "get up";
+		String translated = "wstać";
+
+		String replacedText = SubtitleUtils.replacePhrasalVerb(pattern,english, translated);
+
+		assertEquals(replacedText, "<font color='red'>get up = wstać</font>");
+	}
 	
 	@Test
 	public void shouldFindTextForLowerCaseWord() {

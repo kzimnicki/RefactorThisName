@@ -20,7 +20,7 @@ public class InTextTranslationSubtitleStrategyTest extends AbstractTest{
 		translations.put("house", "dom");
 		Subtitle subtitle = createSubtitleFromFileWithTranslations("/subtitle.srt", translations);
 		
-		Subtitle processedSubtitle = new InTextTranslationSubtitleStrategy().process(subtitle, SubtitleUtilsTest.PATTERN);
+		Subtitle processedSubtitle = new InTextTranslationSubtitleStrategy().process(subtitle, SubtitleUtilsTest.PATTERN, null);
 		
 		assertEquals("The night (noc) started (wystartowała) like any other.", processedSubtitle.getSubtitleElements().get(0).getText());
 		assertEquals("We were downstairs at the Bar.", processedSubtitle.getSubtitleElements().get(1).getText());
@@ -33,7 +33,7 @@ public class InTextTranslationSubtitleStrategyTest extends AbstractTest{
 		phraslaVerbs.put("get away", "odejdz");
 
 		Subtitle subtitle = createSubtitleFromFile("/subtitleWithPhrasalVerbs.srt", Collections.<String, String>emptyMap(), phraslaVerbs);
-		Subtitle processedSubtitle = new InTextTranslationSubtitleStrategy().process(subtitle, SubtitleUtilsTest.PATTERN);
+		Subtitle processedSubtitle = new InTextTranslationSubtitleStrategy().process(subtitle, SubtitleUtilsTest.PATTERN, null);
 
 		assertEquals("to get away from me. \n get away = odejdz", processedSubtitle.getSubtitleElements().get(1).getText());
 	}

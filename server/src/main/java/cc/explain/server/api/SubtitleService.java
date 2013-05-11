@@ -38,11 +38,11 @@ public class SubtitleService {
         }
         return subtitle;
     }
-
-    public String addTranslation(String srt, Map<String, String> translations, String pattern){
+    //TODO refactor
+    public String addTranslation(String srt, Map<String, String> translations, Map<String, String> phrasalVerbs, String wordPattern, String phrasalVerbPattern){
         Subtitle subtitle = new SrtParser().parse(srt);
-        subtitle = new PreTranslateSubtitleStrategy().addTranslation(subtitle, translations, Collections.<String, String>emptyMap());
-        Subtitle processed = new InTextTranslationSubtitleStrategy().process(subtitle, pattern);
+        subtitle = new PreTranslateSubtitleStrategy().addTranslation(subtitle, translations, phrasalVerbs);
+        Subtitle processed = new InTextTranslationSubtitleStrategy().process(subtitle, wordPattern, phrasalVerbPattern);
         return new SrtComposer().compose(processed);
     }
 }

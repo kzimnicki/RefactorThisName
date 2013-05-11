@@ -22,7 +22,7 @@ class ExplainCCApiGroovyTest extends Specification{
     @Autowired
     ExplainCCApi api;
 
-    @Unroll
+   @Unroll
    def "Should translate SRT subtitles using quick method"() {
        given:
        def subtitle = """4
@@ -47,7 +47,7 @@ class ExplainCCApiGroovyTest extends Specification{
           """4
           |00:00:10,622 --> 00:00:12,484
           |Please get up like any other.
-          | get up = wstać
+          | <font color='red'>get up = wstać</font>
           |
           |5
           |00:00:12,584 --> 00:00:14,131
@@ -59,4 +59,29 @@ class ExplainCCApiGroovyTest extends Specification{
           |
           |""".stripMargin()  == translated.stripMargin()
     }
+
+
+    @Unroll
+   def """Should translate 'staring down' not 'staring' """() {
+
+        given:
+       def subtitle = """9
+                        |00:00:25,004 --> 00:00:27,789
+                        |Right now, Howard's
+                        |staring down at our boat
+                        |""".stripMargin()
+
+        when:
+        String translated = api.quickSubtitleTranslate(subtitle);
+
+        then:
+            """9
+            |00:00:25,004 --> 00:00:27,789
+            |Right now, Howard's
+            |staring down at our boat
+            | <font color='red'>staring down = patrząc w dół</font>
+            |
+            |""".stripMargin()  == translated.stripMargin()
+    }
+
 }

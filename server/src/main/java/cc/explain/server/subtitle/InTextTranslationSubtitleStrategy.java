@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 public class InTextTranslationSubtitleStrategy implements SubtitleStrategy {
 
-	public Subtitle process(Subtitle subtitle, String pattern) {
+	public Subtitle process(Subtitle subtitle, String pattern, String phrasalVerbPattern) {
 		List<SubtitleElement> subtitleElements = subtitle.getSubtitleElements();
 		for (SubtitleElement element : subtitleElements) {
 			Map<String, String> translations = element.getTranslations();
@@ -16,7 +16,7 @@ public class InTextTranslationSubtitleStrategy implements SubtitleStrategy {
 				element.setText(SubtitleUtils.replaceText(element.getText(), entry.getKey(), entry.getValue(), pattern));
 			}
             for(Entry<String, String> entry : phrasalVerbs.entrySet()){
-                element.setText(String.format("%s \n %s = %s", element.getText(), entry.getKey(), entry.getValue()));
+                element.setText(String.format("%s\n %s", element.getText(), SubtitleUtils.replacePhrasalVerb(phrasalVerbPattern, entry.getKey(), entry.getValue())));
             }
 		}
 		return subtitle;

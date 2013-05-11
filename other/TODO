@@ -1,4 +1,6 @@
 Przed 3 releasem:
+- Duze litery w phrasal verbsach sie powatrzaja z malymi, napisac test na duplikaty w kodzie
+- usprawnic translate phrasal verbsow aby najpierw szukal w tabeli translate a pozniej w internecie i najlepiej jeszcze zeby to zapisal.
 - duzo slow ma takie znaczenie jak po polsku jak po ang dating(dating), ale o dziwo google translate tlumaczy to slowo.
 - wyrzucic drop video here po wcisnieciu submit
 - dodac mozliwosc logowania za pomoca xbmc.

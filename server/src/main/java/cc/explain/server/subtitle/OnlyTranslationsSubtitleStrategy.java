@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public class OnlyTranslationsSubtitleStrategy implements SubtitleStrategy {
 
-	public Subtitle process(Subtitle subtitle, String pattern) {
+	public Subtitle process(Subtitle subtitle, String pattern, String phrasalVerbPattern) {
 		List<SubtitleElement> subtitleElements = subtitle.getSubtitleElements();
 		for (SubtitleElement element : subtitleElements) {
 			Map<String, String> translations = element.getTranslations();

@@ -4,10 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
+import com.google.common.collect.*;
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.process.DocumentPreprocessor;
@@ -51,8 +48,8 @@ public class StanfordNLP {
                 .toList();
     }
 
-    public Map<String,String> getPhrasalVerbs(List<List<HasWord>> sentences) {
-        Map<String,String> phrasalVerbs = Maps.newHashMap();
+    public List<String> getPhrasalVerbs(List<List<HasWord>> sentences) {
+        List<String> phrasalVerbs = Lists.newLinkedList();
         for (List<HasWord> sentence : sentences) {
             Tree tree = parser.parseTree(sentence);
             GrammaticalStructure gs = gsf.newGrammaticalStructure(tree);
@@ -61,7 +58,7 @@ public class StanfordNLP {
                 if (((TypedDependency) tpd).reln().toString().equals("prt")) {
                     String dep = tpd.toString();
                     String[] split = dep.split(DEPENDENCY_REGEX); //TODO refactor
-                    phrasalVerbs.put(split[1], split[2]);
+                    phrasalVerbs.add(split[1]+" "+split[2]); //TODO refactor
                 }
             }
         }

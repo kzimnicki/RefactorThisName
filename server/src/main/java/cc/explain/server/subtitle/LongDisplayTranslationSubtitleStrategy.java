@@ -18,7 +18,7 @@ public class LongDisplayTranslationSubtitleStrategy implements SubtitleStrategy 
 		}
 	}
 
-	public Subtitle process(Subtitle subtitle, String pattern) {
+	public Subtitle process(Subtitle subtitle, String pattern, String phrasalVerbPattern) {
 		List<SubtitleElement> subtitleElements = subtitle.getSubtitleElements();
 		int size = subtitleElements.size() - 1;
 		for (int i = 0; i < size; i++) {			

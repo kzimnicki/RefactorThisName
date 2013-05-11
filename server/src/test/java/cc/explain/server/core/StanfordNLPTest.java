@@ -62,7 +62,7 @@ public class StanfordNLPTest {
 
             StanfordNLP stanfordNLP = new StanfordNLP();
             List<List<HasWord>> sentences = stanfordNLP.getSentences(subtitle);
-            Map<String, String> phrasalVerbs = stanfordNLP.getPhrasalVerbs(sentences);
+            List<String> phrasalVerbs = stanfordNLP.getPhrasalVerbs(sentences);
 
             assertEquals(127, sentences.size());
             assertEquals(7, phrasalVerbs.size());
@@ -73,10 +73,10 @@ public class StanfordNLPTest {
         String text = "My presentation started well but I dried up quickly.";
         List<List<HasWord>> sentences = new StanfordNLP().getSentences(text);
 
-        Map<String,String> phrasalVerbs = new StanfordNLP().getPhrasalVerbs(sentences);
+        List<String> phrasalVerbs = new StanfordNLP().getPhrasalVerbs(sentences);
 
         assertEquals(1, phrasalVerbs.size());
-        assertEquals("up", phrasalVerbs.get("dried"));
+        assertEquals("dried up", phrasalVerbs.get(0));
     }
 
 
@@ -84,7 +84,7 @@ public class StanfordNLPTest {
     public void testGetPhrasalVerbsForEmptyList() {
         List<List<HasWord>> sentences = Lists.newArrayList();
 
-        Map<String,String> phrasalVerbs = new StanfordNLP().getPhrasalVerbs(sentences);
+        List<String> phrasalVerbs = new StanfordNLP().getPhrasalVerbs(sentences);
 
         assertEquals(0, phrasalVerbs.size());
     }

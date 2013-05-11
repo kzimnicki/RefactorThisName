@@ -14,7 +14,7 @@ public class LongDisplayTranslationSubtitleStrategyTest extends AbstractTest{
 	public void shouldCreateSubtitleWithLongDisplayText() throws IOException, RecognitionException {
 		Subtitle subtitle = createSubtitleFromFile("/subtitle.srt");
 		
-		Subtitle longDisplaySubtitle = new LongDisplayTranslationSubtitleStrategy().process(subtitle, null);
+		Subtitle longDisplaySubtitle = new LongDisplayTranslationSubtitleStrategy().process(subtitle, null, null);
 
 		assertEquals(new LocalTime(00, 00, 12, 584), longDisplaySubtitle.getSubtitleElements().get(0).getEnd());
 		assertEquals(new LocalTime(00, 00, 16, 131), longDisplaySubtitle.getSubtitleElements().get(1).getEnd());

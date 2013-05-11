@@ -75,14 +75,7 @@ public class TextServiceTest {
            assertEquals(0, words.size());
     }
 
-    @Test
-    public void shouldReturnTranslatedWord() throws Exception {
-           String word = "doghouse";
 
-           String translatedWord = textService.getTranslatedWord(word);
-
-           assertEquals("psia buda", translatedWord);
-    }
 
     @Test
     public void shouldReturn2WordsFor2String() throws Exception {
