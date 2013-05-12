@@ -1,16 +1,24 @@
 package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
+import cc.explain.server.core.NLPTask;
 import cc.explain.server.core.StanfordNLP;
 import cc.explain.server.core.WordType;
+import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.*;
+import com.google.common.base.Splitter;
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import edu.stanford.nlp.ling.HasWord;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class TextService {
 
@@ -22,12 +30,6 @@ public class TextService {
 
     @Autowired
     LuceneService luceneService;
-
-    private StanfordNLP stanfordNLP;
-
-    public TextService(){
-        stanfordNLP = new StanfordNLP();
-    }
 
     public Set<String> getExcludeSet(User user) {
         Map<String, Set<String>> excludedWords = getExcludedWords(user);
@@ -59,10 +61,7 @@ public class TextService {
         return wordsToTranslate;
     }
 
-    public List<String> getPhrasalVerbs(String text){
-        List<List<HasWord>> sentences = stanfordNLP.getSentences(text);
-        return  stanfordNLP.getPhrasalVerbs(sentences);
-    }
+
 
     public Map<String, WordDetails> filterWordsToTranslateWithFrequency(List<String> list, int minFrequency, int maxFrequency) {
         Map<String, WordDetails> results = new HashMap<String, WordDetails>();

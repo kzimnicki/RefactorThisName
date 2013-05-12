@@ -58,7 +58,7 @@ public class StanfordNLP {
                 if (((TypedDependency) tpd).reln().toString().equals("prt")) {
                     String dep = tpd.toString();
                     String[] split = dep.split(DEPENDENCY_REGEX); //TODO refactor
-                    phrasalVerbs.add(split[1]+" "+split[2]); //TODO refactor
+                    phrasalVerbs.add((split[1]+" "+split[2]).toLowerCase()); //TODO refactor
                 }
             }
         }

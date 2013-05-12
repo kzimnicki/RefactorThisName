@@ -1,14 +1,11 @@
 package cc.explain.server.api;
 
-import cc.explain.server.core.XmlRpcService;
+import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.User;
 import com.google.common.base.Objects;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
-import org.apache.xmlrpc.XmlRpcException;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +24,10 @@ import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * User: kzimnick
@@ -125,18 +125,34 @@ public class ExplainCCApi {
     public String quickSubtitleTranslate(String subtitle) throws IOException {
         //TODO refactor this
         User user = userService.getLoggedUser();
-        Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, subtitle);
-        List<String> phrasalVerbs = textService.getPhrasalVerbs(subtitle);
 
-        for(String pv : phrasalVerbs){
-            String phrasalVerbFirstPart = pv.split(" ")[0];//only first word
-            wordsToTranslate.remove(phrasalVerbFirstPart);
-        }
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        System.out.println("start future");
+        Future<List<String>> future = service.submit((new PhrasalVerbTask(subtitle)));
+
+
+        Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, subtitle);
+
+
+
 
         Set<String> words = wordsToTranslate.keySet();
         ArrayList<String> strings = new ArrayList<String>(words.size());
         strings.addAll(words);
         List<String[]> translatedWords = translate(strings);
+
+        List<String> phrasalVerbs = Collections.<String>emptyList();
+        try {
+            System.out.println("Wait for get");
+            phrasalVerbs = future.get();
+            System.out.println("get otrzymane");
+        } catch (InterruptedException e) {
+            throw new TechnicalException(e);
+        } catch (ExecutionException e) {
+             throw new TechnicalException(e);
+        }
+        service.shutdown();
+
         Map<String, String> translatedPhrasalVerbs = translationService.translate(phrasalVerbs);
 
         Map<String, String> map = new HashMap<String, String>();
@@ -145,8 +161,12 @@ public class ExplainCCApi {
                 map.put(strings.get(i), translatedWords.get(i)[0]);
             }
         }
+        for(String pv : phrasalVerbs){
+            String phrasalVerbFirstPart = pv.split(" ")[0];//only first word
+            map.remove(phrasalVerbFirstPart);
+        }
         String wordPattern = user.getConfig().getSubtitleTemplate();
-        String phrasalVerbPattern = "<font color='red'>@@TRANSLATED_TEXT@@</font>";
+        String phrasalVerbPattern = "<font color=\"red\">@@TRANSLATED_TEXT@@</font>";
         String translated = subtitleService.addTranslation(subtitle, map, translatedPhrasalVerbs, wordPattern, phrasalVerbPattern);
         return translated;
     }

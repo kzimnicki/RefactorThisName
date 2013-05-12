@@ -47,11 +47,50 @@ class ExplainCCApiGroovyTest extends Specification{
           """4
           |00:00:10,622 --> 00:00:12,484
           |Please get up like any other.
-          | <font color='red'>get up = wstać</font>
+          | <font color="red">get up = wstać</font>
           |
           |5
           |00:00:12,584 --> 00:00:14,131
           |We were downstairs <font color="yellow">(na dół)</font> at the Bar.
+          |
+          |6
+          |00:00:18,239 --> 00:00:19,408
+          |On the house.
+          |
+          |""".stripMargin()  == translated.stripMargin()
+    }
+
+    @Unroll
+   def "Should translate SRT subtitles and add phrasal verbs only for case insesitive"() {
+       given:
+       def subtitle = """4
+                          |00:00:10,622 --> 00:00:12,484
+                          |Please get up like any other.
+                          |
+                          |5
+                          |00:00:12,584 --> 00:00:14,131
+                          |We were downstairs at the Bar, so Get up man!.
+                          |
+                          |6
+                          |00:00:18,239 --> 00:00:19,408
+                          |On the house.
+                          |
+                          |
+                          """.stripMargin()
+
+        when:
+        String translated = api.quickSubtitleTranslate(subtitle);
+
+        then:
+          """4
+          |00:00:10,622 --> 00:00:12,484
+          |Please get up like any other.
+          | <font color="red">get up = wstać</font>
+          |
+          |5
+          |00:00:12,584 --> 00:00:14,131
+          |We were downstairs <font color="yellow">(na dół)</font> at the Bar, so Get up man!.
+          | <font color="red">get up = wstać</font>
           |
           |6
           |00:00:18,239 --> 00:00:19,408
@@ -79,9 +118,11 @@ class ExplainCCApiGroovyTest extends Specification{
             |00:00:25,004 --> 00:00:27,789
             |Right now, Howard's
             |staring down at our boat
-            | <font color='red'>staring down = patrząc w dół</font>
+            | <font color="red">staring down = patrząc w dół</font>
             |
             |""".stripMargin()  == translated.stripMargin()
     }
+
+
 
 }
