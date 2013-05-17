@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
 
 
    config.vm.provision :chef_solo do |chef|
-     chef.cookbooks_path = ["cookbooks"]
+     chef.cookbooks_path = ["/home/kun/vagrannt/cookbooks"]
 	 chef.add_recipe "openssl"
      chef.add_recipe "mysql::server"
 	 chef.add_recipe "setup"
