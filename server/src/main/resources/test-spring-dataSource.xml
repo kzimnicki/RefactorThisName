@@ -9,9 +9,9 @@
 
    <bean id="dbDataSource" name="dateSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>    
-        <property name="url" value="jdbc:mysql://localhost:3306/testEnglishTranslator"/>
+        <property name="url" value="jdbc:mysql://localhost:3336/testenglishtranslator"/>
         <property name="username" value="${jdbc.login}"/>
-        <property name="password" value="${jdbc.password}"/>
+        <property name="password" value="123456${jdbc.password}"/>
    </bean>
    
     
@@ -22,7 +22,7 @@
   <bean id="hibernateProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
     <property name="locations">
       <list>
-        <value>classpath:hibernate.properties</value>
+        <value>classpath:test-hibernate.properties</value>
       </list>
     </property>
   </bean>
