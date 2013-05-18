@@ -6,6 +6,7 @@ import cc.explain.server.xml.LoginResponse;
 import cc.explain.server.xml.SearchResponse;
 import cc.explain.server.xml.TicketResponse;
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ import static org.junit.Assert.assertTrue;
  * Date: 25.11.12
  * Time: 17:47
  */
+@Ignore
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {
         "classpath:spring-context.xml",

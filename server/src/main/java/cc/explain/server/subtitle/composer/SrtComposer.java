@@ -8,7 +8,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 public class SrtComposer implements SubtitleComposer {
 	
-	private static final String CR = "\r\n";
+	private static final String CR = System.getProperty("line.separator");
 	private final DateTimeFormatter formatter = DateTimeFormat
 			.forPattern("HH:mm:ss,SSS");
 
