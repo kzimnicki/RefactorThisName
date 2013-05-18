@@ -22,7 +22,7 @@ public class WebVTTComposer implements SubtitleComposer {
 	String convertSubtitleElementToString(SubtitleElement element) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(element.getId()).append(NEW_LINE);
-		builder.append(element.getStart()).append(ARROW)
+		builder.append(element.getStart()).append(ARROW )
 				.append(element.getEnd()).append(NEW_LINE);
 		builder.append(element.getText()).append(NEW_LINE).append(NEW_LINE);
 		return builder.toString();
