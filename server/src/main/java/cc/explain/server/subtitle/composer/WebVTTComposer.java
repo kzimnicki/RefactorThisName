@@ -6,7 +6,7 @@ import cc.explain.server.subtitle.SubtitleElement;
 public class WebVTTComposer implements SubtitleComposer {
 
 	private static final String WEBVTT = "WEBVTT";
-	public static final String NEW_LINE = "\r\n";
+	public static final String NEW_LINE = System.getProperty("line.separator");
 	public static final String ARROW = " --> ";
 
 	public String compose(Subtitle subtitle) {
