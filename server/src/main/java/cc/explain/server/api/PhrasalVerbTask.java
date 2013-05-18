@@ -25,7 +25,7 @@ public class PhrasalVerbTask implements Callable<List<String>>{
         this.stanfordNLP = new StanfordNLP();
     }
 
-    public List<String> getPhrasalVerbs(String text)  {
+    public List<String> getPhrasalVerbs(String text)  { //todo refactor
         List<List<HasWord>> sentences = stanfordNLP.getSentences(text);
         System.out.println("Sentences size: "+sentences.size());
 

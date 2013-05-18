@@ -17,6 +17,10 @@ sourceSets {
   }
 }
 
+test {
+    systemProperties 'file.encoding': 'UTF-8'
+  }
+
 dependencies {
     compile group: 'aopalliance', name: 'aopalliance', version:'1.0'
     compile group: 'org.antlr', name: 'antlr', version: '3.4'
@@ -95,4 +99,5 @@ task generateWithANTLR3(type:Exec) {
 
 compileJava.dependsOn(generateWithANTLR3)
 sourceSets.main.java.srcDirs 'build/generated-sources/antlr3'
+[compileJava, compileTestJava, compileGroovy, compileTestGroovy]*.options*.encoding = 'UTF-8'
 

@@ -404,8 +404,8 @@ public class ExplainCCApiTest {
 
         String exportedExcludedWords = api.exportIncludedWords();
 
-        assertTrue(exportedExcludedWords.contains("truck;trucks truck trucked trucking;\n"));
-        assertTrue(exportedExcludedWords.contains("ship;shipping shipped ship ships;\n"));
+        assertTrue(exportedExcludedWords.contains("truck;trucks trucking truck trucked;\n"));
+        assertTrue(exportedExcludedWords.contains("ship;shipping ships ship shipped;\n"));
     }
 
 //

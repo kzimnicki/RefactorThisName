@@ -25,10 +25,12 @@ public class SubtitleServiceTest extends Specification {
                           |6
                           |00:00:18,239 --> 00:00:19,408
                           |On the house.
+                          |
+                          |
                           """.stripMargin()
 
         when:
-        def translatedSubtitle = new SubtitleService().addTranslation(subtitle, translations, Collections.<String, String> emptyMap(), "(@@TRANSLATED_TEXT@@)", phrasalVerbPattern)
+        def translatedSubtitle = new SubtitleService().addTranslation(subtitle, translations, Collections.<String, String> emptyMap(), "(@@TRANSLATED_TEXT@@)", SubtitleUtilsTest.PATTERN)
 
         then:
         translatedSubtitle.stripMargin() == """4
@@ -43,7 +45,6 @@ public class SubtitleServiceTest extends Specification {
                                               |00:00:18,239 --> 00:00:19,408
                                               |On the house (dom).
                                               |
-                                              |
-                                              """.stripMargin()
+                                              |""".stripMargin()
     }
 }

@@ -33,9 +33,9 @@ public class InTextTranslationSubtitleStrategyTest extends AbstractTest{
 		phraslaVerbs.put("get away", "odejdz");
 
 		Subtitle subtitle = createSubtitleFromFile("/subtitleWithPhrasalVerbs.srt", Collections.<String, String>emptyMap(), phraslaVerbs);
-		Subtitle processedSubtitle = new InTextTranslationSubtitleStrategy().process(subtitle, SubtitleUtilsTest.PATTERN, null);
+		Subtitle processedSubtitle = new InTextTranslationSubtitleStrategy().process(subtitle, SubtitleUtilsTest.PATTERN, SubtitleUtilsTest.PATTERN);
 
-		assertEquals("to get away from me. \n get away = odejdz", processedSubtitle.getSubtitleElements().get(1).getText());
+		assertEquals("to get away from me.\n (get away = odejdz)", processedSubtitle.getSubtitleElements().get(1).getText());
 	}
 
 }

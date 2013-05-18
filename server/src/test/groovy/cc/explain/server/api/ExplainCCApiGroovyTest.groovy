@@ -99,6 +99,45 @@ class ExplainCCApiGroovyTest extends Specification{
           |""".stripMargin()  == translated.stripMargin()
     }
 
+        @Unroll
+   def "Should translate SRT subtitles and add phrasal verbs only for certain form: 'get up' not 'getting up'"() {
+       given:
+       def subtitle = """4
+                          |00:00:10,622 --> 00:00:12,484
+                          |Please get up like any other.
+                          |
+                          |5
+                          |00:00:12,584 --> 00:00:14,131
+                          |We were downstairs at the Bar, so getting up
+                          |
+                          |6
+                          |00:00:18,239 --> 00:00:19,408
+                          |On the house.
+                          |
+                          |
+                          """.stripMargin()
+
+        when:
+        String translated = api.quickSubtitleTranslate(subtitle);
+
+        then:
+          """4
+          |00:00:10,622 --> 00:00:12,484
+          |Please get up like any other.
+          | <font color="red">get up = wstać</font>
+          |
+          |5
+          |00:00:12,584 --> 00:00:14,131
+          |We were downstairs <font color="yellow">(na dół)</font> at the Bar, so getting up
+          | <font color="red">getting up = wstawania</font>
+          |
+          |6
+          |00:00:18,239 --> 00:00:19,408
+          |On the house.
+          |
+          |""".stripMargin()  == translated.stripMargin()
+    }
+
 
     @Unroll
    def """Should translate 'staring down' not 'staring' """() {

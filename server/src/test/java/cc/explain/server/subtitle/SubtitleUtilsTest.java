@@ -152,7 +152,7 @@ public class SubtitleUtilsTest {
 
     @Test
 	public void shouldRFindPhrasalVerb() {
-		String text = "Sawyer, you’re going out a youngster, but you’ve got to come back a star!”";
+		String text = "Sawyer, you're going out a youngster, but you've got to come back a star!";
 		String phrasalVerb = "going out";
 
 		boolean result = SubtitleUtils.findPhrasalVerb(text,phrasalVerb);
