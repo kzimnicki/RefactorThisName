@@ -18,6 +18,7 @@ TRANSLATING_TEXT = 'Translating...'
 QUICK_TRANSLATE_URL ='http://localhost:8080/RefactorThisName/app/quickSubtitleTranslate'
 HEAD = 'Explain.CC'
 TRANSLATED_SUBTITLE_FILENAME = xbmc.translatePath('special://userdata/addon_data/translatedSubtitle.srt')
+EMPTY_STRING = ""
 
 
 cachedSubtitle = ""
@@ -55,12 +56,15 @@ def getTranslatedSubtitleContent() :
 def quickSubtitleTranslate(subtitle) :
     popup = xbmcgui.DialogProgress()
     popup.create(HEAD, TRANSLATING_TEXT)
-    request = urllib2.Request(QUICK_TRANSLATE_URL)
-    request.add_header("Authorization",getBasicAuthentication())
-    params = urllib.urlencode({
-      'subtitle': subtitle,
-    })
-    response = urllib2.urlopen(request, params).read()
+    response = EMPTY_STRING
+    try:
+        request = urllib2.Request(QUICK_TRANSLATE_URL)
+        request.add_header("Authorization",getBasicAuthentication())
+        params = urllib.urlencode({'subtitle': subtitle})
+        response = urllib2.urlopen(request, params).read()
+    except Exception as inst:
+        popup.close()
+        xbmc.executebuiltin('Notification(Explain.CC,%s,20000)' % str(inst))
     popup.close()
     return response
 
