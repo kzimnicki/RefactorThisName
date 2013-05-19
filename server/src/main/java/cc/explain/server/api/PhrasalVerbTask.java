@@ -28,7 +28,7 @@ public class PhrasalVerbTask implements Callable<List<String>>{
     public List<String> getPhrasalVerbs(String text)  { //todo refactor
         List<List<HasWord>> sentences = stanfordNLP.getSentences(text);
         int threadNumber = Math.max( 2, (Runtime.getRuntime().availableProcessors() / 2));
-        int partSize = sentences.size()>= threadNumber ? sentences.size() : (sentences.size()+1)/threadNumber;
+        int partSize = sentences.size()<= threadNumber ? sentences.size() : (sentences.size()+1)/threadNumber;//todo unit test for that
         ExecutorService service = Executors.newFixedThreadPool(threadNumber);
         List<Future<List<String>>> futures = Lists.newArrayListWithCapacity(threadNumber);
         List<List<List<HasWord>>> partition = Lists.partition(sentences, partSize);
