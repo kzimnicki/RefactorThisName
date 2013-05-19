@@ -28,10 +28,10 @@ public class PhrasalVerbTask implements Callable<List<String>>{
     public List<String> getPhrasalVerbs(String text)  { //todo refactor
         List<List<HasWord>> sentences = stanfordNLP.getSentences(text);
         int threadNumber = Math.max( 2, (Runtime.getRuntime().availableProcessors() / 2));
-        System.out.println("THREAD NUMBER: "+threadNumber);
+        int partSize = sentences.size()>= threadNumber ? sentences.size() : (sentences.size()+1)/threadNumber;
         ExecutorService service = Executors.newFixedThreadPool(threadNumber);
         List<Future<List<String>>> futures = Lists.newArrayListWithCapacity(threadNumber);
-        List<List<List<HasWord>>> partition = Lists.partition(sentences, (sentences.size()+1)/threadNumber);
+        List<List<List<HasWord>>> partition = Lists.partition(sentences, partSize);
         for (List<List<HasWord>> part : partition){
             Future<List<String>> f = service.submit(new NLPTask(part));
             futures.add(f);
