@@ -32,6 +32,6 @@ public class WebVTTComposerTest extends AbstractTest {
 
 		String result = new WebVTTComposer().convertSubtitleElementToString(element);
 		
-		assertEquals(String.format("1%n01:12:23.456 --> 02:23:45.678%ntext%n%n"), result);
+		assertEquals(String.format("1%n01:12:23.456 --> 02:23:45.678%ntext%n%n" ), result);
 	}
 }
