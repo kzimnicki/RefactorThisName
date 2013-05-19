@@ -28,7 +28,7 @@ public class WebVTTComposerTest extends AbstractTest {
 		element.setId(1);
 		element.setText("text");
 		element.setStart(new LocalTime(1,12,23,456));
-		element.setEnd(new LocalTime(2,23,45,678));
+		element.setEnd(new LocalTime(2,23,45,678 ));
 
 		String result = new WebVTTComposer().convertSubtitleElementToString(element);
 		
