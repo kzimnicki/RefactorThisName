@@ -22,7 +22,6 @@ import javax.validation.constraints.NotNull;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"rootWord_id"})},
         name = "rootword"
 )
-@org.hibernate.annotations.Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class RootWord extends EntityObject {
 
     @NotNull

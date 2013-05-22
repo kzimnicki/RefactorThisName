@@ -21,7 +21,6 @@ import javax.validation.constraints.NotNull;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"value", "wordType"})},
         name="word"
 )
-@Cache(usage= CacheConcurrencyStrategy.READ_ONLY)
 public class Word extends EntityObject {
 
     public static Word EMPTY = new Word();

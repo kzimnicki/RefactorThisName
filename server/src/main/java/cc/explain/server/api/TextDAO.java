@@ -42,7 +42,7 @@ public class TextDAO {
     }
 
     public List<WordRelation> findWordRelationsByRootWordValues(List<String> wordValues){
-        List<WordRelation> wordRelations = (List<WordRelation>) commonDao.getByHQL("FROM WordRelation wr WHERE wr.rootWord.rootWord.value IN :wordValues", "wordValues", wordValues);
+        List<WordRelation> wordRelations = (List<WordRelation>) commonDao.getByHQL("FROM WordRelation wr JOIN FETCH wr.word w JOIN FETCH wr.rootWord WHERE wr.rootWord.rootWord.value IN :wordValues", "wordValues", wordValues);
         return wordRelations;
     }
 

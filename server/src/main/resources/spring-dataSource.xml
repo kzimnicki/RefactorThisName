@@ -6,13 +6,6 @@
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations" value="classpath:system.properties"/>
     </bean>
-  
-   <bean id="appDataSource" name="dateSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>    
-        <property name="url" value="jdbc:mysql://localhost:3306/englishtranslator"/>
-        <property name="username" value="${jdbc.login}"/>
-        <property name="password" value="${jdbc.password}"/>
-   </bean>
 
    <bean id="dbDataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName" value="java:comp/env/jdbc/mysql"/>
