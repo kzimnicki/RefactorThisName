@@ -374,10 +374,10 @@ public class ExplainCCApiTest {
                 "donors", "donkeys"
         });
 
-        List<String[]> translatedWords = api.translate(words);
+        Map<String,String> translatedWords = api.translate(words);
 
-        assertEquals("dawców", translatedWords.get(0)[0]);
-        assertEquals("osły", translatedWords.get(1)[0]);
+        assertEquals("dawców", translatedWords.get("donors"));
+        assertEquals("osły", translatedWords.get("donkeys"));
     }
 
     @Test
@@ -387,10 +387,10 @@ public class ExplainCCApiTest {
         });
         userService.clearAutentication();
 
-        List<String[]> translatedWords = api.translate(words);
+        Map<String,String> translatedWords = api.translate(words);
 
-        assertEquals("dawców", translatedWords.get(0)[0]);
-        assertEquals("osły", translatedWords.get(1)[0]);
+        assertEquals("dawców", translatedWords.get("donors"));
+        assertEquals("osły", translatedWords.get("donkeys"));
     }
 
 

@@ -133,13 +133,10 @@ public class ExplainCCApi {
 
         Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, subtitle);
 
-
-
-
         Set<String> words = wordsToTranslate.keySet();
         ArrayList<String> strings = new ArrayList<String>(words.size());
         strings.addAll(words);
-        List<String[]> translatedWords = translate(strings);
+        Map<String, String> translatedWords = translate(strings);
 
         List<String> phrasalVerbs = Collections.<String>emptyList();
         try {
@@ -155,19 +152,13 @@ public class ExplainCCApi {
 
         Map<String, String> translatedPhrasalVerbs = translationService.translate(phrasalVerbs);
 
-        Map<String, String> map = new HashMap<String, String>();
-        for (int i = 0; i<strings.size(); i++){
-            if(!Objects.equal(strings.get(i), translatedWords.get(i)[0])){
-                map.put(strings.get(i), translatedWords.get(i)[0]);
-            }
-        }
         for(String pv : phrasalVerbs){
             String phrasalVerbFirstPart = pv.split(" ")[0];//only first word
-            map.remove(phrasalVerbFirstPart);
+            translatedWords.remove(phrasalVerbFirstPart);
         }
         String wordPattern = user.getConfig().getSubtitleTemplate();
         String phrasalVerbPattern = "<font color=\"red\">@@TRANSLATED_TEXT@@</font>";
-        String translated = subtitleService.addTranslation(subtitle, map, translatedPhrasalVerbs, wordPattern, phrasalVerbPattern);
+        String translated = subtitleService.addTranslation(subtitle, translatedWords, translatedPhrasalVerbs, wordPattern, phrasalVerbPattern);
         return translated;
     }
 
@@ -239,7 +230,7 @@ public class ExplainCCApi {
     @RequestMapping(method = RequestMethod.POST, value = "/translate")
     @ResponseBody
     @Transactional
-    public List<String[]> translate(@RequestBody List<String> words) {
+    public Map<String, String> translate(@RequestBody List<String> words) {
         User user = userService.getLoggedUser();
         if(user != UserService.DUMMY_USER){
             saveIncludedWords(words);

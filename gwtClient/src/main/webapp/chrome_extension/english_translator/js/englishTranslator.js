@@ -24,38 +24,15 @@ EnglishTranslator.splitWordsToGoogleTranslateParts = function(wordsArray) {
 }
 
 EnglishTranslator.translate = function(words, callback) {
-
-    var googleTranslatorWordParts = EnglishTranslator.splitWordsToGoogleTranslateParts(words);
-    for (var x in googleTranslatorWordParts) {
-        translateWords(googleTranslatorWordParts[x], callback)
-    }
-}
-
-this.translateWords = function(words, callback){
     ajaxExecutor.translate(words, function(translatedData) {
-                console.log("inside translate");
-                console.log(words);
-                var translatedWords = createTranslatedBrackets(words, translatedData);
-                callback(translatedWords);
+                callback(translatedData);
             }
-        );
-
-}
-
-this.createTranslatedBrackets = function(words, translatedData, text) {
-    var i = 0;
-    var translatedMapJSON = {};
-    translatedData.forEach(function(item) {
-        var wordToTranslate = words[i++];
-        var translatedWord = item;
-            translatedMapJSON[wordToTranslate] = translatedWord;
-    });
-    return translatedMapJSON;
+    );
 }
 
 EnglishTranslator.putTranslationInText = function(translatedWords, text, pattern){
     for(var key in translatedWords){
-        if(key.toLowerCase() != translatedWords[key][0].toLowerCase()){
+        if(key.toLowerCase() != translatedWords[key].toLowerCase()){
             text = textReplace(text, key, translatedWords[key], pattern);
         }
     }

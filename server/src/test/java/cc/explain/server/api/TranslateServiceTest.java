@@ -1,5 +1,6 @@
 package cc.explain.server.api;
 
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -28,56 +33,45 @@ public class TranslateServiceTest {
    @Autowired
    TranslateService translateService;
 
-    @Test
-    public void shouldTranslateEnglishWordToPolish(){
-        String english = "get up";
-
-        String[] translated = new TranslateService().translate(new String[]{english});
-
-        assertEquals("wstać", translated[0]);
-    }
-
-        @Test
-    public void shouldTranslateBultEnglishWordsToPolish(){
+   @Test
+   public void shouldReturnTranslatedWordsUsingGoogleTranslate(){
         String word1 = "get up";
         String word2 = "get down";
 
-        String[] translated = new TranslateService().translate(new String[]{word1, word2});
+        String[] translated = translateService.translate(new String[]{word1, word2});
 
         assertEquals("wstać", translated[0]);
         assertEquals("schodzić", translated[1]);
+   }
+
+    @Test
+    public void shouldReturnOneTranslatedWord() throws Exception {
+        String word = "doghouse";
+
+        Map<String, String> translatedWords = translateService.getTranslatedWord(Lists.newArrayList(word));
+
+        assertEquals("psia buda", translatedWords);
     }
 
     @Test
-    public void shouldReturnTranslatedWord() throws Exception {
-           String word = "doghouse";
+    public void shouldReturnTranslatedWordWithCorrectEncoding() throws Exception {
+        String word = "thickness";
 
-           String translatedWord = translateService.getTranslatedWord(word);
+        Map<String, String> databaseTranslated = translateService.getTranslatedWord(Lists.newArrayList(word));
+        String[] googleTranslated = translateService.translate(new String[]{word});
 
-           assertEquals("psia buda", translatedWord);
+        assertEquals(databaseTranslated.get(word), googleTranslated[0]);
     }
 
-        @Test
-        public void shouldReturnTranslatedWordWithCorrectEncoding() throws Exception {
-           String word = "thickness";
 
-           String databaseTranslated = translateService.getTranslatedWord(word);
-            String[] googleTranslated = translateService.translate(new String[]{word});
+    @Test
+    public void shouldReturnTranslatedListForEnglishList(){
+        ArrayList<String> englishWords = Lists.newArrayList("car", "dog","untranlatablewordxyz");
 
-            print(databaseTranslated.getBytes());
-            print(googleTranslated[0].getBytes());
-            System.out.println(System.getProperty("file.encoding"));
+        Map<String,String> translatedWords = translateService.getTranslatedWord(englishWords);
 
-
-            assertEquals(databaseTranslated, googleTranslated[0]);
+        assertEquals(2, translatedWords.size());
+        assertEquals("samochód",translatedWords.get("car"));
+        assertEquals("pies",translatedWords.get("dog"));
     }
-
-    private void print(byte[] bytes){
-        for (byte b : bytes){
-            System.out.print(b);
-        }
-        System.out.println();
-
-    }
-
 }

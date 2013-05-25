@@ -36,6 +36,11 @@ public class TextDAO {
         return translatedWords;
     }
 
+    public List<Translation> findTranslations(List<String> words){
+        List<Translation> translatedWords = (List<Translation>) commonDao.getByHQL("FROM Translation t WHERE t.sourceWord IN :words", "words", words);
+        return translatedWords;
+    }
+
     public List<WordRelation> findWordRelationByRootWord(RootWord rootWord){
         List<WordRelation> rootWordrelations = (List<WordRelation>)commonDao.getByHQLObject("FROM WordRelation wr WHERE wr.rootWord = :rootWord", "rootWord", rootWord);
         return rootWordrelations;
