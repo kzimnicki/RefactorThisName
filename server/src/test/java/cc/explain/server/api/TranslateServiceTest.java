@@ -50,7 +50,7 @@ public class TranslateServiceTest {
 
         Map<String, String> translatedWords = translateService.getTranslatedWord(Lists.newArrayList(word));
 
-        assertEquals("psia buda", translatedWords);
+        assertEquals("psia buda", translatedWords.get(word));
     }
 
     @Test
