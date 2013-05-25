@@ -38,7 +38,7 @@ public class TranslateServiceTest {
         String word1 = "get up";
         String word2 = "get down";
 
-        String[] translated = translateService.translate(new String[]{word1, word2});
+        String[] translated = translateService.googleTranslate(new String[]{word1, word2});
 
         assertEquals("wstać", translated[0]);
         assertEquals("schodzić", translated[1]);
@@ -58,7 +58,7 @@ public class TranslateServiceTest {
         String word = "thickness";
 
         Map<String, String> databaseTranslated = translateService.getTranslatedWord(Lists.newArrayList(word));
-        String[] googleTranslated = translateService.translate(new String[]{word});
+        String[] googleTranslated = translateService.googleTranslate(new String[]{word});
 
         assertEquals(databaseTranslated.get(word), googleTranslated[0]);
     }
