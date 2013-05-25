@@ -104,7 +104,7 @@ ajaxExecutor.removeExcludedWord = function(word, callback) {
     setup();
     $.ajax({
         url: SERVER_URL + EXCLUDED_WORDS,
-        data: word,
+        data: JSON.stringify(word),
         type: AJAX_TYPE_DELETE,
         success: callback
     }).done(commonUtils.hideDimmer());
@@ -191,7 +191,7 @@ ajaxExecutor.removeIncludedWord = function(word, callback) {
     setup();
     $.ajax({
         url: SERVER_URL + INCLUDED_WORDS,
-        data: word,
+        data: JSON.stringify(word),
         type: AJAX_TYPE_DELETE,
         success: callback
     }).done(commonUtils.hideDimmer());
