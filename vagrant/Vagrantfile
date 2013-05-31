@@ -1,0 +1,30 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "Centos6"
+  config.vm.box_url = "CentOS-6.4-i386-v20130309.box"
+   config.vm.provision :chef_solo do |chef|
+     chef.cookbooks_path = ["cookbooks"]
+     chef.add_recipe "openssl"
+     chef.add_recipe "mysql::server"
+         chef.add_recipe "setup"
+         chef.log_level = :debug
+
+     chef.json = {
+        :mysql => {
+            :bind_address => "0.0.0.0",
+            :tunable => {
+                :log_bin => "mysql-bin.log",
+                :server_id => 1,
+                :binlog_format => "row"
+            },
+                        :allow_remote_root => true,
+            :server_root_password => "123456",
+            :server_repl_password => "",
+            :server_debian_password => "debian"
+        }
+    }
+   end
+   config.vm.network :forwarded_port, guest: 3306, host: 3336
+end
