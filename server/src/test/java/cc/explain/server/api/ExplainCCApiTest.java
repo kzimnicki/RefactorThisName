@@ -2,8 +2,10 @@ package cc.explain.server.api;
 
 import cc.explain.server.api.*;
 import cc.explain.server.core.CommonDao;
+import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
+import cc.explain.server.subtitle.SubtitleProcessor;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
@@ -156,14 +158,14 @@ public class ExplainCCApiTest {
         });
         api.saveExcludeWords(excludedwords);
 
-        Map<String, Set<String>> loadedExcludedWords = api.loadExcludedWords();
-        assertEquals(5, loadedExcludedWords.size());
+        List<WordDetailDTO> wordDetailDTOs = api.loadExcludedWords();
 
-        Assert.assertTrue(loadedExcludedWords.containsKey("car"));
-        Assert.assertTrue(loadedExcludedWords.containsKey("cat"));
-        Assert.assertTrue(loadedExcludedWords.containsKey("dog"));
-        Assert.assertTrue(loadedExcludedWords.containsKey("ship"));
-        Assert.assertTrue(loadedExcludedWords.containsKey("get"));
+        assertEquals(5, wordDetailDTOs.size());
+        assertTrue(excludedwords.contains(wordDetailDTOs.get(0).getRootWord()));
+        assertTrue(excludedwords.contains(wordDetailDTOs.get(1).getRootWord()));
+        assertTrue(excludedwords.contains(wordDetailDTOs.get(2).getRootWord()));
+        assertEquals("get",wordDetailDTOs.get(3).getRootWord());
+        assertTrue(excludedwords.contains(wordDetailDTOs.get(4).getRootWord()));
     }
 
     @Test
@@ -175,10 +177,10 @@ public class ExplainCCApiTest {
         });
         api.saveExcludeWords(excludedwords);
 
-        Map<String, Set<String>> loadedExcludedWords = api.loadExcludedWords();
-        assertEquals(1, loadedExcludedWords.size());
+        List<WordDetailDTO> wordDetailDTOs = api.loadExcludedWords();
 
-        Assert.assertTrue(loadedExcludedWords.containsKey("car"));
+        assertEquals(1, wordDetailDTOs.size());
+        assertEquals(wordDetailDTOs.get(0).getRootWord(), "car");
     }
 
 
@@ -190,12 +192,13 @@ public class ExplainCCApiTest {
         });
         api.saveIncludedWords(includedWords);
 
-        Map<String, Set<String>> loadedIncludedWords = api.loadIncludedWords();
-        assertEquals(4, loadedIncludedWords.size());
-        Assert.assertTrue(loadedIncludedWords.containsKey("car"));
-        Assert.assertTrue(loadedIncludedWords.containsKey("cat"));
-        Assert.assertTrue(loadedIncludedWords.containsKey("dog"));
-        Assert.assertTrue(loadedIncludedWords.containsKey("ship"));
+        List<WordDetailDTO> wordDetailDTOs = api.loadIncludedWords();
+
+        assertEquals(4, wordDetailDTOs.size());
+        assertTrue(includedWords.contains(wordDetailDTOs.get(0).getRootWord()));
+        assertTrue(includedWords.contains(wordDetailDTOs.get(1).getRootWord()));
+        assertTrue(includedWords.contains(wordDetailDTOs.get(2).getRootWord()));
+        assertTrue(includedWords.contains(wordDetailDTOs.get(3).getRootWord()));
     }
 
     private void createRegisterAndLoginUser() throws IOException {
@@ -230,12 +233,12 @@ public class ExplainCCApiTest {
         api.saveExcludeWords(excludedwords);
         api.removeExcludedWord("dog");
 
-        Map<String, Set<String>> loadedExcludedWords = api.loadExcludedWords();
+        List<WordDetailDTO> wordDetailDTOs = api.loadExcludedWords();
 
-        assertEquals(3, loadedExcludedWords.size());
-        Assert.assertTrue(loadedExcludedWords.containsKey("car"));
-        Assert.assertTrue(loadedExcludedWords.containsKey("cat"));
-        Assert.assertTrue(loadedExcludedWords.containsKey("ship"));
+        assertEquals(3, wordDetailDTOs.size());
+        assertTrue(excludedwords.contains(wordDetailDTOs.get(0).getRootWord()));
+        assertTrue(excludedwords.contains(wordDetailDTOs.get(1).getRootWord()));
+        assertTrue(excludedwords.contains(wordDetailDTOs.get(2).getRootWord()));
     }
 
      @Test
@@ -247,10 +250,10 @@ public class ExplainCCApiTest {
         api.saveExcludeWords(excludedwords);
         api.removeExcludedWord("dog");
 
-        Map<String, Set<String>> loadedIncludedWords = api.loadIncludedWords();
+         List<WordDetailDTO> wordDetailDTOs = api.loadIncludedWords();
 
-        assertEquals(1, loadedIncludedWords.size());
-        Assert.assertTrue(loadedIncludedWords.containsKey("dog"));
+        assertEquals(1, wordDetailDTOs.size());
+        assertEquals(wordDetailDTOs.get(0).getRootWord(), "dog");
     }
 
     @Test
@@ -262,13 +265,12 @@ public class ExplainCCApiTest {
         api.saveIncludedWords(includedWords);
         api.removeIncludedWords("dog");
 
-        Map<String, Set<String>> loadedIncludedWords = api.loadIncludedWords();
+        List<WordDetailDTO> wordDetailDTOs = api.loadIncludedWords();
 
-        assertEquals(3, loadedIncludedWords.size());
-
-        Assert.assertTrue(loadedIncludedWords.containsKey("car"));
-        Assert.assertTrue(loadedIncludedWords.containsKey("cat"));
-        Assert.assertTrue(loadedIncludedWords.containsKey("ship"));
+        assertEquals(3, wordDetailDTOs.size());
+        assertTrue(includedWords.contains(wordDetailDTOs.get(0).getRootWord()));
+        assertTrue(includedWords.contains(wordDetailDTOs.get(1).getRootWord()));
+        assertTrue(includedWords.contains(wordDetailDTOs.get(2).getRootWord()));
     }
 
 
@@ -281,10 +283,10 @@ public class ExplainCCApiTest {
         api.saveIncludedWords(includedWords);
         api.removeIncludedWords("dog");
 
-        Map<String, Set<String>> loadedExcludedWords = api.loadExcludedWords();
+         List<WordDetailDTO> wordDetailDTOs = api.loadExcludedWords();
 
-        assertEquals(1, loadedExcludedWords.size());
-        Assert.assertTrue(loadedExcludedWords.containsKey("dog"));
+         assertEquals(1, wordDetailDTOs.size());
+         assertEquals(wordDetailDTOs.get(0).getRootWord(),"dog");
     }
 
     @Test
@@ -404,8 +406,8 @@ public class ExplainCCApiTest {
 
         String exportedExcludedWords = api.exportIncludedWords();
 
-        assertTrue(exportedExcludedWords.contains("truck;trucks trucking truck trucked;\n"));
-        assertTrue(exportedExcludedWords.contains("ship;shipping ships ship shipped;\n"));
+        assertTrue(exportedExcludedWords.contains("truck;trucks truck trucked trucking;\n"));
+        assertTrue(exportedExcludedWords.contains("ship;shipping shipped ship ships;\n"));
     }
 
 //

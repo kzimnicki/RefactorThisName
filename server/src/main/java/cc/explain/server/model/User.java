@@ -12,7 +12,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -38,15 +40,15 @@ public class User extends AuditableEntityObject {
 
     private boolean enabled = true;
 
-    @ManyToMany
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "user_id")
     @Cascade( { org.hibernate.annotations.CascadeType.ALL })
-    @JoinTable(name="user_excludedwords")
-    private Set<RootWord> excludedWords = new HashSet<RootWord>();
+    private Set<UserExcludeWord> excludedWords = new HashSet<UserExcludeWord>();
 
-    @ManyToMany
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name = "user_id")
     @Cascade( { org.hibernate.annotations.CascadeType.ALL })
-    @JoinTable(name="user_includedwords")
-    private Set<RootWord> includedWords = new HashSet<RootWord>();
+    private Set<UserIncludeWord> includedWords = new HashSet<UserIncludeWord>();
 
 //    @OneToMany
 //    @Cascade( { org.hibernate.annotations.CascadeType.ALL })
@@ -67,22 +69,22 @@ public class User extends AuditableEntityObject {
 
     public void addIncludedWord(RootWord rootWord){
         if(rootWord.getId() != null){
-            getIncludedWords().add(rootWord);
+            getIncludedWords().add(new UserIncludeWord(rootWord));
         }
     }
 
     public void removeIncludedWord(RootWord rootWord){
-       getIncludedWords().remove(rootWord);
+       getIncludedWords().remove(new UserExcludeWord(rootWord));
     }
 
     public void addExcludedWord(RootWord rootWord){
         if(rootWord.getId() != null){
-            getExcludedWords().add(rootWord);
+            getExcludedWords().add(new UserExcludeWord(rootWord));
         }
     }
 
     public void removeExcludedWord(RootWord rootWord){
-       getExcludedWords().remove(rootWord);
+       getExcludedWords().remove(new UserExcludeWord(rootWord));
     }
 
 //    public void addIncludedPhrasalVerb(PhrasalVerb phrasalVerb){
