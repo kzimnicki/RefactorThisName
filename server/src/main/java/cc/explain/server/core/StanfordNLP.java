@@ -9,6 +9,7 @@ import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.trees.*;
+import org.springframework.util.StopWatch;
 
 import java.io.StringReader;
 import java.util.*;
@@ -26,9 +27,12 @@ public class StanfordNLP {
     private GrammaticalStructureFactory gsf;
 
     public StanfordNLP() {
+        StopWatch watch = new StopWatch();
+        watch.start();
         this.parser = LexicalizedParser.loadModel();
         this.gsf = new PennTreebankLanguagePack().grammaticalStructureFactory();
-
+        watch.stop();
+        System.out.println(watch.getTotalTimeMillis());
     }
 
     public List<List<HasWord>> getSentences(String text) {

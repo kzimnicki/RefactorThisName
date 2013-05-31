@@ -1,5 +1,6 @@
 package cc.explain.server.api;
 
+import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.RootWord;
@@ -69,7 +70,7 @@ public class ExplainCCApi {
         for (String wordValue : excludedWords) {
             RootWord rootWord = textService.getRootWord(wordValue);
             if (rootWord != null) {
-                user.getExcludedWords().add(rootWord);
+                user.addExcludedWord(rootWord);
             }
         }
         userService.save(user);
@@ -92,7 +93,7 @@ public class ExplainCCApi {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public Map<String, Set<String>> loadExcludedWords() throws IOException {
+    public List<WordDetailDTO> loadExcludedWords() throws IOException {
         User user = userService.getLoggedUser();
         return textService.getExcludedWords(user);
     }
@@ -105,8 +106,8 @@ public class ExplainCCApi {
     public void removeExcludedWord(@RequestBody String wordValue) throws IOException {
         User user = userService.getLoggedUser();
         RootWord rootWord = textService.getRootWord(wordValue);
-        user.getExcludedWords().remove(rootWord);
-        user.getIncludedWords().add(rootWord);
+        user.removeExcludedWord(rootWord);
+        user.addIncludedWord(rootWord);
         userService.save(user);
     }
 
@@ -126,9 +127,12 @@ public class ExplainCCApi {
         //TODO refactor this
         User user = userService.getLoggedUser();
 
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        System.out.println("start future");
-        Future<List<String>> future = service.submit((new PhrasalVerbTask(subtitle)));
+        Future<List<String>> future= null;
+        ExecutorService service = null;
+        if(user.getConfig().isPhrasalVerbAdded()){
+            service = Executors.newSingleThreadExecutor();
+            future = service.submit((new PhrasalVerbTask(subtitle)));
+        }
 
 
         Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, subtitle);
@@ -139,16 +143,19 @@ public class ExplainCCApi {
         Map<String, String> translatedWords = translate(strings);
 
         List<String> phrasalVerbs = Collections.<String>emptyList();
-        try {
-            System.out.println("Wait for get");
-            phrasalVerbs = future.get();
-            System.out.println("get otrzymane");
-        } catch (InterruptedException e) {
-            throw new TechnicalException(e);
-        } catch (ExecutionException e) {
-             throw new TechnicalException(e);
+        if(user.getConfig().isPhrasalVerbAdded()){
+            try {
+                System.out.println("Wait for get");
+                phrasalVerbs = future.get();
+                System.out.println("get otrzymane");
+            } catch (InterruptedException e) {
+                throw new TechnicalException(e);
+            } catch (ExecutionException e) {
+                 throw new TechnicalException(e);
+            }
+            service.shutdown();
         }
-        service.shutdown();
+
 
         Map<String, String> translatedPhrasalVerbs = translationService.translate(phrasalVerbs);
 
@@ -156,9 +163,8 @@ public class ExplainCCApi {
             String phrasalVerbFirstPart = pv.split(" ")[0];//only first word
             translatedWords.remove(phrasalVerbFirstPart);
         }
-        String wordPattern = user.getConfig().getSubtitleTemplate();
         String phrasalVerbPattern = "<font color=\"red\">@@TRANSLATED_TEXT@@</font>";
-        String translated = subtitleService.addTranslation(subtitle, translatedWords, translatedPhrasalVerbs, wordPattern, phrasalVerbPattern);
+        String translated = subtitleService.addTranslation(subtitle, translatedWords, translatedPhrasalVerbs, user.getConfig());
         return translated;
     }
 
@@ -180,7 +186,7 @@ public class ExplainCCApi {
         for (String wordValue : includedWords) {
             RootWord rootWord = textService.getRootWord(wordValue);
             if (rootWord != null) {
-                user.getIncludedWords().add(rootWord);
+                user.addIncludedWord(rootWord);
             }
         }
         userService.save(user);
@@ -190,7 +196,7 @@ public class ExplainCCApi {
     @ResponseBody
     @Secured(Role.USER)
     @Transactional
-    public Map<String, Set<String>> loadIncludedWords() {
+    public List<WordDetailDTO> loadIncludedWords() {
         User user = userService.getLoggedUser();
         return textService.getIncludedWords(user);
     }
@@ -202,8 +208,8 @@ public class ExplainCCApi {
     public void removeIncludedWords(@RequestBody String wordValue) {
         User user = userService.getLoggedUser();
         RootWord rootWord = textService.getRootWord(wordValue);
-        user.getIncludedWords().remove(rootWord);
-        user.getExcludedWords().add(rootWord);
+        user.removeIncludedWord(rootWord);
+        user.addExcludedWord(rootWord);
         userService.save(user);
     }
 
@@ -213,7 +219,7 @@ public class ExplainCCApi {
     @Transactional
     public String exportExcludedWords() {
         User user = userService.getLoggedUser();
-        Map<String, Set<String>> excludedWords = textService.getExcludedWords(user);
+        List<WordDetailDTO> excludedWords = textService.getExcludedWords(user);
         return textService.createCSVString(excludedWords);
     }
 
@@ -223,7 +229,7 @@ public class ExplainCCApi {
     @Transactional
     public String exportIncludedWords() {
         User user = userService.getLoggedUser();
-        Map<String, Set<String>> includedWords = textService.getIncludedWords(user);
+        List<WordDetailDTO> includedWords = textService.getIncludedWords(user);
         return textService.createCSVString(includedWords);
     }
 

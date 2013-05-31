@@ -9,8 +9,8 @@ public enum SubtitleProcessor {
 
     IN_TEXT(new InTextTranslationSubtitleStrategy()),
     ONLY_TRANSLATION(new OnlyTranslationsSubtitleStrategy()),
-    LONG_DISPLAY(new LongDisplayTranslationSubtitleStrategy()),
-    DUMMY(new DummySubtitleStrategy());
+    LONG_DISPLAY(new LongDisplayTranslationSubtitleStrategy())
+    ;
 
     private SubtitleStrategy strategy;
 

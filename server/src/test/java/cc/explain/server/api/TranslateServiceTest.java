@@ -45,6 +45,16 @@ public class TranslateServiceTest {
    }
 
     @Test
+   public void shouldReturnEmptyTranslatedArrayForEmptyEnglishArray(){
+        String[] emptyEnglishWords = {};
+
+        String[] translated = translateService.googleTranslate(emptyEnglishWords);
+
+        assertEquals(0, translated.length);
+
+   }
+
+    @Test
     public void shouldReturnOneTranslatedWord() throws Exception {
         String word = "doghouse";
 
@@ -62,6 +72,8 @@ public class TranslateServiceTest {
 
         assertEquals(databaseTranslated.get(word), googleTranslated[0]);
     }
+
+
 
 
     @Test

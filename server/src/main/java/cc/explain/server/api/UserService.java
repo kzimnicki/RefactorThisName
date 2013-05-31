@@ -56,6 +56,8 @@ public class UserService {
         user.getConfig().setMin(config.getMin());
         user.getConfig().setSubtitleTemplate(config.getSubtitleTemplate());
         user.getConfig().setTextTemplate(config.getTextTemplate());
+        user.getConfig().setPhrasalVerbAdded(config.isPhrasalVerbAdded());
+        user.getConfig().setSubtitleProcessor(config.getSubtitleProcessor());
         save(user);
     }
 }

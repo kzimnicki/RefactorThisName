@@ -1,5 +1,6 @@
 package cc.explain.server.core;
 
+import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.Word;
 import org.junit.Test;
@@ -41,11 +42,13 @@ public class TextServiceTest {
          rootWordValues.add("cart");
          rootWordValues.add("truck");
 
-         Map<String, Set<String>> wordFmilies = textService.getStringWordFamilyForIds(rootWordValues);
+        List<WordDetailDTO> wordDetailDTOs = textService.getStringWordFamilyForIds(rootWordValues);
 
-         assertTrue(wordFmilies.get("truck").contains("trucks"));
-         assertTrue(wordFmilies.get("cart").contains("carts"));
-         assertTrue(wordFmilies.get("cart").contains("carting"));
+        assertEquals(2, wordDetailDTOs.size());
+
+        assertTrue(wordDetailDTOs.get(0).getWordFamily().contains("carts"));
+        assertTrue(wordDetailDTOs.get(0).getWordFamily().contains("carting"));
+        assertTrue(wordDetailDTOs.get(1).getWordFamily().contains("trucks"));
     }
 
      @Test
@@ -61,9 +64,9 @@ public class TextServiceTest {
     public void shouldReturnEmptyWordFamiliesForEmptyList() throws Exception {
          List<String> rootWordValues = new ArrayList<String>();
 
-         Map<String, Set<String>> wordFmilies = textService.getStringWordFamilyForIds(rootWordValues);
+          List<WordDetailDTO> wordDetailDTOs = textService.getStringWordFamilyForIds(rootWordValues);
 
-         assertEquals(0, wordFmilies.size());
+          assertEquals(0, wordDetailDTOs.size());
     }
 
     @Test

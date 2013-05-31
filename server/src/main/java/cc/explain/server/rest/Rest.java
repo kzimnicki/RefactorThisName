@@ -1,6 +1,7 @@
 package cc.explain.server.rest;
 
 import cc.explain.server.exception.TechnicalException;
+import cc.explain.server.utils.StringUtils;
 import com.google.gson.Gson;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -90,6 +91,6 @@ public class Rest {
         }else{
              results = new Gson().fromJson(content, String[].class);
         }
-        return results;
+        return  results;
     }
 }

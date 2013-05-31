@@ -4,6 +4,7 @@ import cc.explain.server.core.CommonDao;
 import cc.explain.server.core.NLPTask;
 import cc.explain.server.core.StanfordNLP;
 import cc.explain.server.core.WordType;
+import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.*;
 import com.google.common.base.Splitter;
@@ -32,20 +33,21 @@ public class TextService {
     LuceneService luceneService;
 
     public Set<String> getExcludeSet(User user) {
-        Map<String, Set<String>> excludedWords = getExcludedWords(user);
+        List<WordDetailDTO> excludedWords = getExcludedWords(user);
         Set<String> userExcludeSet = new HashSet<String>();
-        for (Set<String> exWords : excludedWords.values()) {
-            userExcludeSet.addAll(exWords);
+        for (WordDetailDTO wd  : excludedWords) {
+            userExcludeSet.add(wd.getRootWord());
+            userExcludeSet.addAll(wd.getWordFamily());
         }
         return userExcludeSet;
     }
 
-    public String createCSVString(Map<String, Set<String>> excludedWords) {
+    public String createCSVString(List<WordDetailDTO> excludedWords) {
         StringBuilder builder = new StringBuilder();
-        for (Map.Entry<String, Set<String>> entry : excludedWords.entrySet()) {
-            builder.append(entry.getKey());
+        for (WordDetailDTO wd : excludedWords) {
+            builder.append(wd.getRootWord());
             builder.append(";");
-            builder.append(StringUtils.join(entry.getValue(), " "));
+            builder.append(StringUtils.join(wd.getWordFamily(), " "));
             builder.append(";\n");
         }
         return builder.toString();
@@ -107,32 +109,38 @@ public class TextService {
         return wordFamily;
     }
 
-    public Map<String, Set<String>> getStringWordFamilyForIds(List<String> wordValues) {
+    public List<WordDetailDTO> getStringWordFamilyForIds(List<String> wordValues) {
         if (!wordValues.isEmpty()) {
             List<WordRelation> wordRelations = textDAO.findWordRelationsByRootWordValues(wordValues);
-            HashMultimap<String, String> multimap = HashMultimap.create();
+            WordDetailDTO wordDetail = new WordDetailDTO();
+            List<WordDetailDTO> wd = Lists.newArrayListWithCapacity(wordRelations.size());
             for (WordRelation wr : wordRelations) {
-                multimap.put(wr.getRootWord().getRootWord().getValue(), wr.getWord().getValue());
+                if(!StringUtils.equals(wordDetail.getRootWord(), wr.getRootWord().getRootWord().getValue())){
+                    wordDetail = new WordDetailDTO();
+                    wordDetail.setRootWord(wr.getRootWord().getRootWord().getValue());
+                    wd.add(wordDetail);
+                }
+                wordDetail.addWordFamily(wr.getWord().getValue());
             }
-            return (Map<String, Set<String>>) (Map<?, ?>) multimap.asMap();
+            return wd;
         }
-        return Collections.<String, Set<String>>emptyMap();
+        return Collections.<WordDetailDTO>emptyList();
     }
 
-    public Map<String, Set<String>> getExcludedWords(User user) {
-        Set<RootWord> excludedWords = user.getExcludedWords();
+    public List<WordDetailDTO> getExcludedWords(User user) {
+        Set<UserExcludeWord> excludedWords = user.getExcludedWords();
         return createWordFamilyForRootWords(excludedWords);
     }
 
-    public Map<String, Set<String>> getIncludedWords(User user) {
-        Set<RootWord> includedWords = user.getIncludedWords();
+    public List<WordDetailDTO> getIncludedWords(User user) {
+        Set<UserIncludeWord> includedWords = user.getIncludedWords();
         return createWordFamilyForRootWords(includedWords);
     }
 
-    private Map<String, Set<String>> createWordFamilyForRootWords(Set<RootWord> rootWords) {
-        List<String> rootWordValues = new ArrayList<String>(rootWords.size());
-        for (RootWord rw : rootWords) {
-            rootWordValues.add(rw.getRootWord().getValue());
+    private List<WordDetailDTO> createWordFamilyForRootWords(Set<? extends UserWord> userWords) {
+        List<String> rootWordValues = new ArrayList<String>(userWords.size());
+        for (UserWord uw : userWords) {
+            rootWordValues.add(uw.getRootWord().getRootWord().getValue());
         }
         return getStringWordFamilyForIds(rootWordValues);
     }

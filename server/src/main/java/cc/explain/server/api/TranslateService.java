@@ -24,12 +24,16 @@ public class TranslateService {
     public static final String PARAMETER_KEY = "q";
 
     public String[] googleTranslate(String[] englishWords){
-        Rest rest = Rest.get()
+        String[] results = {};
+        if(englishWords.length > 0){
+            Rest rest = Rest.get()
             .url(GOOGLE_API_URL);
-        for (String word : englishWords){
-            rest.addParameter(PARAMETER_KEY, word);
+            for (String word : englishWords){
+                rest.addParameter(PARAMETER_KEY, word);
+            }
+            results = rest.execute();
         }
-        return rest.execute();
+        return results;
     }
 
     public Map<String, String> translate(List<String> englishWords){

@@ -17,7 +17,6 @@ public abstract class AuditableEntityObject extends EntityObject {
     @Column(name = "created", insertable=true, updatable=true)
     private Date created = new Date();
 
-//    @Version
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated", insertable=true, updatable=true)
     private Date updated = new Date();
