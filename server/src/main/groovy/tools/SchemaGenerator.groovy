@@ -18,7 +18,7 @@ public class SchemaGenerator {
         cfg.setProperty("hibernate.dialect", dialect);
         SchemaExport export = new SchemaExport(cfg);
         export.setDelimiter(";");
-        export.setOutputFile("server/sql/ddl_explain_cc_database.sql");
+        export.setOutputFile("vagrant/sql/ddl_explain_cc_database.sql");
         export.execute(true, false, false, false);
     }
 
@@ -40,6 +40,6 @@ public class SchemaGenerator {
 
     public static void main(String[] args) throws Exception {
         SchemaGenerator gen = new SchemaGenerator("cc.explain.server.model");
-        gen.generate("org.hibernate.dialect.MySQLDialect");
+        gen.generate("org.hibernate.dialect.MySQL5InnoDBDialect");
     }
 }
