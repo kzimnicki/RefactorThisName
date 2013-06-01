@@ -1,6 +1,3 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 Vagrant.configure("2") do |config|
   config.vm.box = "Centos6"
   config.vm.box_url = "CentOS-6.4-i386-v20130309.box"
