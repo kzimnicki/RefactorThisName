@@ -35,6 +35,24 @@
                             <g:Button ui:field="preview" styleName="btn">Preview</g:Button>
                         </div>
                     </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Phrasal verbs:</label>
+
+                        <div class="controls">
+                            <g:CheckBox ui:field="phrasalVerb"></g:CheckBox>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Phrasal verbs template:</label>
+
+                        <div class="controls">
+                            <g:TextBox ui:field="phrasalVerbTemplate" styleName="input span5 focused" text=""></g:TextBox>
+                        </div>
+                    </div>
+
+
                     <div class="form-actions">
                         <g:Button ui:field="save" styleName="btn btn-primary">Save</g:Button>
                         <g:Button ui:field="restore" styleName="btn">Restore default options</g:Button>

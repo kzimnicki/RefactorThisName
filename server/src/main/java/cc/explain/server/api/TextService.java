@@ -13,8 +13,10 @@ import com.google.common.collect.Lists;
 import edu.stanford.nlp.ling.HasWord;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang.time.DateUtils;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -22,6 +24,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class TextService {
+
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
 
     @Autowired
     TextDAO textDAO;
@@ -109,15 +114,16 @@ public class TextService {
         return wordFamily;
     }
 
-    public List<WordDetailDTO> getStringWordFamilyForIds(List<String> wordValues) {
+    public List<WordDetailDTO> getStringWordFamilyForIds(Map<String,String> wordValues) {
         if (!wordValues.isEmpty()) {
-            List<WordRelation> wordRelations = textDAO.findWordRelationsByRootWordValues(wordValues);
+            List<WordRelation> wordRelations = textDAO.findWordRelationsByRootWordValues(wordValues.keySet());
             WordDetailDTO wordDetail = new WordDetailDTO();
             List<WordDetailDTO> wd = Lists.newArrayListWithCapacity(wordRelations.size());
             for (WordRelation wr : wordRelations) {
                 if(!StringUtils.equals(wordDetail.getRootWord(), wr.getRootWord().getRootWord().getValue())){
                     wordDetail = new WordDetailDTO();
                     wordDetail.setRootWord(wr.getRootWord().getRootWord().getValue());
+                    wordDetail.setAddDate(wordValues.get(wr.getRootWord().getRootWord().getValue()));
                     wd.add(wordDetail);
                 }
                 wordDetail.addWordFamily(wr.getWord().getValue());
@@ -138,11 +144,15 @@ public class TextService {
     }
 
     private List<WordDetailDTO> createWordFamilyForRootWords(Set<? extends UserWord> userWords) {
-        List<String> rootWordValues = new ArrayList<String>(userWords.size());
+        Map<String,String> rootWordValues = new HashMap<String,String>(userWords.size());
         for (UserWord uw : userWords) {
-            rootWordValues.add(uw.getRootWord().getRootWord().getValue());
+            rootWordValues.put(uw.getRootWord().getRootWord().getValue(), formatDate(uw.getCreated()));
         }
         return getStringWordFamilyForIds(rootWordValues);
+    }
+
+    private String formatDate(Date created) {
+        return format.format(created);
     }
 
 }

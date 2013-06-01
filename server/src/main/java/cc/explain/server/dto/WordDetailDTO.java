@@ -12,7 +12,7 @@ import java.util.Set;
 public class WordDetailDTO {
     private String rootWord;
     private Set<String> wordFamily = new HashSet<String>();
-    private Date addDate;
+    private String addDate;
 
     public String getRootWord() {
         return rootWord;
@@ -22,11 +22,11 @@ public class WordDetailDTO {
         this.rootWord = rootWord;
     }
 
-    public Date getAddDate() {
+    public String getAddDate() {
         return addDate;
     }
 
-    public void setAddDate(Date addDate) {
+    public void setAddDate(String addDate) {
         this.addDate = addDate;
     }
 

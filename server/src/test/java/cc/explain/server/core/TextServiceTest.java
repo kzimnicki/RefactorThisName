@@ -3,6 +3,7 @@ package cc.explain.server.core;
 import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.Word;
+import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,10 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import cc.explain.server.api.TextService;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -38,9 +36,9 @@ public class TextServiceTest {
 
     @Test
     public void shouldReturnWordFamiliesForTwoRootWords() throws Exception {
-         List<String> rootWordValues = new ArrayList<String>(2);
-         rootWordValues.add("cart");
-         rootWordValues.add("truck");
+         Map<String,String> rootWordValues = Maps.newHashMap();
+         rootWordValues.put("cart", new Date().toString());
+         rootWordValues.put("truck", new Date().toString());
 
         List<WordDetailDTO> wordDetailDTOs = textService.getStringWordFamilyForIds(rootWordValues);
 
@@ -62,7 +60,7 @@ public class TextServiceTest {
 
       @Test
     public void shouldReturnEmptyWordFamiliesForEmptyList() throws Exception {
-         List<String> rootWordValues = new ArrayList<String>();
+          Map<String,String> rootWordValues = Maps.newHashMap();
 
           List<WordDetailDTO> wordDetailDTOs = textService.getStringWordFamilyForIds(rootWordValues);
 

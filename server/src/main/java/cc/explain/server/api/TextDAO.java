@@ -8,6 +8,7 @@ import cc.explain.server.model.WordRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: kzimnick
@@ -46,7 +47,7 @@ public class TextDAO {
         return rootWordrelations;
     }
 
-    public List<WordRelation> findWordRelationsByRootWordValues(List<String> wordValues){
+    public List<WordRelation> findWordRelationsByRootWordValues(Set<String> wordValues){
         List<WordRelation> wordRelations = (List<WordRelation>) commonDao.getByHQL("FROM WordRelation wr JOIN FETCH wr.word w JOIN FETCH wr.rootWord WHERE wr.rootWord.rootWord.value IN :wordValues ORDER BY wr.rootWord.rootWord", "wordValues", wordValues);
         return wordRelations;
     }

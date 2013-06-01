@@ -12,6 +12,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -21,6 +22,9 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     public static final String MAX = "max";
     public static final String TEXT_TEMPLATE = "textTemplate";
     public static final String SUBTITLE_TEMPLATE = "subtitleTemplate";
+    public static final String PHRASAL_VERB_TEMPLATE = "phrasalVerbTemplate";
+    public static final String PHRASAL_VERB = "phrasalVerbAdded";
+
     @UiField
     TextBox min;
 
@@ -38,6 +42,12 @@ public class OptionsDialog extends CafaWidget implements Dialog {
 
     @UiField
     TextBox subtitleTemplate;
+
+    @UiField
+    CheckBox phrasalVerb;
+
+    @UiField
+    TextBox phrasalVerbTemplate;
 
     @UiField
     Button save;
@@ -90,6 +100,9 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         JSONObject jsonObject = new JSONObject();
 //       jsonObject.put(TEXT_TEMPLATE, new JSONString(textTemplate.getText()));
         jsonObject.put(SUBTITLE_TEMPLATE, new JSONString(subtitleTemplate.getText()));
+        jsonObject.put(PHRASAL_VERB_TEMPLATE, new JSONString(phrasalVerbTemplate.getText()));
+        jsonObject.put(PHRASAL_VERB, new JSONString(phrasalVerb.getValue().toString()));
+
         jsonObject.put(MIN, new JSONString(String.valueOf(5)));
         jsonObject.put(MAX, new JSONString(max.getText()));
         saveOptions(jsonObject.toString());
@@ -101,6 +114,8 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         max.setValue(jsonObject.get(MAX).isNumber().toString());
 //        textTemplate.setText(jsonObject.get(TEXT_TEMPLATE).isString().stringValue());
         subtitleTemplate.setText(jsonObject.get(SUBTITLE_TEMPLATE).isString().stringValue());
+        phrasalVerbTemplate.setText(jsonObject.get(PHRASAL_VERB_TEMPLATE).isString().stringValue());
+        phrasalVerb.setValue(jsonObject.get(PHRASAL_VERB).isBoolean().booleanValue());
     }
 
     public void afterSave() {

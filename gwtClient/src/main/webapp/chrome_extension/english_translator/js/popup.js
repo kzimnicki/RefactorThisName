@@ -56,9 +56,9 @@ popup.removeIncludedWord = function(object) {
 
 popup.createExcludedSiteRows = function(wordFamilies) {
     var rows = [];
-    for (var key in  wordFamilies) {
-        var wordFamilyArray = (wordFamilies[key]);
-        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">I don\'t know this word</a>'];
+    for (var i=0; i<wordFamilies.length; i++) {
+        var wordFamilyArray = (wordFamilies[i].wordFamily);
+        var row = [wordFamilies[i].rootWord, createWordFamilyString(wordFamilyArray),wordFamilies[i].addDate,'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">I don\'t know this word</a>'];
         rows.push(row);
     }
     return rows;
@@ -66,9 +66,9 @@ popup.createExcludedSiteRows = function(wordFamilies) {
 
 popup.createIncludedSiteRows = function(wordFamilies) {
     var rows = [];
-    for (var key in  wordFamilies) {
-        var wordFamilyArray = (wordFamilies[key]);
-        var row = [key, createWordFamilyString(wordFamilyArray),'<a class="btn btn-danger" href="#" onclick="popup.removeIncludedWord(this)">I know this word</a>'];
+    for (var i=0; i<wordFamilies.length; i++) {
+        var wordFamilyArray = (wordFamilies[i].wordFamily);
+        var row = [wordFamilies[i].rootWord, createWordFamilyString(wordFamilyArray),wordFamilies[i].addDate,'<a class="btn btn-danger" href="#" onclick="popup.removeIncludedWord(this)">I know this word</a>'];
         rows.push(row);
     }
     return rows;
@@ -93,7 +93,6 @@ function createWordFamilyString (wordFamilyArray){
 
 popup.createSiteTable = function(rows, title, id) {
     oSiteTable = $(id).dataTable({
-               //<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>
         "sDom": "<'row'<'span8'><'span8'f>r>t<'row'<'spa8'><'span8'pi>>",
         "sPaginationType": "bootstrap",
         "iDisplayLength": 10,
@@ -104,6 +103,7 @@ popup.createSiteTable = function(rows, title, id) {
         "aoColumns":[
             { "sTitle": title, "sWidth": "150px"},
             { "sTitle": "Word family", "sWidth": "400px"},
+            { "sTitle": "Date", "sWidth": "200px"},
             { "sTitle": "action", "sWidth": "220px"}
         ]
     });
