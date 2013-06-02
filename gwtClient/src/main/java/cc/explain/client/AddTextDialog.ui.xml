@@ -9,8 +9,8 @@
         <div class="span8">
             <form class="form-horizontal" action="">
 
-                <div id="drop_zone">Drop movie here</div>
-                <div id="video" style="text-align: center;font-weight: bolder;font-size: 22px;margin: 10px;">OR</div>
+          <!--      <div id="drop_zone">Drop movie here</div>
+                <div id="video" style="text-align: center;font-weight: bolder;font-size: 22px;margin: 10px;">OR</div>-->
 
                 <g:HTMLPanel ui:field="tablePanel" styleName="span8">
                     <table cellpadding="0" cellspacing="0" border="0"

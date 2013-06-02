@@ -11,10 +11,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 public class OptionsDialog extends CafaWidget implements Dialog {
 
@@ -24,6 +21,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     public static final String SUBTITLE_TEMPLATE = "subtitleTemplate";
     public static final String PHRASAL_VERB_TEMPLATE = "phrasalVerbTemplate";
     public static final String PHRASAL_VERB = "phrasalVerbAdded";
+    public static final String SUBTITLE_TYPE = "subtitleProcessor";
 
     @UiField
     TextBox min;
@@ -52,6 +50,12 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     @UiField
     Button save;
 
+    @UiField
+    RadioButton subtitleTypeInText;
+
+    @UiField
+    RadioButton subtitleTypeOnlyTranslation;
+
     @UiTemplate("OptionsDialog.ui.xml")
     interface OptionsDialogUiBinder extends UiBinder<Widget, OptionsDialog> {
     }
@@ -68,7 +72,46 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         min.getElement().setAttribute("type", "range");
         min.getElement().setAttribute("min", "1");
         min.getElement().setAttribute("max", "100");
+        onSubtitleTypeInTextClick(null);
+
     }
+
+
+    @UiHandler("subtitleTypeInText")
+    public void onSubtitleTypeInTextClick(ClickEvent e) {
+        subtitleTypeInText.setValue(true);
+        subtitleTypeOnlyTranslation.setValue(false);
+    }
+
+    @UiHandler("subtitleTypeOnlyTranslation")
+    public void onSubtitleTypeOnlyTranlsationClick(ClickEvent e) {
+        subtitleTypeInText.setValue(false);
+        subtitleTypeOnlyTranslation.setValue(true);
+    }
+
+    private String getSubtitleType(){
+        if(subtitleTypeInText.getValue()){  //TODO refactor powinno czytac te wartoci z ENUMA
+            return "IN_TEXT";
+        }
+        return "ONLY_TRANSLATION";
+    }
+
+     private void setSubtitleType(String value){
+        consoleLog(value);
+        if("IN_TEXT".equals(value)){  //TODO refactor powinno czytac te wartoci z ENUMA
+            consoleLog("in if intext");
+            onSubtitleTypeInTextClick(null);
+        }else{
+            consoleLog("in else intext");
+            onSubtitleTypeOnlyTranlsationClick(null);
+        }
+    }
+
+
+    native void consoleLog( String message) /*-{
+      console.log( "me:" + message );
+    }-*/;
+
 
     @UiHandler("min")
     public void changeSlider(ChangeEvent e) {
@@ -96,7 +139,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     }
 
     @UiHandler("save")
-    public void registerClick(ClickEvent e) {
+    public void saveClick(ClickEvent e) {
         JSONObject jsonObject = new JSONObject();
 //       jsonObject.put(TEXT_TEMPLATE, new JSONString(textTemplate.getText()));
         jsonObject.put(SUBTITLE_TEMPLATE, new JSONString(subtitleTemplate.getText()));
@@ -105,6 +148,8 @@ public class OptionsDialog extends CafaWidget implements Dialog {
 
         jsonObject.put(MIN, new JSONString(String.valueOf(5)));
         jsonObject.put(MAX, new JSONString(max.getText()));
+        jsonObject.put(SUBTITLE_TYPE, new JSONString(getSubtitleType()));
+
         saveOptions(jsonObject.toString());
     }
 
@@ -116,6 +161,8 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         subtitleTemplate.setText(jsonObject.get(SUBTITLE_TEMPLATE).isString().stringValue());
         phrasalVerbTemplate.setText(jsonObject.get(PHRASAL_VERB_TEMPLATE).isString().stringValue());
         phrasalVerb.setValue(jsonObject.get(PHRASAL_VERB).isBoolean().booleanValue());
+
+        setSubtitleType(jsonObject.get(SUBTITLE_TYPE).isString().stringValue());
     }
 
     public void afterSave() {
