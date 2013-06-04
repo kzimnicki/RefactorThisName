@@ -145,9 +145,9 @@ public class ExplainCCApi {
         List<String> phrasalVerbs = Collections.<String>emptyList();
         if(user.getConfig().isPhrasalVerbAdded()){
             try {
-                System.out.println("Wait for get");
+                LOG.info("Waiting for phrasal verbs processing");
                 phrasalVerbs = future.get();
-                System.out.println("get otrzymane");
+                LOG.info("Phrasal Verbs size: {}",phrasalVerbs.size());
             } catch (InterruptedException e) {
                 throw new TechnicalException(e);
             } catch (ExecutionException e) {
@@ -163,7 +163,6 @@ public class ExplainCCApi {
             String phrasalVerbFirstPart = pv.split(" ")[0];//only first word
             translatedWords.remove(phrasalVerbFirstPart);
         }
-        String phrasalVerbPattern = "<font color=\"red\">@@TRANSLATED_TEXT@@</font>";
         String translated = subtitleService.addTranslation(subtitle, translatedWords, translatedPhrasalVerbs, user.getConfig());
         return translated;
     }

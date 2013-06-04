@@ -275,4 +275,33 @@ class ExplainCCApiGroovyTest extends Specification {
     }
 
 
+    @Unroll
+    def "Should quick translate using ONLY TRANSLATION with phrasal verbs configuration option"() {
+        given:
+        def user = userService.getLoggedUser()
+        def config = user.getConfig();
+        config.setPhrasalVerbAdded(true);
+        config.setSubtitleProcessor(SubtitleProcessor.ONLY_TRANSLATION);
+        api.saveOptions(config);
+
+        def subtitle = """5
+                           |00:00:12,584 --> 00:00:14,131
+                           |We were downstairs at the Bar, so getting up
+                           |
+                           """.stripMargin()
+
+        when:
+        String translated = api.quickSubtitleTranslate(subtitle);
+
+        then:
+        """5
+           |00:00:12,584 --> 00:00:14,131
+           |downstairs = na dół
+           |<font color="red">getting up = wstawania</font>
+           |
+           |""".stripMargin() == translated.stripMargin()
+    }
+
+
+
 }

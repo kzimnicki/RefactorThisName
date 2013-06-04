@@ -14,6 +14,10 @@ public class OnlyTranslationsSubtitleStrategy implements SubtitleStrategy {
 			for (Entry<String, String> trans : translations.entrySet()) {
 				builder.append(trans.getKey()).append(" = ").append(trans.getValue()).append("\n");
 			}
+            Map<String, String> phrasalVerbs = element.getPhrasalVerbs();
+            for(Entry<String, String> entry : phrasalVerbs.entrySet()){
+                builder.append(SubtitleUtils.replacePhrasalVerb(phrasalVerbPattern, entry.getKey(), entry.getValue()));
+            }
 			element.setText(builder.toString());
 		}
 		return subtitle;
