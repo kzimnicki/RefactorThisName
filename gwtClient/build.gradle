@@ -1,4 +1,4 @@
-
+import org.apache.tools.ant.filters.ReplaceTokens
 group = 'gwtClient'
 description = 'GWT Client'
 
@@ -52,4 +52,9 @@ task compileGwt (dependsOn: classes, type: JavaExec) {
 war.dependsOn compileGwt
 war {
     from compileGwt.buildDir
+     eachFile {
+          if (it.name == 'index.html') {
+            it.filter(ReplaceTokens, tokens: ['tmstp': String.valueOf(System.currentTimeMillis())])
+          }
+     }
 }
