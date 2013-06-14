@@ -16,3 +16,5 @@ server/src/main/webapp/WEB-INF/lib
 server/src/main/webapp/WEB-INF/classes
 server\src\webapp\WEB-INF\classes\
 web/WEB-INF/lib/
+vagrant/.vagrant
+subtitles.log
