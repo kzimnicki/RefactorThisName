@@ -33,7 +33,6 @@ public class UserService {
 
     public User getLoggedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(">>>>>"+authentication);
         if (authentication == null) {
             return DUMMY_USER;
         }

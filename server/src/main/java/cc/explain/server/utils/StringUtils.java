@@ -10,4 +10,9 @@ public class StringUtils extends org.springframework.util.StringUtils {
     public static final String EMPTY = "";
 
 
+    public static int length(String value){
+        return value != null ? value.length() : 0;
+    }
+
+
 }

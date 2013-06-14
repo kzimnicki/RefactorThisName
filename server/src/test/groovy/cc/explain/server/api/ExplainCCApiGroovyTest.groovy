@@ -85,7 +85,7 @@ class ExplainCCApiGroovyTest extends Specification {
                           """.stripMargin()
 
         when:
-        String translated = api.quickSubtitleTranslate(subtitle);
+        String translated = api.quickSubtitleTranslate("test",subtitle);
 
         then:
         """4
@@ -123,7 +123,7 @@ class ExplainCCApiGroovyTest extends Specification {
                           """.stripMargin()
 
         when:
-        String translated = api.quickSubtitleTranslate(subtitle);
+        String translated = api.quickSubtitleTranslate("test",subtitle);
 
         then:
         """4
@@ -162,7 +162,7 @@ class ExplainCCApiGroovyTest extends Specification {
                           """.stripMargin()
 
         when:
-        String translated = api.quickSubtitleTranslate(subtitle);
+        String translated = api.quickSubtitleTranslate("test",subtitle);
 
         then:
         """4
@@ -206,7 +206,7 @@ class ExplainCCApiGroovyTest extends Specification {
                            """.stripMargin()
 
         when:
-        String translated = api.quickSubtitleTranslate(subtitle);
+        String translated = api.quickSubtitleTranslate("test",subtitle);
 
         then:
         """4
@@ -235,7 +235,8 @@ class ExplainCCApiGroovyTest extends Specification {
                         |""".stripMargin()
 
         when:
-        String translated = api.quickSubtitleTranslate(subtitle);
+        String translated = api.quickSubtitleTranslate("test",subtitle);
+
 
         then:
         """9
@@ -263,7 +264,7 @@ class ExplainCCApiGroovyTest extends Specification {
                            """.stripMargin()
 
         when:
-        String translated = api.quickSubtitleTranslate(subtitle);
+        String translated = api.quickSubtitleTranslate("test",subtitle);
 
         then:
         """5
@@ -291,7 +292,7 @@ class ExplainCCApiGroovyTest extends Specification {
                            """.stripMargin()
 
         when:
-        String translated = api.quickSubtitleTranslate(subtitle);
+        String translated = api.quickSubtitleTranslate("test",subtitle);
 
         then:
         """5

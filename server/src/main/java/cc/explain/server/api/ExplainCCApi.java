@@ -5,8 +5,7 @@ import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.RootWord;
 import cc.explain.server.model.User;
-import com.google.common.base.Objects;
-import com.google.common.collect.Lists;
+import cc.explain.server.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +38,7 @@ import java.util.concurrent.Future;
 public class ExplainCCApi {
 
     private static Logger LOG = LoggerFactory.getLogger(ExplainCCApi.class);
+    private static Logger SUBTITLE_LOG = LoggerFactory.getLogger("SUBTITLE_LOGGER");
 
     @Autowired
     TextService textService;
@@ -57,6 +57,7 @@ public class ExplainCCApi {
     @Transactional
     public Map<String, WordDetails> extractWords(@RequestBody DataToTranslate data) throws IOException {
         User user = userService.getLoggedUser();
+        SUBTITLE_LOG.info("User: {}, Filename: {}, Subtitle length: {} \n {}",new Object[]{user.getUsername(), "WEB", StringUtils.length(data.getText()), data.getText()});
         Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, data.getText());
         return wordsToTranslate;
     }
@@ -123,9 +124,10 @@ public class ExplainCCApi {
     @RequestMapping(method = RequestMethod.POST, value = "/quickSubtitleTranslate", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional
-    public String quickSubtitleTranslate(String subtitle) throws IOException {
+    public String quickSubtitleTranslate(String filename, String subtitle) throws IOException {
         //TODO refactor this
         User user = userService.getLoggedUser();
+        SUBTITLE_LOG.info("User: {}, Filename: {}, Subtitle length: {} \n {}",new Object[]{user.getUsername(), filename, StringUtils.length(subtitle), subtitle});
 
         Future<List<String>> future= null;
         ExecutorService service = null;
