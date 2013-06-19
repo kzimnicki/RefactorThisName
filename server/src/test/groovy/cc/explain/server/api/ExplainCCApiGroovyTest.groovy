@@ -51,6 +51,7 @@ class ExplainCCApiGroovyTest extends Specification {
     def createRegisterAndLoginUser() {
         User testUser = createTestUser();
         api.register(testUser);
+        api.activate(testUser.getId()*UserService.MAGIC_NUMBER, userService.generateActivationKey(testUser.getUsername()));
         api.login(testUser);
         def config = testUser.getConfig()
         config.setPhrasalVerbAdded(true);

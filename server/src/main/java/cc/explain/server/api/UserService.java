@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserService {
     public static final int MAGIC_NUMBER = 13;
-    public static final String URL_PATTERN = "https://explain.cc/app/activation?id=%s&key=%s";
+    public static final String URL_PATTERN = "https://explain.cc/app/activate?id=%s&key=%s";
     @Autowired
     CommonDao commonDao;
 
