@@ -1,6 +1,7 @@
 Przed 3 releasem:
 - phrasal verbs font color red ale z " a nie z  ' bo w vlc nie widac pozniej
 - goes on = go on i wystepuje tak samo w linijce tej samej
+- phrasal verbs jak sa 2 w Only translation - to sa obok siebie a powinny pod soba.
 - Duze litery w phrasal verbsach sie powatrzaja z malymi, napisac test na duplikaty w kodzie
 - usprawnic translate phrasal verbsow aby najpierw szukal w tabeli translate a pozniej w internecie i najlepiej jeszcze zeby to zapisal.
 - duzo slow ma takie znaczenie jak po polsku jak po ang dating(dating), ale o dziwo google translate tlumaczy to slowo.

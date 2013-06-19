@@ -3,6 +3,7 @@ package cc.explain.server.api;
 import cc.explain.server.core.CommonDao;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
+import cc.explain.server.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +11,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 public class UserService {
+    public static final int MAGIC_NUMBER = 13;
+    public static final String URL_PATTERN = "https://explain.cc/app/activation?id=%s&key=%s";
     @Autowired
     CommonDao commonDao;
 
@@ -42,6 +45,11 @@ public class UserService {
         return user;
     }
 
+    public User getUserById(Long id){
+         User user = (User) commonDao.getByHQL("from User u where u.id = :id", "id", String.valueOf(id)).get(0);
+        return user;
+    }
+
     public void save(User user) {
         commonDao.saveOrUpdate(user);
     }
@@ -58,5 +66,29 @@ public class UserService {
         user.getConfig().setPhrasalVerbAdded(config.isPhrasalVerbAdded());
         user.getConfig().setSubtitleProcessor(config.getSubtitleProcessor());
         save(user);
+    }
+
+    String generateActivationKey(String username) {
+        return StringUtils.md5(username);
+    }
+
+    public String generateLink(User user) {
+        return String.format(URL_PATTERN,user.getId()* MAGIC_NUMBER, generateActivationKey(user.getUsername()));
+    }
+
+    boolean validateActivation(User user, String key) {
+        return generateActivationKey(user.getUsername()).equals(key);
+
+    }
+
+    public User activate(Long id, String key) {
+        long decyptedId = id / MAGIC_NUMBER;
+        User user = getUserById(decyptedId);
+        if(validateActivation(user, key)){
+            user.setEnabled(true);
+            commonDao.saveOrUpdate(user);
+            return user;
+        }
+        return DUMMY_USER;
     }
 }

@@ -79,9 +79,21 @@ public class ExplainCCApi {
 
     @RequestMapping(method = RequestMethod.POST, value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
+    @Transactional
     public LoginServiceResult register(@RequestBody User user) throws IOException {
         return userService.register(user);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/activate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @Transactional
+    public LoginServiceResult activate(@RequestBody Long id, @RequestBody String key) {
+        userService.activate(id, key);
+        return LoginServiceResult.ACTIVATED;
+    }
+
+
+
 
     @RequestMapping(method = RequestMethod.POST, value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -290,4 +302,7 @@ public class ExplainCCApi {
         LOG.error(e.getMessage());
         writer.write(String.format("%s", e.getMessage()));
     }
+
+
+
 }

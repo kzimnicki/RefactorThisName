@@ -1,12 +1,9 @@
 package cc.explain.server.api;
 
-import cc.explain.server.api.*;
 import cc.explain.server.core.CommonDao;
 import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
-import cc.explain.server.subtitle.SubtitleProcessor;
-import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +16,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -109,7 +105,7 @@ public class ExplainCCApiTest {
                 "the slowing rate of job creation suggests that they have not done enough. And there’s little prospect that Congress will rise to the occasion.";
 
 
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
 
         DataToTranslate data = new DataToTranslate();
         data.setText(text);
@@ -132,7 +128,7 @@ public class ExplainCCApiTest {
                 "the slowing rate of job creation suggests that they have not done enough. And there’s little prospect that Congress will rise to the occasion.";
 
 
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
 
         DataToTranslate data = new DataToTranslate();
         data.setText(text);
@@ -151,7 +147,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testSaveExcludeWords() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
 
         List<String> excludedwords = Arrays.asList(new String[]{
                 "car", "dog", "cat", "ship", "getting"
@@ -170,7 +166,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testSaveExcludeWordsForWordWhichNotExists() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
 
         List<String> excludedwords = Arrays.asList(new String[]{
                 "car", "zxcxcxzczxcsadqweqqwe"
@@ -186,7 +182,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testSaveIncludedWords() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> includedWords = Arrays.asList(new String[]{
                 "car", "dog", "cat", "ship"
         });
@@ -201,9 +197,10 @@ public class ExplainCCApiTest {
         assertTrue(includedWords.contains(wordDetailDTOs.get(3).getRootWord()));
     }
 
-    private void createRegisterAndLoginUser() throws IOException {
+    private void createRegisterActivateAndLoginUser() throws IOException {
         User testUser = createTestUser();
         api.register(testUser);
+        api.activate(testUser.getId()*UserService.MAGIC_NUMBER, userService.generateActivationKey(testUser.getUsername()));
         api.login(testUser);
     }
 
@@ -215,9 +212,25 @@ public class ExplainCCApiTest {
     }
 
     @Test
+    public void testActivate() throws Exception {
+        User testUser = createTestUser();
+        api.register(testUser);
+        Long id = testUser.getId()*UserService.MAGIC_NUMBER;
+        String key = "1710261a5bc69ce1221c5d857b3c3f7f";
+
+        LoginServiceResult activate = api.activate(id, key);
+
+        User user = userService.getUserById(testUser.getId());
+        assertEquals(LoginServiceResult.ACTIVATED, activate);
+        assertEquals(Boolean.TRUE, user.getEnabled());
+
+    }
+
+    @Test
     public void testLogin() throws Exception {
         User testUser = createTestUser();
         api.register(testUser);
+        api.activate(testUser.getId()*UserService.MAGIC_NUMBER, userService.generateActivationKey(testUser.getUsername()));
 
         LoginServiceResult result = api.login(testUser);
 
@@ -226,7 +239,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testRemoveExcludedWord() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> excludedwords = Arrays.asList(new String[]{
                 "car", "dog", "cat", "ship"
         });
@@ -243,7 +256,7 @@ public class ExplainCCApiTest {
 
      @Test
     public void testRemoveExcludedWordAndCheckIncludedWords() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> excludedwords = Arrays.asList(new String[]{
                 "car", "dog", "cat", "ship"
         });
@@ -258,7 +271,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testRemoveIncludedWord() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> includedWords = Arrays.asList(new String[]{
                 "car", "dog", "cat", "ship"
         });
@@ -276,7 +289,7 @@ public class ExplainCCApiTest {
 
      @Test
     public void testRemoveIncludedWordAndCheckInExcluded() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> includedWords = Arrays.asList(new String[]{
                 "car", "dog", "cat", "ship"
         });
@@ -291,7 +304,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testOptions() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         Configuration config = new Configuration();
         config.setMax(98);
         config.setMin(12);
@@ -322,7 +335,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testGetWordsAccordingToOptionsBoundaryTest() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         Configuration config = new Configuration();
         config.setMax(87);
         config.setMin(12);
@@ -343,7 +356,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testDatabaseStructureAfterRemove() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> includedWords = Arrays.asList(new String[]{
                 "car"
         });
@@ -356,7 +369,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testExportsAllExcludeWordsToCSVFormat() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> excludedwords = Arrays.asList(new String[]{
                 "car", "cat"
         });
@@ -370,7 +383,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testTranslateWord() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
 
         List<String> words = Arrays.asList(new String[]{
                 "donors", "donkeys"
@@ -398,7 +411,7 @@ public class ExplainCCApiTest {
 
     @Test
     public void testExportsAllIncludeWordsToCSVFormat() throws Exception {
-        createRegisterAndLoginUser();
+        createRegisterActivateAndLoginUser();
         List<String> excludedwords = Arrays.asList(new String[]{
                 "truck", "ship"
         });

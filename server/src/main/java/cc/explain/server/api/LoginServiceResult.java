@@ -5,5 +5,7 @@ public enum LoginServiceResult {
 	
 	USER_ALREADY_EXIST,
 	
-	BAD_LOGIN_OR_PASSWORD;	
+	BAD_LOGIN_OR_PASSWORD,
+
+    ACTIVATED ;
 }

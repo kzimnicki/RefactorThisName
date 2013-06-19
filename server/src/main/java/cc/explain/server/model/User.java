@@ -34,16 +34,18 @@ public class User extends AuditableEntityObject {
     private String password;
 
     @NotNull
-    @Getter
-    @Setter
     private String role;
 
-    private boolean enabled = true;
+    @Setter
+    @Getter
+    private Boolean enabled = false;
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "user_id")
     @Cascade( { org.hibernate.annotations.CascadeType.ALL })
     private Set<UserExcludeWord> excludedWords = new HashSet<UserExcludeWord>();
+
+
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "user_id")
@@ -106,5 +108,6 @@ public class User extends AuditableEntityObject {
 //    public void removeExcludedPhrasalVerb(PhrasalVerb phrasalVerb){
 //       getExcludedPhrasalVerbs().remove(phrasalVerb);
 //    }
+
 
 }
