@@ -24,8 +24,8 @@ public class MailService {
 
     public void init(){
         host="smtp.live.com";
-        from="admin@explain.cc";
-        pass="Kuna1234";
+        from="";
+        pass="";
     }
 
 

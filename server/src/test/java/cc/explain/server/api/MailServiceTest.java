@@ -16,6 +16,6 @@ public class MailServiceTest {
     public void test() throws Exception {
         MailService mailService = new MailService();
         mailService.init();
-        mailService.send("krzysztof@zimnicki.biz", "Hello", "World");
+        mailService.send("krzys", "Hello", "World");
     }
 }
