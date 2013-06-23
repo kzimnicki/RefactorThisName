@@ -29,7 +29,7 @@ public class UserServiceTest {
 
         String textLink = new UserService().generateLink(user);
 
-        assertEquals("https://explain.cc/app/activate?id=13&key=cba1f2d695a5ca39ee6f343297a761a4", textLink);
+        assertEquals("https://explain.cc/app/activate/13/cba1f2d695a5ca39ee6f343297a761a4", textLink);
     }
 
     @Test
@@ -37,12 +37,20 @@ public class UserServiceTest {
         User user = new User();
         user.setId(1L);
         user.setUsername("user@gmail.com");
-        String id = "13";
         String key = "cba1f2d695a5ca39ee6f343297a761a4";
 
 
         boolean result = new UserService().validateActivation(user, key);
 
         assertEquals(true, result);
+    }
+
+    @Test
+    public void shouldCreateEmailMessage(){
+        String link = "https://explain.cc/app/activate/13/cba1f2d695a5ca39ee6f343297a761a4";
+
+        String message = new UserService().createEmailMessage(link);
+
+        assertEquals("Please click on this link: https://explain.cc/app/activate/13/cba1f2d695a5ca39ee6f343297a761a4", message);
     }
 }

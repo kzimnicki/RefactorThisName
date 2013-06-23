@@ -84,10 +84,10 @@ public class ExplainCCApi {
         return userService.register(user);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/activate", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.GET, value = "/activate/{id}/{key}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional
-    public LoginServiceResult activate(@RequestBody Long id, @RequestBody String key) {
+    public LoginServiceResult activate(@PathVariable Long id, @PathVariable String key) {
         userService.activate(id, key);
         return LoginServiceResult.ACTIVATED;
     }

@@ -63,7 +63,8 @@ public class RegisterDialog extends CafaWidget implements Dialog {
 
     public native void register(String username, String password) /*-{
         var instance = this;
-        $wnd.ajaxExecutor.register(username, password, function(data) {
+        var passHash = $wnd.crypto.md5(username+password);
+        $wnd.ajaxExecutor.register(username, passHash, function(data) {
             instance.@cc.explain.client.RegisterDialog::registerCallback(Ljava/lang/String;)(data);
         });
     }-*/;

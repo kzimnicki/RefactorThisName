@@ -80,6 +80,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
     <bean id="luceneService" class="cc.explain.server.api.LuceneService" init-method="init"/>
     <bean id="loginService" class="cc.explain.server.api.UserService"/>
     <bean id="translateService" class="cc.explain.server.api.TranslateService"/>
+    <bean id="mailService" class="cc.explain.server.api.MailService"/>
 
     <bean id="openSubtitlesService" class="cc.explain.server.api.OpenSubtitlesService" init-method="init">
         <property name="login" value=""/>

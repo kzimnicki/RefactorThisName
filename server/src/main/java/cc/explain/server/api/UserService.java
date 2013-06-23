@@ -1,6 +1,7 @@
 package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
+import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
 import cc.explain.server.utils.StringUtils;
@@ -10,11 +11,17 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import javax.mail.MessagingException;
+
 public class UserService {
     public static final int MAGIC_NUMBER = 13;
-    public static final String URL_PATTERN = "https://explain.cc/app/activate?id=%s&key=%s";
+    public static final String URL_PATTERN = "https://explain.cc/app/activate/%s/%s";
+
     @Autowired
     CommonDao commonDao;
+
+    @Autowired
+    MailService mailService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -24,6 +31,7 @@ public class UserService {
     public LoginServiceResult register(User user) {
         user.setRole(Role.USER);
         commonDao.create(user);
+        sendConfirmationLink(user);
         return LoginServiceResult.SUCCESS;
     }
 
@@ -72,13 +80,22 @@ public class UserService {
         return StringUtils.md5(username);
     }
 
-    public String generateLink(User user) {
+    String generateLink(User user) {
         return String.format(URL_PATTERN,user.getId()* MAGIC_NUMBER, generateActivationKey(user.getUsername()));
     }
 
     boolean validateActivation(User user, String key) {
         return generateActivationKey(user.getUsername()).equals(key);
+    }
 
+    public void sendConfirmationLink(User user){
+        String link = generateLink(user);
+        String message = createEmailMessage(link);
+        try{
+            mailService.send(user.getUsername(), "Confirmation", message);
+        }catch(MessagingException e){
+            throw new TechnicalException(e);
+        }
     }
 
     public User activate(Long id, String key) {
@@ -90,5 +107,13 @@ public class UserService {
             return user;
         }
         return DUMMY_USER;
+    }
+
+    String createEmailMessage(String link) {
+        return String.format("Please click on this link: %s", link);
+    }
+
+    public void setMailService(MailService mailService){
+        this.mailService = mailService;
     }
 }

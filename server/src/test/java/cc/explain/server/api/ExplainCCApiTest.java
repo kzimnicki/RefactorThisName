@@ -20,6 +20,7 @@ import java.util.Map;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 
 /**
@@ -52,6 +53,7 @@ public class ExplainCCApiTest {
     @Before
     public void setUp() throws Exception {
         cleanDatabase();
+        userService.setMailService(mock(MailService.class));
     }
 
     private void cleanDatabase() {

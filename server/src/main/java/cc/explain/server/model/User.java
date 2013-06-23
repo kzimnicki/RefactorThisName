@@ -30,7 +30,7 @@ public class User extends AuditableEntityObject {
     private String username;
 
     @NotBlank
-    @Size(min = 6, max = 20)
+    @Size(min = 6, max = 32)
     private String password;
 
     @NotNull

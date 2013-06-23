@@ -49,6 +49,31 @@ task compileGwt (dependsOn: classes, type: JavaExec) {
     maxHeapSize = '256M'
 }
 
+
+
+task devMode() << {
+  ant.java(classname:'com.google.gwt.dev.DevMode', failOnError: 'true', fork: 'true') {
+    jvmarg(value: '-Xss1024k')
+    jvmarg(value: '-Xms256M')
+    jvmarg(value: '-Xmx256M')
+    arg(line: '-war src/main/webapp')
+    arg(line: '-startupUrl index.html')
+    arg(line: '-port 8881')
+    arg(line: '-logLevel DEBUG')
+    // uncomment to bind to all IPs, not just 127.0.0.1
+    // useful for debugging in a virtualized OS
+    // arg(line: '-bindAddress 0.0.0.0')
+    arg(value: 'cc.explain.ExplainCC')
+    classpath {
+      pathElement(location: "src/main/java")
+      pathElement(path: configurations.compile.asPath)
+    }
+  }
+}
+
+
+
+
 war.dependsOn compileGwt
 war {
     from compileGwt.buildDir
