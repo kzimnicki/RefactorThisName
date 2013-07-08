@@ -77,3 +77,4 @@ task explodedDist(dependsOn: assemble) << {
 
 [tomcatRun, tomcatRunWar]*.configFile = file('config/context.xml')
 [tomcatRun, tomcatStop]*.stopKey = 'stopKey'
+//test
