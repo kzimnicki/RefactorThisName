@@ -75,8 +75,8 @@ dependencies {
     compile group: 'org.springframework.security', name: 'spring-security-web', version:'3.1.0.RELEASE'
     compile group: 'oro', name: 'oro', version:'2.0.8'
 
-    providedCompile group: 'javax', name: 'javaee-api', version:'6.0'
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.0.1'
+    providedCompile group: 'javax', name: 'javaee-api', version:'6.0'
     providedCompile group: 'org.projectlombok', name: 'lombok', version:'0.11.0'
 
     testCompile group: 'junit', name: 'junit', version:'4.8.1'
