@@ -9,6 +9,12 @@ Przed 3 releasem:
 - dodac mozliwosc logowania za pomoca xbmc.
 - xbmc plugin jesli service nie zyje - wywala sie.
 
+PORZADKI:
+- dodac lomboka w calym modelu, teraz jest wyrywkowo.
+- dwa transaction managery
+
+
+
 Nowe funkcjonalnosci:
 - Typ slowa, location, noun, verb etc.
 - Praser srt i innych napisow. Teraz wstawianie slow bedzie po stronie servera.
@@ -27,8 +33,6 @@ Refactoring:
 
 Przed releasem na serwer.
 - dodac budowanie aplikacji z poziomu serwera, maven git i sama niech sie zbuduje. Jeden skrypt aby to ogarnac. // dodac katalog ze skryptami budujacymi
-- versjonowanie static contentu skrypt.js?v=1231
-- jndi dla tomcata. i wywalic system.properties.
 
 
 Chrome Plugin:
