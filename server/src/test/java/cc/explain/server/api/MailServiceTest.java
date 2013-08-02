@@ -6,11 +6,14 @@ import org.springframework.mock.jndi.SimpleNamingContextBuilder;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Properties;
+import org.apache.commons.io.IOUtils;
 
 /**
  * User: kzimnick
@@ -23,7 +26,7 @@ public class MailServiceTest {
     public void setup() throws NamingException, IOException {
         SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
         Properties prop = new Properties();
-        InputStream stream = this.getClass().getResourceAsStream("/jndi.properties");
+        InputStream stream = new FileInputStream("config/jndi.properties");
         prop.load(stream);
         stream.close();
 
