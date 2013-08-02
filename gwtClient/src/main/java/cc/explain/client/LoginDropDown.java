@@ -1,8 +1,8 @@
 package cc.explain.client;
 
+import cc.explain.client.event.AuthenticationErrorEventHandler;
 import cc.explain.client.event.UserLoggedOutEvent;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.impl.Md5Digest;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -10,10 +10,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
-public class LoginDropDown extends Composite {
+public class LoginDropDown extends Composite implements AuthenticationErrorEventHandler {
 
     @UiField
     TextBox username;
@@ -29,6 +26,10 @@ public class LoginDropDown extends Composite {
 
     @UiField
     Button register;
+
+    public void onAuthenticationErrorEvent() {
+        logout();
+    }
 
     @UiTemplate("LoginDropDown.ui.xml")
     interface LoginDropDownUiBinder extends UiBinder<Widget, LoginDropDown> {
@@ -62,8 +63,6 @@ public class LoginDropDown extends Composite {
         }
     }
 
-
-
     public void userLoggedOut(){
       parent.getController().getEventBus().fireEvent(new UserLoggedOutEvent());
     }
@@ -83,7 +82,6 @@ public class LoginDropDown extends Composite {
         logout();
         handleComponentsVisibility(null);
     }
-
 
     public native void logout() /*-{
         $wnd.commonUtils.removeCookie();

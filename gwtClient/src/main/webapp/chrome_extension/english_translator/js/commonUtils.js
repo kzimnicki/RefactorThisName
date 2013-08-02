@@ -78,6 +78,7 @@ commonUtils.saveCookie = function(username, password) {
     var header = base64_encode(username + ":" + password);
     document.cookie = "Authorization=" + header+";expires=Sun, 31 May 2020 18:40:22 GMT;";
     document.cookie = "username="+username+";expires=Sun, 31 May 2020 18:40:22 GMT;";
+    document.cookie = "version=1;expires=Sun, 31 May 2020 18:40:22 GMT;";
 
 }
 
@@ -94,11 +95,15 @@ commonUtils.isLogged = function() {
 commonUtils.removeCookie = function() {
     document.cookie = "Authorization=;expires=Thu, 01-Jan-70 00:00:01 GMT;";
     document.cookie="username=;expires=Thu, 01-Jan-70 00:00:01 GMT;"
+    document.cookie = "version=;expires=Thu, 01-Jan-70 00:00:01 GMT;";
 }
 
 this.getBase64FromCookies = function() {
-   return getCookieValue("Authorization=");
-
+   if(getCookieValue("version=") == "1"){
+     return getCookieValue("Authorization=");
+   }
+    commonUtils.removeCookie();
+    return "";
 }
 
 

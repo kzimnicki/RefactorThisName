@@ -7,7 +7,7 @@ apply plugin: 'war'
 dependencies {
     providedCompile group: 'com.google.gwt', name: 'gwt-user', version:'2.4.0'
     providedCompile group: 'com.google.gwt', name: 'gwt-dev', version: '2.4.0'
-  }
+}
 
 task compileGwt (dependsOn: classes, type: JavaExec) {
     buildDir = "${project.buildDir}/gwt"
