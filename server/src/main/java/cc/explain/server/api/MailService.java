@@ -1,11 +1,15 @@
 package cc.explain.server.api;
 
+import cc.explain.server.exception.TechnicalException;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Properties;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  * User: kzimnick
@@ -17,18 +21,22 @@ public class MailService {
     public String host;
     public String from;
     public String pass;
+    public String username;
 
     public MailService(){
         init();
     }
 
-    public void init(){
-        host="smtp.live.com";
-        from="";
-        pass="";
+    public void init() {
+        try{
+            from= (String)InitialContext.doLookup("java:comp/env/fromEmail");
+            pass= (String)InitialContext.doLookup("java:comp/env/smtpPass");
+            username = (String)InitialContext.doLookup("java:comp/env/smtpUser");
+            host = (String)InitialContext.doLookup("java:comp/env/smtpHost");
+        }catch(NamingException e){
+            throw new TechnicalException(e);
+        }
     }
-
-
 
     public void send(String destinationEmail, String subject, String text) throws MessagingException {
 
@@ -56,7 +64,7 @@ public class MailService {
         message.setSubject(subject);
         message.setText(text);
         Transport transport = session.getTransport("smtp");
-        transport.connect(host, from, pass);
+        transport.connect(host, username, pass);
         transport.sendMessage(message, message.getAllRecipients());
         transport.close();
     }
