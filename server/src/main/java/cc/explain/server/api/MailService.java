@@ -23,11 +23,7 @@ public class MailService {
     public String pass;
     public String username;
 
-    public MailService(){
-        init();
-    }
-
-    public void init() {
+    public void initializeCredentials() {
         try{
             from= (String)InitialContext.doLookup("java:comp/env/fromEmail");
             pass= (String)InitialContext.doLookup("java:comp/env/smtpPass");
@@ -39,7 +35,7 @@ public class MailService {
     }
 
     public void send(String destinationEmail, String subject, String text) throws MessagingException {
-
+        initializeCredentials();
         Properties props = System.getProperties();
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.port", "587");

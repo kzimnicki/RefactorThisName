@@ -40,7 +40,6 @@ public class MailServiceTest {
     public void test() throws Exception {
         String testEmail = (String) InitialContext.doLookup("java:comp/env/testEmail");
         MailService mailService = new MailService();
-        mailService.init();
         mailService.send(testEmail, "Hello", "World");
     }
 }
