@@ -7,6 +7,7 @@ import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
 import spock.lang.Unroll
 import cc.explain.server.subtitle.SubtitleProcessor
+import cc.explain.server.utils.TestUtils
 
 /**
  * User: kzimnick
@@ -32,6 +33,7 @@ class ExplainCCApiGroovyTest extends Specification {
     UserService userService;
 
     def setup() {
+        TestUtils.initTestJNDIFromPropertiesFile();
         cleanDatabase()
         createRegisterAndLoginUser()
     }

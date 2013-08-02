@@ -1,5 +1,6 @@
 package cc.explain.server.api;
 
+import cc.explain.server.utils.TestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
@@ -24,16 +25,7 @@ public class MailServiceTest {
 
     @Before
     public void setup() throws NamingException, IOException {
-        SimpleNamingContextBuilder builder = new SimpleNamingContextBuilder();
-        Properties prop = new Properties();
-        InputStream stream = new FileInputStream("config/jndi.properties");
-        prop.load(stream);
-        stream.close();
-
-        for(Object key : prop.keySet()){
-            builder.bind((String)key, prop.get(key));
-        }
-        builder.activate();
+        TestUtils.initTestJNDIFromPropertiesFile();
     }
 
     @Test

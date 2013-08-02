@@ -51,7 +51,6 @@ public class PhrasalVerbTask implements Callable<List<String>>{
     }
 
     public List<String> call() throws Exception {
-        System.out.println("CALL");
         return getPhrasalVerbs(this.text);
     }
 }
