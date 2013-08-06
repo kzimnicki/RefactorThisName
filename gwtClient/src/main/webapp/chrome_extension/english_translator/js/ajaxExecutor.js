@@ -148,6 +148,15 @@ ajaxExecutor.register = function(username, password, callback, errorCalback) {
     }).done(commonUtils.hideDimmer());
 }
 
+ajaxExecutor.reset = function(username, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + "app/reset",
+        data: '{"username":"' + username + '"}',
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
 ajaxExecutor.login = function(username, password, callback) {
     setup();
     $.ajax({

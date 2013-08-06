@@ -46,11 +46,44 @@ public class UserServiceTest {
     }
 
     @Test
-    public void shouldCreateEmailMessage(){
+    public void shouldValidateResetLink(){
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("user@gmail.com");
+        String key = "cba1f2d695a5ca39ee6f343297a761a4";
+
+
+        boolean result = new UserService().validateReset(user, key);
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void shouldCreateActivateEmailMessage(){
         String link = "https://explain.cc/app/activate/13/cba1f2d695a5ca39ee6f343297a761a4";
 
-        String message = new UserService().createEmailMessage(link);
+        String message = new UserService().createActivationEmailMessage(link);
 
-        assertEquals("Please click on this link: https://explain.cc/app/activate/13/cba1f2d695a5ca39ee6f343297a761a4", message);
+        assertEquals("Please confirm user account: https://explain.cc/app/activate/13/cba1f2d695a5ca39ee6f343297a761a4", message);
+    }
+
+    @Test
+    public void shouldCreateResetEmailMessage(){
+        String link = "https://explain.cc/app/reset/13/cba1f2d695a5ca39ee6f343297a761a4";
+
+        String message = new UserService().createResetEmailMessage(link);
+
+        assertEquals("Please reset password: https://explain.cc/app/reset/13/cba1f2d695a5ca39ee6f343297a761a4", message);
+    }
+
+    @Test
+    public void shouldCreateResetPasswordLink(){
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("user@gmail.com");
+
+        String link = new UserService().generateResetPasswordLink(user);
+
+        assertEquals("https://explain.cc/app/reset/13/cba1f2d695a5ca39ee6f343297a761a4", link);
     }
 }

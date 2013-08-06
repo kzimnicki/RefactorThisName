@@ -10,6 +10,8 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.*;
 
+import java.io.ObjectOutputStream;
+
 public class LoginDropDown extends Composite implements AuthenticationErrorEventHandler {
 
     @UiField
@@ -23,6 +25,9 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
 
     @UiField
     Button logout;
+
+    @UiField
+    Button reset;
 
     @UiField
     Button register;
@@ -54,13 +59,21 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
             register.setVisible(false);
             logout.setVisible(true);
             logout.setText("logout "+getUsername());
+            reset.setVisible(false);
         } else {
             username.setVisible(true);
             password.setVisible(true);
             login.setVisible(true);
             register.setVisible(true);
             logout.setVisible(false);
+            reset.setVisible(true);
         }
+    }
+
+    private void restPasswordSuccessCallback(String data) {
+        SimplePopup popup = new SimplePopup();
+        popup.getMessagePanel().add(new Label(data));
+        popup.init();
     }
 
     public void userLoggedOut(){
@@ -70,6 +83,16 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
     @UiHandler("login")
     public void loginClick(ClickEvent e){
         login(username.getText(), password.getText());
+    }
+
+    @UiHandler("reset")
+    public void forgotClick(ClickEvent e){
+        if(username.getText().length() == 0){
+              parent.getController().getMainDialog().handleError("Please fill email field.");
+        }else{
+            resetPassword(username.getText());
+        }
+
     }
 
     @UiHandler("register")
@@ -96,6 +119,12 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
         return $wnd.commonUtils.getUsername();
     }-*/;
 
+    private native void resetPassword(String email) /*-{
+        var instance = this;
+        $wnd.ajaxExecutor.resetPassword(email, function(data) {
+            instance.@cc.explain.client.LoginDropDown::restPasswordSuccessCallback(Ljava/lang/String;)(data);
+        });
+    }-*/;
     public native void login(String username, String password) /*-{
         var instance = this;
         var passHash = $wnd.crypto.md5(username+password);

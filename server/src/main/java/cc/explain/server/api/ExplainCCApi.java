@@ -92,7 +92,13 @@ public class ExplainCCApi {
         return LoginServiceResult.ACTIVATED;
     }
 
-
+    @RequestMapping(method = RequestMethod.POST, value = "/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @Transactional
+    public LoginServiceResult resetPassword(@RequestBody User user, String newPassword) {
+        userService.resetPassword(user, newPassword);
+        return LoginServiceResult.PASSWORD_RESETED;
+    }
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -302,7 +308,4 @@ public class ExplainCCApi {
         LOG.error(e.getMessage());
         writer.write(String.format("%s", e.getMessage()));
     }
-
-
-
 }

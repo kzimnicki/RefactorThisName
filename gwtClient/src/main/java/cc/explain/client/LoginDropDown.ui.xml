@@ -13,6 +13,7 @@
             <g:Button ui:field="login" styleName="btn btn-primary">Log-In</g:Button>
             <g:Button ui:field="register" styleName="btn btn-danger">Register</g:Button>
             <g:Button ui:field="logout" styleName="btn btn-danger">Logout</g:Button>
+            <g:Button ui:field="reset" styleName="btn btn-danger">Reset Password</g:Button>
         </div>
         <!--</form>-->
         <!--<g:Label ui:field="dropDownText">Not logged in</g:Label>-->

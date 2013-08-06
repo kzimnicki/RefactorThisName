@@ -199,11 +199,12 @@ public class ExplainCCApiTest {
         assertTrue(includedWords.contains(wordDetailDTOs.get(3).getRootWord()));
     }
 
-    private void createRegisterActivateAndLoginUser() throws IOException {
+    private User createRegisterActivateAndLoginUser() throws IOException {
         User testUser = createTestUser();
         api.register(testUser);
         api.activate(testUser.getId()*UserService.MAGIC_NUMBER, userService.generateActivationKey(testUser.getUsername()));
         api.login(testUser);
+        return testUser;
     }
 
     @Test
@@ -410,6 +411,16 @@ public class ExplainCCApiTest {
         assertEquals("osły", translatedWords.get("donkeys"));
     }
 
+    @Test
+    public void testResetPassword() throws Exception {
+        User user = createRegisterActivateAndLoginUser();
+        String newPassword = "abcdef";
+
+        LoginServiceResult result = api.resetPassword(user, newPassword);
+
+        assertEquals(LoginServiceResult.PASSWORD_RESETED,result);
+        assertEquals(newPassword, user.getPassword());
+    }
 
     @Test
     public void testExportsAllIncludeWordsToCSVFormat() throws Exception {

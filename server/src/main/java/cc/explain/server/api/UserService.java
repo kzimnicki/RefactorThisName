@@ -16,6 +16,7 @@ import javax.mail.MessagingException;
 public class UserService {
     public static final int MAGIC_NUMBER = 13;
     public static final String URL_PATTERN = "https://explain.cc/app/activate/%s/%s";
+    public static final String RESET_URL_PATTERN = "https://explain.cc/app/reset/%s/%s";
 
     @Autowired
     CommonDao commonDao;
@@ -90,9 +91,9 @@ public class UserService {
 
     public void sendConfirmationLink(User user){
         String link = generateLink(user);
-        String message = createEmailMessage(link);
+        String message = createActivationEmailMessage(link);
         try{
-            mailService.send(user.getUsername(), "Confirmation", message);
+            mailService.send(user.getUsername(), "Explain.CC - Confirmation", message);
         }catch(MessagingException e){
             throw new TechnicalException(e);
         }
@@ -109,11 +110,28 @@ public class UserService {
         return DUMMY_USER;
     }
 
-    String createEmailMessage(String link) {
-        return String.format("Please click on this link: %s", link);
+    public void resetPassword(User user, String newPassword){
+            user.setPassword(newPassword);
+            commonDao.saveOrUpdate(user);
+    }
+
+    String createActivationEmailMessage(String link) {
+        return String.format("Please confirm user account: %s", link);
     }
 
     public void setMailService(MailService mailService){
         this.mailService = mailService;
+    }
+
+    public String generateResetPasswordLink(User user) {
+        return String.format(RESET_URL_PATTERN,user.getId()* MAGIC_NUMBER, generateActivationKey(user.getUsername()));
+    }
+
+    public String createResetEmailMessage(String link) {
+        return String.format("Please reset password: %s", link);
+    }
+
+    public boolean validateReset(User user, String key) {
+        return generateActivationKey(user.getUsername()).equals(key);
     }
 }

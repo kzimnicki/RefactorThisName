@@ -7,5 +7,7 @@ public enum LoginServiceResult {
 	
 	BAD_LOGIN_OR_PASSWORD,
 
-    ACTIVATED ;
+    PASSWORD_RESETED,
+
+    ACTIVATED;
 }
