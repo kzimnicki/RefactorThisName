@@ -52,7 +52,6 @@ public class UserServiceTest {
         user.setUsername("user@gmail.com");
         String key = "cba1f2d695a5ca39ee6f343297a761a4";
 
-
         boolean result = new UserService().validateReset(user, key);
 
         assertEquals(true, result);
@@ -69,11 +68,11 @@ public class UserServiceTest {
 
     @Test
     public void shouldCreateResetEmailMessage(){
-        String link = "https://explain.cc/app/reset/13/cba1f2d695a5ca39ee6f343297a761a4";
+        String link = "https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=testuser3@gmail.com#RESET";
 
         String message = new UserService().createResetEmailMessage(link);
 
-        assertEquals("Please reset password: https://explain.cc/app/reset/13/cba1f2d695a5ca39ee6f343297a761a4", message);
+        assertEquals("Please reset password: https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=testuser3@gmail.com#RESET", message);
     }
 
     @Test
@@ -84,6 +83,7 @@ public class UserServiceTest {
 
         String link = new UserService().generateResetPasswordLink(user);
 
-        assertEquals("https://explain.cc/app/reset/13/cba1f2d695a5ca39ee6f343297a761a4", link);
+        assertEquals("https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=user@gmail.com#RESET", link);
     }
+
 }

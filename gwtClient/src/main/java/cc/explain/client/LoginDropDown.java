@@ -3,16 +3,22 @@ package cc.explain.client;
 import cc.explain.client.event.AuthenticationErrorEventHandler;
 import cc.explain.client.event.UserLoggedOutEvent;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import java.io.ObjectOutputStream;
 
-public class LoginDropDown extends Composite implements AuthenticationErrorEventHandler {
+import static com.google.gwt.user.client.Window.*;
+
+public class LoginDropDown extends Composite implements AuthenticationErrorEventHandler, Dialog {
 
     @UiField
     TextBox username;
@@ -31,6 +37,12 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
 
     @UiField
     Button register;
+
+    @UiField
+    HTMLPanel loginDropDownArea;
+
+    @UiField
+    FocusPanel clickDiv;
 
     public void onAuthenticationErrorEvent() {
         logout();
@@ -51,29 +63,25 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
         handleComponentsVisibility(null);
     }
 
+    public void init() {
+        username.getElement().setPropertyString("placeholder", "E-Mail");
+        password.getElement().setPropertyString("placeholder", "Password");
+        clickDiv.getElement().removeAttribute("tabindex");
+    }
+
     private void handleComponentsVisibility(String usernameValue) {
         if (isLogged()) {
-            username.setVisible(false);
-            password.setVisible(false);
-            login.setVisible(false);
-            register.setVisible(false);
+            loginDropDownArea.setVisible(false);
             logout.setVisible(true);
             logout.setText("logout "+getUsername());
-            reset.setVisible(false);
         } else {
-            username.setVisible(true);
-            password.setVisible(true);
-            login.setVisible(true);
-            register.setVisible(true);
+            loginDropDownArea.setVisible(true);
             logout.setVisible(false);
-            reset.setVisible(true);
         }
     }
 
     private void restPasswordSuccessCallback(String data) {
-        SimplePopup popup = new SimplePopup();
-        popup.getMessagePanel().add(new Label(data));
-        popup.init();
+        parent.getController().getMainDialog().handleError(data);
     }
 
     public void userLoggedOut(){
@@ -85,6 +93,11 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
         login(username.getText(), password.getText());
     }
 
+    @UiHandler("clickDiv")
+    public void divClick(ClickEvent e){
+        e.stopPropagation();
+    }
+
     @UiHandler("reset")
     public void forgotClick(ClickEvent e){
         if(username.getText().length() == 0){
@@ -92,7 +105,6 @@ public class LoginDropDown extends Composite implements AuthenticationErrorEvent
         }else{
             resetPassword(username.getText());
         }
-
     }
 
     @UiHandler("register")

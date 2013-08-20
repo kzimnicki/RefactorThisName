@@ -1,5 +1,7 @@
 package cc.explain.server.api;
 
+import cc.explain.server.dto.DataToTranslateDTO;
+import cc.explain.server.dto.ResetPasswordDTO;
 import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.Configuration;
@@ -55,7 +57,7 @@ public class ExplainCCApi {
     @RequestMapping(method = RequestMethod.POST, value = "/extractWords", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional
-    public Map<String, WordDetails> extractWords(@RequestBody DataToTranslate data) throws IOException {
+    public Map<String, WordDetails> extractWords(@RequestBody DataToTranslateDTO data) throws IOException {
         User user = userService.getLoggedUser();
         SUBTITLE_LOG.info("User: {}, Filename: {}, Subtitle length: {} \n {}",new Object[]{user.getUsername(), "WEB", StringUtils.length(data.getText()), data.getText()});
         Map<String, WordDetails> wordsToTranslate = textService.getWordsToTranslate(user, data.getText());
@@ -92,12 +94,19 @@ public class ExplainCCApi {
         return LoginServiceResult.ACTIVATED;
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/changePassword", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    @Transactional
+    public LoginServiceResult changePassword(@RequestBody ResetPasswordDTO resetPasswordDTO) {
+        return userService.changePassword(resetPasswordDTO.getUsername(), resetPasswordDTO.getNewPassword(), resetPasswordDTO.getKey());
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/resetPassword", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     @Transactional
-    public LoginServiceResult resetPassword(@RequestBody User user, String newPassword) {
-        userService.resetPassword(user, newPassword);
-        return LoginServiceResult.PASSWORD_RESETED;
+    public LoginServiceResult resetPassword(@RequestBody String username) {
+        LOG.info(username);
+        return userService.resetPassword(username);
     }
 
 

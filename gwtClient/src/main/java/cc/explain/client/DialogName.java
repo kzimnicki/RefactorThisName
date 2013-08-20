@@ -18,7 +18,9 @@ public enum DialogName {
 
     CONTACT(ContactDialog.class),
 
-    WATCH(WatchDialog.class);
+    WATCH(WatchDialog.class),
+
+    RESET(ResetDialog.class);
 
 
     private Class<?> clazz;
@@ -42,6 +44,8 @@ public enum DialogName {
            return GWT.create(ContactDialog.class);
         }else if(WATCH.equals(this)){
            return GWT.create(WatchDialog.class);
+        }else if(RESET.equals(this)){
+            return GWT.create(ResetDialog.class);
         }
         return GWT.create(AddTextDialog.class);
     }

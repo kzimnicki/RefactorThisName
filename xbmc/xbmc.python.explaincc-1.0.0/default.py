@@ -10,12 +10,13 @@ import time
 import urllib
 import urllib2
 import base64
+import hashlib
 
 TRANSLATED_SUBTITLE_FILE_NAME = "translatedSubtitle.srt"
 PLUGIN_SUBTITLE_FILENAME = "temp_sub.en.srt"
 PLUGIN_SUBTITLE_PATH = xbmc.translatePath('special://userdata/addon_data/script.xbmc.subtitles/sub_stream/temp_sub.en.srt')
 TRANSLATING_TEXT = 'Translating...'
-QUICK_TRANSLATE_URL ='http://explain.cc/app/quickSubtitleTranslate'
+QUICK_TRANSLATE_URL ='https://explain.cc/app/quickSubtitleTranslate'
 HEAD = 'Explain.CC'
 TRANSLATED_SUBTITLE_FILENAME = xbmc.translatePath('special://userdata/addon_data/translatedSubtitle.srt')
 EMPTY_STRING = ""
@@ -62,6 +63,7 @@ def quickSubtitleTranslate(subtitle) :
         request.add_header("Authorization",getBasicAuthentication())
         params = urllib.urlencode({'subtitle': subtitle})
         response = urllib2.urlopen(request, params).read()
+        print response;
     except Exception as inst:
         popup.close()
         xbmc.executebuiltin('Notification(Explain.CC,%s,20000)' % str(inst))
@@ -86,9 +88,8 @@ def getBasicAuthentication() :
      addon = xbmcaddon.Addon()
      login = addon.getSetting('login')
      password = addon.getSetting('password')
-     print login
-     print password
-     auth = base64.encodestring('%s:%s' % (login, password)).replace('\n','')
+     print hashlib.md5(login+password).hexdigest()
+     auth = base64.encodestring('%s:%s' % (login, hashlib.md5(login+password).hexdigest())).replace('\n','')
      return 'Basic %s' % auth
 
 

@@ -28,10 +28,10 @@ public class RegisterDialog extends CafaWidget implements Dialog {
     private MainDialog mainDialog;
 
     @UiTemplate("RegisterDialog.ui.xml")
-    interface AboutDialogUiBinder extends UiBinder<Widget, RegisterDialog> {
+    interface RegisterDialogUiBinder extends UiBinder<Widget, RegisterDialog> {
     }
 
-    private static AboutDialogUiBinder uiBinder = GWT.create(AboutDialogUiBinder.class);
+    private static RegisterDialogUiBinder uiBinder = GWT.create(RegisterDialogUiBinder.class);
 
     public RegisterDialog() {
         super();

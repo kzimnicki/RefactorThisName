@@ -9,5 +9,12 @@ public enum LoginServiceResult {
 
     PASSWORD_RESETED,
 
-    ACTIVATED;
+    PASSWORD_CHANGED,
+
+    ACTIVATED,
+
+    EMAIL_NOT_EXISTS,
+
+    RESET_EMAIL_SENT,
+    WRONG_RESET_KEY;
 }

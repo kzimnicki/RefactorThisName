@@ -5,7 +5,8 @@ var AJAX_TYPE_GET = 'GET';
 var AJAX_TYPE_DELETE = 'DELETE';
 var CURRENT_TYPE_JSON = 'application/json; charset=UTF-8';
 var DATA_TYPE_JSON = 'JSON'
-var SERVER_URL = "../";
+//var SERVER_URL = "../";
+var SERVER_URL = "http://localhost:8080/RefactorThisName/"
 var TRANSLATE_URL = 'http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&sl=en&tl=pl'; //96 chars +  (word size +3 chars) * words counts
 var isLogged = false;
 
@@ -148,11 +149,21 @@ ajaxExecutor.register = function(username, password, callback, errorCalback) {
     }).done(commonUtils.hideDimmer());
 }
 
-ajaxExecutor.reset = function(username, callback) {
+ajaxExecutor.resetPassword = function(username, callback) {
     setup();
     $.ajax({
-        url: SERVER_URL + "app/reset",
-        data: '{"username":"' + username + '"}',
+        url: SERVER_URL + "app/resetPassword",
+        data: JSON.stringify(username),
+        success: callback
+    }).done(commonUtils.hideDimmer());
+}
+
+
+ajaxExecutor.changePassword = function(username, password, key, callback) {
+    setup();
+    $.ajax({
+        url: SERVER_URL + "app/changePassword",
+        data: '{"username":"' + username + '", "newPassword":"'+password+'", "key":"'+key+'"}',
         success: callback
     }).done(commonUtils.hideDimmer());
 }

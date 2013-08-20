@@ -30,13 +30,10 @@ public class OptionsDialog extends CafaWidget implements Dialog {
     TextBox max;
 
     @UiField
-    Button preview;
-//
-//    @UiField
-//    Button restore;
+    Button subtitlePreview;
 
-//    @UiField
-//    TextBox textTemplate;
+    @UiField
+    Button phrasalVerbPreview;
 
     @UiField
     TextBox subtitleTemplate;
@@ -118,12 +115,20 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         max.setValue(min.getValue());
     }
 
-    @UiHandler("preview")
-    public void previewClick(ClickEvent e) {
+    @UiHandler("subtitlePreview")
+    public void subtitlePreviewClick(ClickEvent e) {
         String exampleSubtitle = "<div style='color:white; background-color: black;'>This is example## subtitle.</div>";
-        String pattern = subtitleTemplate.getText().replace("@@TRANSLATED_TEXT@@","przyklad");
+        String pattern = subtitleTemplate.getText().replace("@@TRANSLATED_TEXT@@","przykład");
         exampleSubtitle = exampleSubtitle.replace("##",pattern);
-        getController().getMainDialog().handleError(exampleSubtitle);
+        getController().getMainDialog().infoPopup("Preview", exampleSubtitle);
+    }
+
+    @UiHandler("phrasalVerbPreview")
+    public void phrasalVerbPreviewClick(ClickEvent e) {
+        String example = "<div style='color:white; background-color: black;'>I give up!<br /> ##</div>";
+        String pattern = phrasalVerbTemplate.getText().replace("@@TRANSLATED_TEXT@@","give up = poddawać się");
+        example = example.replace("##",pattern);
+        getController().getMainDialog().infoPopup("Preview", example);
     }
 //
     @UiHandler("restore")
@@ -131,6 +136,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
         max.setValue(String.valueOf(89));
         min.setValue(String.valueOf(89));
         subtitleTemplate.setText("<font color=\"yellow\">(@@TRANSLATED_TEXT@@)</font>");
+        phrasalVerbTemplate.setText("<font color=\"red\">@@TRANSLATED_TEXT@@</font>");
     }
 
     @UiHandler("max")

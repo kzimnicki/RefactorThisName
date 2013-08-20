@@ -91,6 +91,13 @@ public class CommonDao extends HibernateDaoSupport {
         return  query.list();
 	}
 
+    public int countByHQL(String queryString, String paramName, Object value) {
+        Query query = getSession().createQuery(queryString);
+        query.setString(paramName, (String) value);
+        query.setCacheable(true);
+        return  ((Long)query.uniqueResult()).intValue();
+	}
+
     public List getByHQLObject(String queryString, String paramName, Object value) {
         Query query = getSession().createQuery(queryString);
         query.setParameter(paramName, value);

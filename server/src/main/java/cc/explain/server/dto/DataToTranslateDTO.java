@@ -1,4 +1,4 @@
-package cc.explain.server.api;
+package cc.explain.server.dto;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -11,14 +11,10 @@ import java.io.Serializable;
  * Date: 18.03.12
  * Time: 18:19
  */
-public class DataToTranslate implements Serializable {
+public class DataToTranslateDTO implements Serializable {
 
     private String text;
     private String url;
-
-    public DataToTranslate() {
-
-    }
 
     public String getText() {
         return text;

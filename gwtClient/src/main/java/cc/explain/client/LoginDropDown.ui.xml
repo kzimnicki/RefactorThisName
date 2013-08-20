@@ -6,16 +6,29 @@
 
     <g:HTMLPanel>
 
-        <!--<form class="well form-inline" action="">-->
-        <div class="form-inline">
-            <g:TextBox ui:field="username" styleName="input-small"></g:TextBox>
-            <g:PasswordTextBox ui:field="password" styleName="input-small"></g:PasswordTextBox>
-            <g:Button ui:field="login" styleName="btn btn-primary">Log-In</g:Button>
-            <g:Button ui:field="register" styleName="btn btn-danger">Register</g:Button>
-            <g:Button ui:field="logout" styleName="btn btn-danger">Logout</g:Button>
-            <g:Button ui:field="reset" styleName="btn btn-danger">Reset Password</g:Button>
-        </div>
-        <!--</form>-->
-        <!--<g:Label ui:field="dropDownText">Not logged in</g:Label>-->
+        <g:Button ui:field="logout" styleName="btn btn-danger">Logout</g:Button>
+
+
+        <g:HTMLPanel ui:field="loginDropDownArea" styleName="btn-group">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                Login <span class="caret"></span>
+            </button>
+            <g:FocusPanel ui:field="clickDiv">
+                <g:HTMLPanel>
+                    <ul class="dropdown-menu">
+                        <fieldset style="padding: 10px;">
+                            <g:TextBox ui:field="username" styleName="input"></g:TextBox>
+                            <g:PasswordTextBox ui:field="password" styleName="input"></g:PasswordTextBox>
+                            <div><g:Button ui:field="login" styleName="btn btn-primary btn-block">Log-In</g:Button></div><br/> <br/>
+                            <div><g:Button ui:field="register" styleName="btn btn-info btn-block">Register</g:Button></div><br/><br/>
+                            <div><g:Button ui:field="reset" styleName="btn btn-danger btn-block">Reset Password</g:Button></div>
+                        </fieldset>
+                    </ul>
+                </g:HTMLPanel>
+            </g:FocusPanel>
+        </g:HTMLPanel>
     </g:HTMLPanel>
+
+
+
 </ui:UiBinder> 

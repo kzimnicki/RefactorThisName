@@ -8,6 +8,7 @@ Przed 3 releasem:
 - wyrzucic drop video here po wcisnieciu submit
 - dodac mozliwosc logowania za pomoca xbmc.
 - xbmc plugin jesli service nie zyje - wywala sie.
+- Wysylac zawsze swiezego index.htmla
 
 PORZADKI:
 - dodac lomboka w calym modelu, teraz jest wyrywkowo.

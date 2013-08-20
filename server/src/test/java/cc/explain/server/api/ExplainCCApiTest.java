@@ -1,6 +1,7 @@
 package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
+import cc.explain.server.dto.DataToTranslateDTO;
 import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
@@ -84,7 +85,7 @@ public class ExplainCCApiTest {
                 "may now find itself unable to avoid doubling down." +
                 "Although Fed officials have said repeatedly that they were reluctant to expand what has already been a substantial campaign to stimulate growth, " +
                 "the slowing rate of job creation suggests that they have not done enough. And there’s little prospect that Congress will rise to the occasion.";
-        DataToTranslate data = new DataToTranslate();
+        DataToTranslateDTO data = new DataToTranslateDTO();
         data.setText(text);
         data.setUrl("http://www.nytimes.com/2012/06/02/business/jobs-report-makes-federal-reserve-more-likely-to-act.html?hp");
         userService.clearAutentication();
@@ -109,7 +110,7 @@ public class ExplainCCApiTest {
 
         createRegisterActivateAndLoginUser();
 
-        DataToTranslate data = new DataToTranslate();
+        DataToTranslateDTO data = new DataToTranslateDTO();
         data.setText(text);
         data.setUrl("http://www.nytimes.com/2012/06/02/business/jobs-report-makes-federal-reserve-more-likely-to-act.html?hp");
 
@@ -132,7 +133,7 @@ public class ExplainCCApiTest {
 
         createRegisterActivateAndLoginUser();
 
-        DataToTranslate data = new DataToTranslate();
+        DataToTranslateDTO data = new DataToTranslateDTO();
         data.setText(text);
         data.setUrl("http://www.nytimes.com/2012/06/02/business/jobs-report-makes-federal-reserve-more-likely-to-act.html?hp");
 
@@ -346,7 +347,7 @@ public class ExplainCCApiTest {
         config.setSubtitleTemplate("sub");
         api.saveOptions(config);
 
-        DataToTranslate dataToTranslate = new DataToTranslate();
+        DataToTranslateDTO dataToTranslate = new DataToTranslateDTO();
         dataToTranslate.setText("department"); //frequency = 87
 
 
@@ -414,12 +415,41 @@ public class ExplainCCApiTest {
     @Test
     public void testResetPassword() throws Exception {
         User user = createRegisterActivateAndLoginUser();
-        String newPassword = "abcdef";
 
-        LoginServiceResult result = api.resetPassword(user, newPassword);
+        LoginServiceResult result = api.resetPassword(user.getUsername());
 
-        assertEquals(LoginServiceResult.PASSWORD_RESETED,result);
-        assertEquals(newPassword, user.getPassword());
+        assertEquals(LoginServiceResult.RESET_EMAIL_SENT,result);
+    }
+
+    @Test
+    public void testChangePassword() throws Exception {
+        User user = createRegisterActivateAndLoginUser();
+
+        LoginServiceResult result = api.changePassword(user.getUsername(),"abcdef", "1710261a5bc69ce1221c5d857b3c3f7f");
+
+        assertEquals(LoginServiceResult.PASSWORD_CHANGED,result);
+        user = userService.loadUserFromDatabase(user.getUsername());
+        assertEquals("abcdef", user.getPassword());
+    }
+
+
+    @Test
+    public void testIsUserExistsForExistingUser() throws Exception {
+        createRegisterActivateAndLoginUser();
+        String username = "testuser3@gmail.com";
+
+        boolean result = userService.isUserExists(username);
+
+        assertEquals(true, result);
+    }
+
+    @Test
+    public void testIsUserExistsForNotExistingUser() throws Exception {
+        String username = "user1231231@gmail.com";
+
+        boolean result = userService.isUserExists(username);
+
+        assertEquals(false, result);
     }
 
     @Test

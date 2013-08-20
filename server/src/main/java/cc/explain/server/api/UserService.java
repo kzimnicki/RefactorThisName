@@ -5,18 +5,23 @@ import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
 import cc.explain.server.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import sun.rmi.runtime.Log;
 
 import javax.mail.MessagingException;
 
 public class UserService {
     public static final int MAGIC_NUMBER = 13;
     public static final String URL_PATTERN = "https://explain.cc/app/activate/%s/%s";
-    public static final String RESET_URL_PATTERN = "https://explain.cc/app/reset/%s/%s";
+    public static final String RESET_URL_PATTERN = "https://explain.cc/?key=%s&username=%s#RESET";
+
+    private static Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     CommonDao commonDao;
@@ -50,8 +55,12 @@ public class UserService {
         }
         String username = authentication.getName();
         //Todo refactor
-        User user = (User) commonDao.getByHQL("from User u where u.username = :username", "username", username).get(0);
+        User user = loadUserFromDatabase(username);
         return user;
+    }
+
+    public User loadUserFromDatabase(String username){
+        return (User) commonDao.getByHQL("from User u where u.username = :username", "username", username).get(0);
     }
 
     public User getUserById(Long id){
@@ -110,9 +119,10 @@ public class UserService {
         return DUMMY_USER;
     }
 
-    public void resetPassword(User user, String newPassword){
-            user.setPassword(newPassword);
-            commonDao.saveOrUpdate(user);
+    public void changePassword(User user, String newPassword, String key){
+
+        user.setPassword(newPassword);
+        commonDao.saveOrUpdate(user);
     }
 
     String createActivationEmailMessage(String link) {
@@ -124,7 +134,7 @@ public class UserService {
     }
 
     public String generateResetPasswordLink(User user) {
-        return String.format(RESET_URL_PATTERN,user.getId()* MAGIC_NUMBER, generateActivationKey(user.getUsername()));
+        return String.format(RESET_URL_PATTERN, generateActivationKey(user.getUsername()), user.getUsername());
     }
 
     public String createResetEmailMessage(String link) {
@@ -133,5 +143,41 @@ public class UserService {
 
     public boolean validateReset(User user, String key) {
         return generateActivationKey(user.getUsername()).equals(key);
+    }
+
+    public LoginServiceResult resetPassword(String username) {
+        if(isUserExists(username)){
+            User user = loadUserFromDatabase(username);
+            try {
+                mailService.send(username, "Excplain.CC - reset password", createResetEmailMessage(generateResetPasswordLink(user)));
+                return LoginServiceResult.RESET_EMAIL_SENT;
+            } catch (MessagingException e) {
+               throw new TechnicalException(e);
+            }
+        }else{
+            return LoginServiceResult.EMAIL_NOT_EXISTS;
+        }
+    }
+
+    public LoginServiceResult changePassword(String username, String newPassword, String key) {
+        if(isUserExists(username)){
+            User user = loadUserFromDatabase(username);
+            String serverActivationKey = generateActivationKey(username);
+            if(serverActivationKey.equals(key)){
+                user.setPassword(newPassword);
+                commonDao.saveOrUpdate(user);
+                return LoginServiceResult.PASSWORD_CHANGED;
+            }else{
+              return LoginServiceResult.WRONG_RESET_KEY;
+            }
+        }else{
+            return LoginServiceResult.EMAIL_NOT_EXISTS;
+        }
+    }
+
+    public boolean isUserExists(String username) {
+        int count = commonDao.countByHQL("select count(*) from User u where u.username = :username", "username", username);
+        LOG.info(String.valueOf(count));
+        return count > 0;
     }
 }

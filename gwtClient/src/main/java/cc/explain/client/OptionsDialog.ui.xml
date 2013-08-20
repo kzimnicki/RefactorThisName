@@ -18,21 +18,12 @@
                             <g:Label styleName="help-inline">Common words</g:Label>
                         </div>
                     </div>
-                    <script src='ui/html5slider.js'></script>
-
-                    <!--<div class="control-group">
-                        <label class="control-label">Text template:</label>
-
-                        <div class="controls">
-                            <g:TextBox ui:field="textTemplate" styleName="input span5 focused" text=""/>
-                        </div>
-                    </div>-->
                     <div class="control-group">
                         <label class="control-label">Subtitle template:</label>
 
                         <div class="controls">
                             <g:TextBox ui:field="subtitleTemplate" styleName="input span5 focused" text=""></g:TextBox>
-                            <g:Button ui:field="preview" styleName="btn">Preview</g:Button>
+                            <g:Button ui:field="subtitlePreview" styleName="btn">Preview</g:Button>
                         </div>
                     </div>
 
@@ -49,6 +40,7 @@
 
                         <div class="controls">
                             <g:TextBox ui:field="phrasalVerbTemplate" styleName="input span5 focused" text=""></g:TextBox>
+                            <g:Button ui:field="phrasalVerbPreview" styleName="btn">Preview</g:Button>
                         </div>
                     </div>
 

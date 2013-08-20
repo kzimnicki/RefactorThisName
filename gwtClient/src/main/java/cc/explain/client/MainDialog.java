@@ -43,21 +43,22 @@ public class MainDialog extends CafaWidget implements Dialog {
     @UiField
     HTMLPanel errorPanel;
 
+    @UiField
+    Label popupTitle;
+
     private Element lastClicked = new Anchor().getElement();
 
 	public MainDialog() {
 		super();
         initErrorHandler();
 		initWidget(uiBinder.createAndBindUi(this));
+        loginDropDown.init();
 	}
 
     public void setDefaultDialog(DialogName dialogName){
         Widget widget = getController().getWidget(dialogName);
         container.add(widget);
     }
-
-	public void init() {
-	}
 
     @UiHandler("options")
 	public void optionsClick(ClickEvent e) {
@@ -114,13 +115,22 @@ public class MainDialog extends CafaWidget implements Dialog {
 	}
 
     public void handleError(String errorData){
+       showPopup("Error", errorData);
+    }
+
+    public void infoPopup(String title, String info){
+        showPopup(title, info);
+    }
+
+    private void showPopup(String title, String info){
         DOM.getElementById("POPUP").setAttribute("style","display:block");
         errorPanel.clear();
-        String[] messages = errorData.split("\\|");
+        popupTitle.setText(title);
+        String[] messages = info.split("\\|");
         for(String m : messages){
             errorPanel.add(new InlineHTML(m));
         }
-        if("Bad login or password".equals(errorData)){
+        if("Bad login or password".equals(info)){
             getController().getEventBus().fireEvent(new AuthenticationErrorEvent());
         }
     }

@@ -80,7 +80,7 @@
             <div>
                 <div id="POPUP" class="modal hide fade in" style="display: none;">
                     <div class="modal-header">
-                        <h3>Error</h3>
+                        <h3><g:Label ui:field="popupTitle" /></h3>
                     </div>
                     <g:HTMLPanel ui:field="errorPanel" styleName="modal-body"/>
                     <div class="modal-footer">
