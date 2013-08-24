@@ -117,7 +117,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
 
     @UiHandler("subtitlePreview")
     public void subtitlePreviewClick(ClickEvent e) {
-        String exampleSubtitle = "<div style='color:white; background-color: black;'>This is example## subtitle.</div>";
+        String exampleSubtitle = "<div style='color:white; background-color: black; text-align: center;'>This is example## subtitle.</div>";
         String pattern = subtitleTemplate.getText().replace("@@TRANSLATED_TEXT@@","przykład");
         exampleSubtitle = exampleSubtitle.replace("##",pattern);
         getController().getMainDialog().infoPopup("Preview", exampleSubtitle);
@@ -125,7 +125,7 @@ public class OptionsDialog extends CafaWidget implements Dialog {
 
     @UiHandler("phrasalVerbPreview")
     public void phrasalVerbPreviewClick(ClickEvent e) {
-        String example = "<div style='color:white; background-color: black;'>I give up!<br /> ##</div>";
+        String example = "<div style='color:white; background-color: black; text-align: center;'>I give up!<br /> ##</div>";
         String pattern = phrasalVerbTemplate.getText().replace("@@TRANSLATED_TEXT@@","give up = poddawać się");
         example = example.replace("##",pattern);
         getController().getMainDialog().infoPopup("Preview", example);

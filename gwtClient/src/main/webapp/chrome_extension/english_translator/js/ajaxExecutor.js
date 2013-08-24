@@ -29,6 +29,7 @@ this.setup = function() {
                 xhr.setRequestHeader("Authorization", "Basic " + getBase64());
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                  commonUtils.hideDimmer();
                   errorHandling(xhr);
             }
         }
@@ -80,8 +81,6 @@ this.createUrl = function(wordsArray) {
 }
 
 ajaxExecutor.sendTranslatedWords = function(translatedMapJSON, callback) {
-    console.log(translatedMapJSON);
-    console.log(JSON.stringify(translatedMapJSON));
     setup();
     $.ajax({
         url: SERVER_URL + "app/translatedWords",
@@ -155,7 +154,7 @@ ajaxExecutor.resetPassword = function(username, callback) {
         url: SERVER_URL + "app/resetPassword",
         data: JSON.stringify(username),
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).success(commonUtils.hideDimmer());
 }
 
 
@@ -165,7 +164,7 @@ ajaxExecutor.changePassword = function(username, password, key, callback) {
         url: SERVER_URL + "app/changePassword",
         data: '{"username":"' + username + '", "newPassword":"'+password+'", "key":"'+key+'"}',
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).success(commonUtils.hideDimmer());
 }
 
 ajaxExecutor.login = function(username, password, callback) {
@@ -174,7 +173,7 @@ ajaxExecutor.login = function(username, password, callback) {
         url: SERVER_URL + "app/login",
         data: '{"username":"' + username + '", "password": "' + password + '"}',
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).success(commonUtils.hideDimmer());
 }
 
 
