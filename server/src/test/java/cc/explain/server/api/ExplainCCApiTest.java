@@ -2,6 +2,7 @@ package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
 import cc.explain.server.dto.DataToTranslateDTO;
+import cc.explain.server.dto.ResetPasswordDTO;
 import cc.explain.server.dto.WordDetailDTO;
 import cc.explain.server.model.Configuration;
 import cc.explain.server.model.User;
@@ -424,8 +425,12 @@ public class ExplainCCApiTest {
     @Test
     public void testChangePassword() throws Exception {
         User user = createRegisterActivateAndLoginUser();
+        ResetPasswordDTO dto = new ResetPasswordDTO();
+        dto.setUsername(user.getUsername());
+        dto.setNewPassword("abcdef");
+        dto.setKey("1710261a5bc69ce1221c5d857b3c3f7f");
 
-        LoginServiceResult result = api.changePassword(user.getUsername(),"abcdef", "1710261a5bc69ce1221c5d857b3c3f7f");
+        LoginServiceResult result = api.changePassword(dto);
 
         assertEquals(LoginServiceResult.PASSWORD_CHANGED,result);
         user = userService.loadUserFromDatabase(user.getUsername());

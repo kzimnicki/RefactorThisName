@@ -25,8 +25,6 @@ public class Controller implements ValueChangeHandler<String> {
         this.eventBus = eventBus;
     }
 
-
-
     private MainDialog mainDialog;
 
 	public Controller(MainDialog mainDialog, EventBus eventBus) {

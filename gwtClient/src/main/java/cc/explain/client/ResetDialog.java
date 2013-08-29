@@ -6,7 +6,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.PasswordTextBox;
@@ -28,8 +27,6 @@ public class ResetDialog extends CafaWidget implements Dialog {
 
     @UiField
     Button reset;
-
-    private MainDialog mainDialog;
 
     private String key;
 
@@ -61,7 +58,7 @@ public class ResetDialog extends CafaWidget implements Dialog {
 
     void resetCallback(String data) {
         if("PASSWORD_CHANGED".equals(data)){
-            getController().goTo(DialogName.WATCH);
+            Window.Location.assign("https://explain.cc");
         }
     }
 

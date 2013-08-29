@@ -19,7 +19,7 @@ import javax.mail.MessagingException;
 public class UserService {
     public static final int MAGIC_NUMBER = 13;
     public static final String URL_PATTERN = "https://explain.cc/app/activate/%s/%s";
-    public static final String RESET_URL_PATTERN = "https://explain.cc/?key=%s&username=%s#RESET";
+    public static final String RESET_URL_PATTERN = "https://explain.cc/?key=%s&username=%s";
 
     private static Logger LOG = LoggerFactory.getLogger(UserService.class);
 

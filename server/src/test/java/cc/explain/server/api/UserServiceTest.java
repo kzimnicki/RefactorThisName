@@ -68,11 +68,11 @@ public class UserServiceTest {
 
     @Test
     public void shouldCreateResetEmailMessage(){
-        String link = "https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=testuser3@gmail.com#RESET";
+        String link = "https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=testuser3@gmail.com";
 
         String message = new UserService().createResetEmailMessage(link);
 
-        assertEquals("Please reset password: https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=testuser3@gmail.com#RESET", message);
+        assertEquals("Please reset password: https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=testuser3@gmail.com", message);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class UserServiceTest {
 
         String link = new UserService().generateResetPasswordLink(user);
 
-        assertEquals("https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=user@gmail.com#RESET", link);
+        assertEquals("https://explain.cc/?key=cba1f2d695a5ca39ee6f343297a761a4&username=user@gmail.com", link);
     }
 
 }
