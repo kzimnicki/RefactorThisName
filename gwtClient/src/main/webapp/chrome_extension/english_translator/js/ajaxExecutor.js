@@ -29,7 +29,6 @@ this.setup = function() {
                 xhr.setRequestHeader("Authorization", "Basic " + getBase64());
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                  commonUtils.hideDimmer();
                   errorHandling(xhr);
             }
         }
@@ -96,7 +95,7 @@ ajaxExecutor.sendExcludedWords = function(excludedWordsJSON, callback) {
         url: SERVER_URL + EXCLUDED_WORDS,
         data: JSON.stringify(excludedWordsJSON),
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.removeExcludedWord = function(word, callback) {
@@ -106,7 +105,7 @@ ajaxExecutor.removeExcludedWord = function(word, callback) {
         data: JSON.stringify(word),
         type: AJAX_TYPE_DELETE,
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.loadExcludedWords = function(callback) {
@@ -115,7 +114,7 @@ ajaxExecutor.loadExcludedWords = function(callback) {
         url: SERVER_URL + EXCLUDED_WORDS,
         type: AJAX_TYPE_GET,
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.exportExcludedWords = function(callback) {
@@ -125,7 +124,7 @@ ajaxExecutor.exportExcludedWords = function(callback) {
         type: AJAX_TYPE_GET,
         dataType: 'HTML',
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.exportIncludedWords = function(callback) {
@@ -135,7 +134,7 @@ ajaxExecutor.exportIncludedWords = function(callback) {
         type: AJAX_TYPE_GET,
         dataType: 'HTML',
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.register = function(username, password, callback, errorCalback) {
@@ -145,7 +144,7 @@ ajaxExecutor.register = function(username, password, callback, errorCalback) {
         data: '{"username":"' + username + '", "password": "' + password + '"}',
         success: callback,
         error:  errorCalback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.resetPassword = function(username, callback) {
@@ -154,7 +153,7 @@ ajaxExecutor.resetPassword = function(username, callback) {
         url: SERVER_URL + "app/resetPassword",
         data: JSON.stringify(username),
         success: callback
-    }).success(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 
@@ -164,7 +163,7 @@ ajaxExecutor.changePassword = function(username, password, key, callback) {
         url: SERVER_URL + "app/changePassword",
         data: '{"username":"' + username + '", "newPassword":"'+password+'", "key":"'+key+'"}',
         success: callback
-    }).success(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.login = function(username, password, callback) {
@@ -173,7 +172,7 @@ ajaxExecutor.login = function(username, password, callback) {
         url: SERVER_URL + "app/login",
         data: '{"username":"' + username + '", "password": "' + password + '"}',
         success: callback
-    }).success(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 
@@ -183,7 +182,7 @@ ajaxExecutor.loadOptions = function(callback) {
         url: SERVER_URL + OPTIONS,
         type: AJAX_TYPE_GET,
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 
@@ -193,7 +192,7 @@ ajaxExecutor.saveOptions = function(optionsData, callback) {
         url: SERVER_URL + OPTIONS,
         data: optionsData,
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.sendIncludedWords = function(includedWordsJSON, callback) {
@@ -202,7 +201,7 @@ ajaxExecutor.sendIncludedWords = function(includedWordsJSON, callback) {
         url: SERVER_URL + INCLUDED_WORDS,
         data: JSON.stringify(includedWordsJSON),
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.removeIncludedWord = function(word, callback) {
@@ -212,7 +211,7 @@ ajaxExecutor.removeIncludedWord = function(word, callback) {
         data: JSON.stringify(word),
         type: AJAX_TYPE_DELETE,
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.loadIncludedWords = function(callback) {
@@ -221,7 +220,7 @@ ajaxExecutor.loadIncludedWords = function(callback) {
         url: SERVER_URL + INCLUDED_WORDS,
         type: AJAX_TYPE_GET,
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 
@@ -231,7 +230,7 @@ ajaxExecutor.sendIncludedPhrasalVerb = function(includedPhrasalVerbJSON, callbac
         url: SERVER_URL + INCLUDED_PHRASAL_VERB,
         data: JSON.stringify(includedPhrasalVerbJSON),
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.removeIncludedPhrasalVerb = function(phrasalVerb, callback) {
@@ -241,7 +240,7 @@ ajaxExecutor.removeIncludedPhrasalVerb = function(phrasalVerb, callback) {
         data: phrasalVerb,
         type: AJAX_TYPE_DELETE,
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.loadIncludedPhrasalVerb = function(callback) {
@@ -250,7 +249,7 @@ ajaxExecutor.loadIncludedPhrasalVerb = function(callback) {
         url: SERVER_URL + INCLUDED_PHRASAL_VERB,
         type: AJAX_TYPE_GET,
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 
@@ -260,7 +259,7 @@ ajaxExecutor.sendExcludedPhrasalVerb = function(excludedPhrasalVerbJSON, callbac
         url: SERVER_URL + EXCLUDED_PHRASAL_VERB,
         data: JSON.stringify(excludedPhrasalVerbJSON),
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.removeExcludedPhrasalVerb = function(phrasalVerb, callback) {
@@ -270,7 +269,7 @@ ajaxExecutor.removeExcludedPhrasalVerb = function(phrasalVerb, callback) {
         data: phrasalVerb,
         type: AJAX_TYPE_DELETE,
         success: callback
-    }).done(commonUtils.hideDimmer());
+    }).done(commonUtils.hideDimmer);
 }
 
 ajaxExecutor.loadExcludedPhrasalVerb = function(callback) {
@@ -279,7 +278,7 @@ ajaxExecutor.loadExcludedPhrasalVerb = function(callback) {
         url: SERVER_URL + EXCLUDED_PHRASAL_VERB,
         type: AJAX_TYPE_GET,
         success: callback
-    }).success(commonUtils.hideDimmer);
+    }).done(commonUtils.hideDimmer);
 }
 
 
