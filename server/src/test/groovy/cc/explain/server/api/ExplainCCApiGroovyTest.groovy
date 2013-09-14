@@ -328,8 +328,9 @@ class ExplainCCApiGroovyTest extends Specification {
         """5
            |00:00:12,584 --> 00:00:14,131
            |downstairs = na dół
+           |<font color="red">get out = wyleźć</font>
            |<font color="red">getting up = wstawania</font>
-           |<font color="red">get out = wyjść</font>
+           |
            |
            |""".stripMargin() == translated.stripMargin()
     }
