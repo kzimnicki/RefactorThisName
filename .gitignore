@@ -24,3 +24,5 @@ gwtClient/war/ExplainCC
 config/jndi.properties
 config/context.xml
 *.iml
+*.ipr
+*.iws
