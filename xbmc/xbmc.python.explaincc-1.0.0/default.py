@@ -14,11 +14,11 @@ import hashlib
 
 TRANSLATED_SUBTITLE_FILE_NAME = "translatedSubtitle.srt"
 PLUGIN_SUBTITLE_FILENAME = "temp_sub.en.srt"
-PLUGIN_SUBTITLE_PATH = xbmc.translatePath('special://userdata/addon_data/script.xbmc.subtitles/sub_stream/temp_sub.en.srt')
+PLUGIN_SUBTITLE_PATH = xbmc.translatePath('special://masterprofile/addon_data/script.xbmc.subtitles/sub_stream/temp_sub.en.srt')
 TRANSLATING_TEXT = 'Translating...'
 QUICK_TRANSLATE_URL ='https://explain.cc/app/quickSubtitleTranslate'
 HEAD = 'Explain.CC'
-TRANSLATED_SUBTITLE_FILENAME = xbmc.translatePath('special://userdata/addon_data/translatedSubtitle.srt')
+TRANSLATED_SUBTITLE_FILENAME = xbmc.translatePath('special://masterprofile/addon_data/translatedSubtitle.srt')
 EMPTY_STRING = ""
 
 
@@ -32,6 +32,8 @@ def isTranslatedSubtitles(subtitlesName):
     return TRANSLATED_SUBTITLE_FILE_NAME == subtitlesName
 	
 def readFile(path) :
+	print path  # Bug on ubuntu, can't see the file.
+	print os.path.isfile(path)
 	if os.path.isfile(path) :
 		f = open(path,'r')
 		content = f.read()
