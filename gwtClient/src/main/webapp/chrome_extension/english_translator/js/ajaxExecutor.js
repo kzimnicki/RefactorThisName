@@ -5,7 +5,7 @@ var AJAX_TYPE_GET = 'GET';
 var AJAX_TYPE_DELETE = 'DELETE';
 var CURRENT_TYPE_JSON = 'application/json; charset=UTF-8';
 var DATA_TYPE_JSON = 'JSON'
-var SERVER_URL = "../";
+var SERVER_URL = "";
 //var SERVER_URL = "http://localhost:8080/RefactorThisName/"
 var TRANSLATE_URL = 'http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&sl=en&tl=pl'; //96 chars +  (word size +3 chars) * words counts
 var isLogged = false;

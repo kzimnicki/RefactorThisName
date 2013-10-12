@@ -11,6 +11,7 @@ import java.util.Set;
  */
 public class WordDetailDTO {
     private String rootWord;
+    private int frequency;
     private Set<String> wordFamily = new HashSet<String>();
     private String addDate;
 
@@ -36,5 +37,13 @@ public class WordDetailDTO {
 
     public void addWordFamily(String wordFamily) {
         getWordFamily().add(wordFamily);
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(int frequency) {
+        this.frequency = frequency;
     }
 }

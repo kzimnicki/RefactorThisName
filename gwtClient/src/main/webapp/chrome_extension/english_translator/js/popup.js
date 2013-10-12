@@ -58,7 +58,7 @@ popup.createExcludedSiteRows = function(wordFamilies) {
     var rows = [];
     for (var i=0; i<wordFamilies.length; i++) {
         var wordFamilyArray = (wordFamilies[i].wordFamily);
-        var row = [wordFamilies[i].rootWord, createWordFamilyString(wordFamilyArray),wordFamilies[i].addDate,'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">I don\'t know this word</a>'];
+        var row = [wordFamilies[i].rootWord, createWordFamilyString(wordFamilyArray), wordFamilies[i].frequency,wordFamilies[i].addDate,'<a class="btn btn-danger" href="#" onclick="popup.removeExcludedWord(this)">I don\'t know this word</a>'];
         rows.push(row);
     }
     return rows;
@@ -68,7 +68,7 @@ popup.createIncludedSiteRows = function(wordFamilies) {
     var rows = [];
     for (var i=0; i<wordFamilies.length; i++) {
         var wordFamilyArray = (wordFamilies[i].wordFamily);
-        var row = [wordFamilies[i].rootWord, createWordFamilyString(wordFamilyArray),wordFamilies[i].addDate,'<a class="btn btn-danger" href="#" onclick="popup.removeIncludedWord(this)">I know this word</a>'];
+        var row = [wordFamilies[i].rootWord, createWordFamilyString(wordFamilyArray), wordFamilies[i].frequency, wordFamilies[i].addDate,'<a class="btn btn-danger" href="#" onclick="popup.removeIncludedWord(this)">I know this word</a>'];
         rows.push(row);
     }
     return rows;
@@ -103,6 +103,7 @@ popup.createSiteTable = function(rows, title, id) {
         "aoColumns":[
             { "sTitle": title, "sWidth": "150px"},
             { "sTitle": "Word family", "sWidth": "400px"},
+            { "sTitle": "Popularity", "sWidth": "100px"},
             { "sTitle": "Date", "sWidth": "200px"},
             { "sTitle": "action", "sWidth": "220px"}
         ]
@@ -142,9 +143,9 @@ popup.createTable = function(wordsMap) {
 			"sSearch": "Search all columns:"
 		},
         "aoColumns":[
-            { "sTitle": "words", "sWidth": "30px" },
-            { "sTitle": "freq", "sWidth": "40px"},
-            { "sTitle": "action", "sWidth": "30px"}
+            { "sTitle": "Word", "sWidth": "30px" },
+            { "sTitle": "Popularity", "sWidth": "40px"},
+            { "sTitle": "Action", "sWidth": "30px"}
 
 
         ]

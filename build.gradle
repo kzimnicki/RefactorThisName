@@ -75,5 +75,10 @@ task explodedDist(dependsOn: assemble) << {
     }
 }
 
+task deployToTomcat(type: Copy) {
+    from war
+    into "/srv/www/lighttpd/english_translator/v1/tomcat/webapps"
+}
+
 [tomcatRun, tomcatRunWar]*.configFile = file(System.properties["user.home"]+'/.ecc/context.xml')
 [tomcatRun, tomcatStop]*.stopKey = 'stopKey'

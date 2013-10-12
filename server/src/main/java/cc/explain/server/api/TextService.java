@@ -122,6 +122,7 @@ public class TextService {
             for (WordRelation wr : wordRelations) {
                 if(!StringUtils.equals(wordDetail.getRootWord(), wr.getRootWord().getRootWord().getValue())){
                     wordDetail = new WordDetailDTO();
+                    wordDetail.setFrequency(wr.getRootWord().getRootWord().getFrequency());
                     wordDetail.setRootWord(wr.getRootWord().getRootWord().getValue());
                     wordDetail.setAddDate(wordValues.get(wr.getRootWord().getRootWord().getValue()));
                     wd.add(wordDetail);
