@@ -1,0 +1,15 @@
+group = 'dvbtCC'
+description = 'dvbtCC'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+dependencies {
+//    compile 'org.eclipse.jetty:jetty-server:9.1.0.M0'
+//    compile 'org.eclipse.jetty:jetty-servlet:9.1.0.M0'
+//    compile 'org.eclipse.jetty:jetty-websocket:8.1.13.v20130916'
+//    compile 'org.eclipse.jetty:jetty-io:9.1.0.M0'
+
+    compile group: 'org.eclipse.jetty.aggregate', name: 'jetty-all', version: '8.1.3.v20120416'
+
+}

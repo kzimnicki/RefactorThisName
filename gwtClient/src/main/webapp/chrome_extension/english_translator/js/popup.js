@@ -102,9 +102,9 @@ popup.createSiteTable = function(rows, title, id) {
         "bDestroy":true,
         "aoColumns":[
             { "sTitle": title, "sWidth": "150px"},
-            { "sTitle": "Word family", "sWidth": "400px"},
-            { "sTitle": "Popularity", "sWidth": "100px"},
-            { "sTitle": "Date", "sWidth": "200px"},
+            { "sTitle": "Word family", "sWidth": "380px"},
+            { "sTitle": "Popularity", "sWidth": "80px"},
+            { "sTitle": "Date", "sWidth": "180px"},
             { "sTitle": "action", "sWidth": "220px"}
         ]
     });

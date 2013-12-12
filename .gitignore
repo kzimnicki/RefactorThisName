@@ -26,3 +26,4 @@ config/context.xml
 *.iml
 *.ipr
 *.iws
+out/
