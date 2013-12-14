@@ -20,20 +20,30 @@ public class TranslateService {
     @Autowired
     TextDAO textDAO;
 
-    public static final String GOOGLE_API_URL = "http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=pl&sl=en&ie=UTF-8&oe=UTF-8";
-    public static final String PARAMETER_KEY = "q";
+    private static final String GOOGLE_API_URL_PATTERN = "http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=%s&sl=%s&ie=UTF-8&oe=UTF-8";
+    private static final String GOOGLE_API_URL_ENGLISH = String.format(GOOGLE_API_URL_PATTERN, "pl","en");
+    private static final String GOOGLE_API_URL_GERMAN = String.format(GOOGLE_API_URL_PATTERN, "pl","de");
+    private static final String PARAMETER_KEY = "q";
 
     public String[] googleTranslate(String[] englishWords){
+        return translate(englishWords, GOOGLE_API_URL_ENGLISH);
+    }
+
+    private String[] translate(String[] englishWords, String apiUrl) {
         String[] results = {};
         if(englishWords.length > 0){
             Rest rest = Rest.get()
-            .url(GOOGLE_API_URL);
+            .url(apiUrl);
             for (String word : englishWords){
                 rest.addParameter(PARAMETER_KEY, word);
             }
             results = rest.execute();
         }
         return results;
+    }
+
+    public String[] googleTranslateFromGerman(String[] germanWords){
+        return translate(germanWords, GOOGLE_API_URL_GERMAN);
     }
 
     public Map<String, String> translate(List<String> englishWords){
