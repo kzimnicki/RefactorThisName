@@ -25,4 +25,20 @@ public class WordFamily extends EntityObject {
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<Word> family = new ArrayList<Word>();
+
+    public List<Word> getFamily() {
+        return family;
+    }
+
+    public void setFamily(List<Word> family) {
+        this.family = family;
+    }
+
+    public Word getRoot() {
+        return root;
+    }
+
+    public void setRoot(Word root) {
+        this.root = root;
+    }
 }

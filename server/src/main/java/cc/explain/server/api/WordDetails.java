@@ -1,7 +1,5 @@
 package cc.explain.server.api;
 
-import lombok.Data;
-
 public class WordDetails {
 
     private Integer frequency;

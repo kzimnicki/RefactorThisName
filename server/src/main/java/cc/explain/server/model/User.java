@@ -125,6 +125,14 @@ public class User extends AuditableEntityObject {
         this.includedWords = includedWords;
     }
 
+    public Configuration getConfig() {
+        return config;
+    }
+
+    public void setConfig(Configuration config) {
+        this.config = config;
+    }
+
 //    public void addIncludedPhrasalVerb(PhrasalVerb phrasalVerb){
 //        if(phrasalVerb.getId() != null){
 //            getIncludedPhrasalVerbs().add(phrasalVerb);

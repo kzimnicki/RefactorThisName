@@ -9,7 +9,6 @@ import cc.explain.server.utils.StringUtils;
 import cc.explain.server.xml.LoginResponse;
 import cc.explain.server.xml.SearchResponse;
 import cc.explain.server.xml.TicketResponse;
-import lombok.Data;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.xml.bind.*;
