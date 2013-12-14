@@ -1,0 +1,13 @@
+Arrow=4
+BLOCK=5
+BLOCKS=6
+Dashes=7
+LINE=8
+LINES=9
+LineBreak=10
+Number=11
+Other=12
+Spaces=13
+TIME_RANGE=14
+Time=15
+WORD=16
