@@ -1,9 +1,6 @@
 package cc.explain.server.model;
 
 import cc.explain.server.core.WordType;
-import lombok.Data;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;

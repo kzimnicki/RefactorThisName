@@ -1,7 +1,6 @@
 package cc.explain.server.model;
 
 import cc.explain.server.subtitle.SubtitleProcessor;
-import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
@@ -17,7 +16,6 @@ import javax.validation.constraints.Min;
  * Time: 20:53
  */
 @Entity
-@Data
 @Table(name = "configuration")
 public class Configuration extends AuditableEntityObject{
 
@@ -42,4 +40,60 @@ public class Configuration extends AuditableEntityObject{
 
     @Enumerated(EnumType.STRING)
     private SubtitleProcessor subtitleProcessor = SubtitleProcessor.IN_TEXT;
+
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    public String getTextTemplate() {
+        return textTemplate;
+    }
+
+    public void setTextTemplate(String textTemplate) {
+        this.textTemplate = textTemplate;
+    }
+
+    public String getSubtitleTemplate() {
+        return subtitleTemplate;
+    }
+
+    public void setSubtitleTemplate(String subtitleTemplate) {
+        this.subtitleTemplate = subtitleTemplate;
+    }
+
+    public String getPhrasalVerbTemplate() {
+        return phrasalVerbTemplate;
+    }
+
+    public void setPhrasalVerbTemplate(String phrasalVerbTemplate) {
+        this.phrasalVerbTemplate = phrasalVerbTemplate;
+    }
+
+    public boolean isPhrasalVerbAdded() {
+        return isPhrasalVerbAdded;
+    }
+
+    public void setPhrasalVerbAdded(boolean isPhrasalVerbAdded) {
+        this.isPhrasalVerbAdded = isPhrasalVerbAdded;
+    }
+
+    public SubtitleProcessor getSubtitleProcessor() {
+        return subtitleProcessor;
+    }
+
+    public void setSubtitleProcessor(SubtitleProcessor subtitleProcessor) {
+        this.subtitleProcessor = subtitleProcessor;
+    }
 }

@@ -1,7 +1,6 @@
 package cc.explain.server.model;
 
 
-import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -12,7 +11,6 @@ import javax.persistence.*;
  * Time: 21:36
  */
 @Entity
-@Data
 @Table(name = "translation",uniqueConstraints = {@UniqueConstraint(columnNames = {"sourceLang", "transLang", "sourceWord"})})
 public class Translation extends EntityObject {
 
@@ -27,4 +25,35 @@ public class Translation extends EntityObject {
 
     private String transWord;
 
+    public Language getSourceLang() {
+        return sourceLang;
+    }
+
+    public void setSourceLang(Language sourceLang) {
+        this.sourceLang = sourceLang;
+    }
+
+    public Language getTransLang() {
+        return transLang;
+    }
+
+    public void setTransLang(Language transLang) {
+        this.transLang = transLang;
+    }
+
+    public String getSourceWord() {
+        return sourceWord;
+    }
+
+    public void setSourceWord(String sourceWord) {
+        this.sourceWord = sourceWord;
+    }
+
+    public String getTransWord() {
+        return transWord;
+    }
+
+    public void setTransWord(String transWord) {
+        this.transWord = transWord;
+    }
 }

@@ -8,5 +8,4 @@ package cc.explain.server.model;
 public enum Language {
     en,
     pl;
-
 }

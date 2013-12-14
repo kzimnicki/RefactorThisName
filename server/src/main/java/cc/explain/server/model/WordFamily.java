@@ -1,8 +1,5 @@
 package cc.explain.server.model;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -22,14 +19,10 @@ public class WordFamily extends EntityObject {
 
     public static WordFamily EMPTY = new WordFamily();
 
-    @Getter
-    @Setter
     @NotNull
     @OneToOne
     private Word root;
 
-    @Getter
-    @Setter
     @OneToMany(fetch = FetchType.EAGER)
     private List<Word> family = new ArrayList<Word>();
 }
