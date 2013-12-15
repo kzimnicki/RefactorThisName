@@ -4,13 +4,11 @@ import cc.explain.server.api.TranslateService;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
-import com.google.common.io.LineProcessor;
 import redis.clients.jedis.Jedis;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,7 +20,7 @@ public class RedisService {
 
         private Jedis jedis;
 
-    void init(){
+    public void init(){
         jedis = new Jedis("localhost");
         jedis.connect();
     }
@@ -31,11 +29,11 @@ public class RedisService {
         jedis.set(key, value);
     }
 
-    String get(String key){
+    public String get(String key){
         return jedis.get(key);
     }
 
-    void release(){
+    public void release(){
         jedis.disconnect();
     }
 

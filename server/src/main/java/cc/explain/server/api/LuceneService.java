@@ -1,5 +1,6 @@
 package cc.explain.server.api;
 
+import cc.explain.server.core.lucene.StandardAnalyzerCaseSensitive;
 import org.apache.commons.io.IOUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -13,10 +14,7 @@ import org.apache.lucene.util.Version;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * User: kzimnick
@@ -27,7 +25,7 @@ public class LuceneService {
 
 
     private static final Version LUCENE_VER = Version.LUCENE_30;
-    private HashSet<String> stopWordsSet;
+    private Set<String> stopWordsSet = Collections.emptySet();
 
     private RAMDirectory idx;
 
@@ -71,6 +69,31 @@ public class LuceneService {
             String termText = term.text();
             if (termText.matches("[A-Za-z-]+") && termText.length() > 2) {
                 list.add(termText.toLowerCase());
+            }
+        }
+        return list;
+    }
+    //TODO refactor
+    public List<String> getGermanWords(Set<String> excludeSet, String text) throws IOException {
+        Set<String> userWordsSet = new HashSet<String>();
+        userWordsSet.addAll(stopWordsSet);
+        userWordsSet.addAll(excludeSet);
+        StandardAnalyzerCaseSensitive standardAnalyzer = new StandardAnalyzerCaseSensitive(LUCENE_VER, userWordsSet);
+        idx = new RAMDirectory();
+        IndexWriter writer = new IndexWriter(idx, standardAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+        writer.addDocument(createDocument(text));
+        writer.optimize();
+        writer.close();
+
+        IndexReader reader = IndexReader.open(idx);
+        TermEnum terms = reader.terms();
+
+        List<String> list = new LinkedList<String>();
+        while (terms.next()) {
+            Term term = terms.term();
+            String termText = term.text();
+            if (termText.matches("[A-Za-z-äöüß]+") && termText.length() > 2) {
+                list.add(termText);
             }
         }
         return list;
