@@ -1,7 +1,9 @@
 package cc.explain.german;
 
 import cc.explain.server.api.TranslateService;
+import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import redis.clients.jedis.Jedis;
@@ -33,6 +35,10 @@ public class RedisService {
         return jedis.get(key);
     }
 
+    public String getWithEngPrefix(String key){
+        return jedis.get(String.format("EN:%s",key));
+    }
+
     public void release(){
         jedis.disconnect();
     }
@@ -44,13 +50,8 @@ public class RedisService {
         Splitter splitter = Splitter.onPattern("[(,)]");
         List germanWords = new LinkedList();
 
-        RedisService redisService = new RedisService();
+        final RedisService redisService = new RedisService();
         redisService.init();
-
-
-//        System.out.println(redisService.get("knuten"));
-//
-//        System.exit(0);
 
         for(String word : lines) {
             if(word.contains("(")){
@@ -74,15 +75,28 @@ public class RedisService {
         }
         System.out.println(germanWords.size());
         System.out.println(lines.size());
-        List<List<String>> partition = Lists.partition(germanWords, 20);
+        List<List<String>> partition = Lists.partition(germanWords, 160);
 
         for(int i = partition.size()-1; i>= 0; i--){
             System.err.println("Partition: " + i);
-            String[] partToTranslate = partition.get(i).toArray(new String[]{});
-            String[] translated = service.googleTranslateFromGerman(partToTranslate);
+            List<String> partToTranslate = partition.get(i);
+            List<String> filtered =Lists.newArrayList(Iterables.filter(partToTranslate, new Predicate<String>() {
+                @Override
+                public boolean apply(String key) {
+                    String value = redisService.getWithEngPrefix(key);
+                    return value.equals(key);
+                }
+            }));
+            System.err.println("filtered: " + filtered.size());
+            String[] filteredArray =  filtered.toArray(new String[filtered.size()]);
+            String[] translated = service.googleTranslateFromGermanToEnglish(filteredArray);
             for(int j=0; j<translated.length; j++ ){
-                System.out.println(partToTranslate[j] +" - "+ translated[j]);
-                redisService.put(partToTranslate[j], translated[j]);
+                System.out.println(filteredArray[j] +" - "+ translated[j]);
+                if(!filteredArray[j].equals(translated[j])){
+                    System.exit(0);
+                    redisService.put("EN"+":"+filteredArray[j], translated[j]);
+                }
+//
             }
         }
 

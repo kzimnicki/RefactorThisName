@@ -4,6 +4,9 @@ description = 'dvbtCC'
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'groovy'
+apply plugin: 'application'
+
+mainClassName = System.getProperty('mainClass') // to run from command line
 
 dependencies {
     compile 'redis.clients:jedis:2.2.1'

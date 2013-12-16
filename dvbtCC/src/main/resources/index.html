@@ -13,11 +13,8 @@
         }
 
         var server = {
-            connect : function() {
-//                var location = document.location.toString().replace('http://',
-//                        'ws://').replace('https://', 'wss://').replace('test.html','servlet/WebSocket');
-                var location = 'ws://localhost:8888/app/'
-                this._ws = new WebSocket(location);
+            connect : function(url) {
+                this._ws = new WebSocket(url);
                 this._ws.onopen = this._onopen;
                 this._ws.onmessage = this._onmessage;
                 this._ws.onclose = this._onclose;
@@ -62,12 +59,15 @@
             border: 0px solid black;
         }
 
+        body {
+            background-color: black;
+        }
+
         div#messageBox {
             clear: both;
             overflow: auto;
-            background-color: #f0f0f0;
             padding: 16px;
-            border: 1px solid black;
+            color: white;
         }
 
         div#input {
@@ -94,21 +94,17 @@
 </head>
 <body>
 <div id='messageBox'></div>
-<div id='input'>
-    <div>
-        <input id='connect' class='button' type='submit' name='Connect'
-               value='Connect' />
+    <div id="control">
+        <input id='url' type='text' style="width: 350px; height: 40px; font-size:20px;" name='Connect' value="ws://192.168.2.108/app/"/>
+        <input id='connect' class='button' type='submit' name='Connect' style="height:40px; font-size:20px; " value='Connect' />
     </div>
-</div>
 <script type='text/javascript'>
     document.getElementById('connect').onclick = function(event) {
-        server.connect();
+        server.connect(document.getElementById('url').value);
+        $('#control').empty();
         return false;
     };
 </script>
 
-<p>
-    This is a demonstration of the Jetty websocket server.
-</p>
 </body>
 </html>

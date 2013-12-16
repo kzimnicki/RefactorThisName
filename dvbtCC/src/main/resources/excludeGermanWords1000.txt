@@ -2,7 +2,9 @@ der
 die
 das
 in
+ist
 und
+Und
 sein
 ein
 eine

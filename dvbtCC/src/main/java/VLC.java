@@ -11,7 +11,7 @@ public class VLC {
 
     public static BufferedReader get(){
         if(br == null){
-            ProcessBuilder builder = new ProcessBuilder("vlc", "-vvv","--ts-es-id-pid","dvb://frequency=682000000","--vbi-text","--vbi-page=150","--vbi-position=9","--no-vbi-opaque");
+            ProcessBuilder builder = new ProcessBuilder("vlc", "-vvv","--ts-es-id-pid","dvb://frequency=570000000","--vbi-text","--vbi-page=150","--vbi-position=9","--no-vbi-opaque");
             builder.redirectErrorStream(true);
             Process proc = null;
             try {

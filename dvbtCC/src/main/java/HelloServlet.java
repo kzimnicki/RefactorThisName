@@ -1,5 +1,6 @@
 import cc.explain.german.RedisService;
 import cc.explain.server.api.LuceneService;
+import cc.explain.server.utils.StringUtils;
 import com.google.common.io.Files;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
@@ -32,7 +33,7 @@ public class HelloServlet extends WebSocketServlet{
     public void init() throws ServletException {
         super.init();
         try {
-            excludedWords = new HashSet<>(Files.readLines(new File("/home/kz/dev/RefactorThisName/dvbtCC/src/main/resources/excludeGermanWords1000.txt"), Charset.defaultCharset()));
+            excludedWords = new HashSet<String>(Files.readLines(new File("/home/kz/dev/RefactorThisName/dvbtCC/src/main/resources/excludeGermanWords1000.txt"), Charset.defaultCharset()));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,11 +64,11 @@ public class HelloServlet extends WebSocketServlet{
 
                                     for(String word : words){
                                         System.out.println(word);
-                                        String translation = redisService.get(word);
+                                        String translation = redisService.getWithEngPrefix(word);
                                         if(translation == null){
-                                            translation = redisService.get(word.toLowerCase());
+                                            translation = redisService.getWithEngPrefix(word.toLowerCase());
                                         }
-                                        if(translation != null){
+                                        if(translation != null && !org.apache.commons.lang3.StringUtils.equals(translation,word)){
                                             builder.append(word + " - " + translation + "<br />");
                                         }
                                     }

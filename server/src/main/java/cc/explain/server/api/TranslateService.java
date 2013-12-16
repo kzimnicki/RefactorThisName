@@ -23,6 +23,7 @@ public class TranslateService {
     private static final String GOOGLE_API_URL_PATTERN = "http://translate.googleapis.com/translate_a/t?anno=3&client=tee&format=html&v=1.0&logld=v7&tl=%s&sl=%s&ie=UTF-8&oe=UTF-8";
     private static final String GOOGLE_API_URL_ENGLISH = String.format(GOOGLE_API_URL_PATTERN, "pl","en");
     private static final String GOOGLE_API_URL_GERMAN = String.format(GOOGLE_API_URL_PATTERN, "pl","de");
+    private static final String GOOGLE_API_URL_GERMAN_TO_ENGLISH = String.format(GOOGLE_API_URL_PATTERN, "en","de");
     private static final String PARAMETER_KEY = "q";
 
     public String[] googleTranslate(String[] englishWords){
@@ -44,6 +45,10 @@ public class TranslateService {
 
     public String[] googleTranslateFromGerman(String[] germanWords){
         return translate(germanWords, GOOGLE_API_URL_GERMAN);
+    }
+
+    public String[] googleTranslateFromGermanToEnglish(String[] germanWords){
+        return translate(germanWords, GOOGLE_API_URL_GERMAN_TO_ENGLISH);
     }
 
     public Map<String, String> translate(List<String> englishWords){
