@@ -1,5 +1,6 @@
 import cc.explain.german.RedisService;
 import cc.explain.server.api.LuceneService;
+import cc.explain.server.subtitle.SubtitleUtils;
 import cc.explain.server.utils.StringUtils;
 import com.google.common.io.Files;
 import org.eclipse.jetty.websocket.WebSocket;
@@ -61,22 +62,25 @@ public class HelloServlet extends WebSocketServlet{
                                     List<String> words = luceneService.getGermanWords(excludedWords, subtitles);
                                     System.out.println("Lucene Processing finish");
                                     StringBuilder builder = new StringBuilder();
-
-                                    for(String word : words){
+                                    String translateSubtitle = subtitles;
+                                    for(int i=0; i<words.size(); i++){
+                                        String word = words.get(i);
+                                        if(translateSubtitle.trim().startsWith(word)){
+                                            System.err.println(word);
+                                        }
                                         System.out.println(word);
-                                        String translation = redisService.getWithEngPrefix(word);
+//                                        String translation = redisService.getWithEngPrefix(word);
+                                        String translation = redisService.get(word);
                                         if(translation == null){
-                                            translation = redisService.getWithEngPrefix(word.toLowerCase());
+//                                            translation = redisService.getWithEngPrefix(word.toLowerCase());
+                                              translation = redisService.get(word.toLowerCase());
                                         }
                                         if(translation != null && !org.apache.commons.lang3.StringUtils.equals(translation,word)){
-                                            builder.append(word + " - " + translation + "<br />");
+                                            translateSubtitle = SubtitleUtils.replaceText(translateSubtitle, word, translation, "<font color='yellow'>(@@TRANSLATED_TEXT@@)</font>");
                                         }
                                     }
-                                    if(builder.length() > 0 ){
-                                        member.sendMessage(builder.toString());
-                                    }
+                                    member.sendMessage(translateSubtitle);
                                 }
-
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
