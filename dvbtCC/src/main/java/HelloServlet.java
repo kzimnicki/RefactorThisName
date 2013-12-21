@@ -1,3 +1,8 @@
+import cc.explain.german.RedisService;
+import cc.explain.server.api.LuceneService;
+import cc.explain.server.subtitle.SubtitleUtils;
+import cc.explain.server.utils.StringUtils;
+import com.google.common.io.Files;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
@@ -6,8 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Date;
-import java.util.Set;
+import java.nio.charset.Charset;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,9 +26,19 @@ public class HelloServlet extends WebSocketServlet{
     private final Set<TailorSocket> _members = new CopyOnWriteArraySet<TailorSocket>();
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
+    private final LuceneService luceneService = new LuceneService();
+    private final RedisService  redisService = new RedisService();
+    private Set<String> excludedWords;
+
     @Override
     public void init() throws ServletException {
         super.init();
+        try {
+            excludedWords = new HashSet<String>(Files.readLines(new File("/home/kz/dev/RefactorThisName/dvbtCC/src/main/resources/excludeGermanWords1000.txt"), Charset.defaultCharset()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        redisService.init();
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -31,12 +46,41 @@ public class HelloServlet extends WebSocketServlet{
                 for(TailorSocket member : _members){
                     System.out.println("Trying to send to Member!");
                     if(member.isOpen()){
-                        System.out.println("Sending!");
                         try {
                             String line;
                             while((line = br.readLine()) != null){
-                                if(line.contains("##CC##") && line.substring(74) .length() > 2)
-                                    member.sendMessage(line.substring(74));
+                                System.out.println(line);
+                                String subtitles = "";
+                                if(line.length()> 74){
+                                    subtitles = line.substring(74);
+                                }
+
+                                System.out.println(subtitles.length());
+                                System.out.println(subtitles);
+                                if(line.contains("##CC##") && subtitles.length() > 2) {
+                                    System.out.println("Lucene Processing start");
+                                    List<String> words = luceneService.getGermanWords(excludedWords, subtitles);
+                                    System.out.println("Lucene Processing finish");
+                                    StringBuilder builder = new StringBuilder();
+                                    String translateSubtitle = subtitles;
+                                    for(int i=0; i<words.size(); i++){
+                                        String word = words.get(i);
+                                        if(translateSubtitle.trim().startsWith(word)){
+                                            System.err.println(word);
+                                        }
+                                        System.out.println(word);
+//                                        String translation = redisService.getWithEngPrefix(word);
+                                        String translation = redisService.get(word);
+                                        if(translation == null){
+//                                            translation = redisService.getWithEngPrefix(word.toLowerCase());
+                                              translation = redisService.get(word.toLowerCase());
+                                        }
+                                        if(translation != null && !org.apache.commons.lang3.StringUtils.equals(translation,word)){
+                                            translateSubtitle = SubtitleUtils.replaceText(translateSubtitle, word, translation, "<font color='yellow'>(@@TRANSLATED_TEXT@@)</font>");
+                                        }
+                                    }
+                                    member.sendMessage(translateSubtitle);
+                                }
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

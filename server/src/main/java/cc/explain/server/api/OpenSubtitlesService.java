@@ -2,7 +2,6 @@ package cc.explain.server.api;
 
 import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.utils.StringUtils;
-import lombok.Data;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;

@@ -3,13 +3,14 @@ description = 'dvbtCC'
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'groovy'
+apply plugin: 'application'
+
+mainClassName = System.getProperty('mainClass') // to run from command line
 
 dependencies {
-//    compile 'org.eclipse.jetty:jetty-server:9.1.0.M0'
-//    compile 'org.eclipse.jetty:jetty-servlet:9.1.0.M0'
-//    compile 'org.eclipse.jetty:jetty-websocket:8.1.13.v20130916'
-//    compile 'org.eclipse.jetty:jetty-io:9.1.0.M0'
-
-    compile group: 'org.eclipse.jetty.aggregate', name: 'jetty-all', version: '8.1.3.v20120416'
-
+    compile 'redis.clients:jedis:2.2.1'
+    compile 'org.eclipse.jetty.aggregate:jetty-all:8.1.3.v20120416'
+    compile 'server:server:1.0@war'
+    compile 'com.google.guava:guava:15.0'
 }

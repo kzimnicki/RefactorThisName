@@ -1,10 +1,7 @@
 package cc.explain.server.model;
 
-import lombok.Data;
-import org.omg.CORBA.PRIVATE_MEMBER;
-
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * User: kzimnick
@@ -12,11 +9,8 @@ import java.util.Date;
  * Time: 13:15
  */
 @Entity
-@Data
 @Table(name="user_includedwords")
 public class UserIncludeWord extends UserWord {
-
-    public UserIncludeWord(){}
 
     public UserIncludeWord(RootWord rootWord) {
         this.rootWord = rootWord;

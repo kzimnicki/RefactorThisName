@@ -1,5 +1,4 @@
 package cc.explain.server.subtitle;
-import lombok.Data;
 
 import java.util.LinkedList;
 import java.util.List;

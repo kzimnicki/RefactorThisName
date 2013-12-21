@@ -1,9 +1,7 @@
 package cc.explain.server.model;
 
-import lombok.Data;
-
-import javax.persistence.*;
-import java.util.Date;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * User: kzimnick
@@ -11,11 +9,8 @@ import java.util.Date;
  * Time: 13:15
  */
 @Entity
-@Data
 @Table(name="user_excludedwords")
 public class UserExcludeWord extends UserWord{
-
-    public UserExcludeWord(){}
 
     public UserExcludeWord(RootWord rootWord) {
         this.rootWord = rootWord;

@@ -1,25 +1,17 @@
 package cc.explain.server.model;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
 @Entity
-@Data
 @Table(name = "user")
 public class User extends AuditableEntityObject {
 
@@ -36,16 +28,12 @@ public class User extends AuditableEntityObject {
     @NotNull
     private String role;
 
-    @Setter
-    @Getter
     private Boolean enabled = false;
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "user_id")
     @Cascade( { org.hibernate.annotations.CascadeType.ALL })
     private Set<UserExcludeWord> excludedWords = new HashSet<UserExcludeWord>();
-
-
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name = "user_id")
@@ -87,6 +75,62 @@ public class User extends AuditableEntityObject {
 
     public void removeExcludedWord(RootWord rootWord){
        getExcludedWords().remove(new UserExcludeWord(rootWord));
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<UserExcludeWord> getExcludedWords() {
+        return excludedWords;
+    }
+
+    public void setExcludedWords(Set<UserExcludeWord> excludedWords) {
+        this.excludedWords = excludedWords;
+    }
+
+    public Set<UserIncludeWord> getIncludedWords() {
+        return includedWords;
+    }
+
+    public void setIncludedWords(Set<UserIncludeWord> includedWords) {
+        this.includedWords = includedWords;
+    }
+
+    public Configuration getConfig() {
+        return config;
+    }
+
+    public void setConfig(Configuration config) {
+        this.config = config;
     }
 
 //    public void addIncludedPhrasalVerb(PhrasalVerb phrasalVerb){

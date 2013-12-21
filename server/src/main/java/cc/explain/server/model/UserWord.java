@@ -1,10 +1,8 @@
 package cc.explain.server.model;
 
 import com.google.common.base.Objects;
-import lombok.Data;
 
 import javax.persistence.Column;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
 import java.util.Date;
@@ -14,7 +12,6 @@ import java.util.Date;
  * Date: 30.05.13
  * Time: 14:39
  */
-@Data
 @MappedSuperclass
 public abstract class UserWord extends EntityObject{
 
@@ -35,5 +32,29 @@ public abstract class UserWord extends EntityObject{
         } else{
             return false;
         }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public RootWord getRootWord() {
+        return rootWord;
+    }
+
+    public void setRootWord(RootWord rootWord) {
+        this.rootWord = rootWord;
     }
 }

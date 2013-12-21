@@ -1,7 +1,7 @@
 package cc.explain.server.model;
 
-import lombok.Data;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -15,7 +15,6 @@ import javax.validation.constraints.NotNull;
  * Time: 12:20
  */
 @Entity
-@Data
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames = {"word_id", "rootWord_id"})},
         name="wordrelation"
@@ -32,4 +31,19 @@ public class WordRelation extends EntityObject {
     @Cascade( { CascadeType.SAVE_UPDATE})
     private Word word;
 
+    public RootWord getRootWord() {
+        return rootWord;
+    }
+
+    public void setRootWord(RootWord rootWord) {
+        this.rootWord = rootWord;
+    }
+
+    public Word getWord() {
+        return word;
+    }
+
+    public void setWord(Word word) {
+        this.word = word;
+    }
 }
