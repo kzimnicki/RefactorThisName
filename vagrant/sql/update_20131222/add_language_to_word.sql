@@ -1,0 +1,1 @@
+ALTER TABLE word ADD COLUMN language INT(11) DEFAULT 0;

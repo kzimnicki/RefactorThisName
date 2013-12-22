@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -15,7 +17,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"value", "wordType"})},
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"value", "wordType", "language"})},
         name="word"
 )
 public class Word extends EntityObject {
@@ -28,6 +30,11 @@ public class Word extends EntityObject {
     @NotNull
     private WordType wordType;
 
+    @NotNull
+    private Language language;
+
+    @Min(value=0)
+    @Max(value=100)
     private int frequency=0;
 
     public String getValue() {
@@ -52,5 +59,13 @@ public class Word extends EntityObject {
 
     public void setFrequency(int frequency) {
         this.frequency = frequency;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

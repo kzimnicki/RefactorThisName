@@ -12,6 +12,8 @@ import javax.persistence.Table;
 @Table(name="user_excludedwords")
 public class UserExcludeWord extends UserWord{
 
+    public UserExcludeWord(){}
+
     public UserExcludeWord(RootWord rootWord) {
         this.rootWord = rootWord;
     }

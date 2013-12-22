@@ -12,6 +12,8 @@ import javax.persistence.Table;
 @Table(name="user_includedwords")
 public class UserIncludeWord extends UserWord {
 
+    public UserIncludeWord(){}
+
     public UserIncludeWord(RootWord rootWord) {
         this.rootWord = rootWord;
     }

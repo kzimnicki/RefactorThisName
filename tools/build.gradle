@@ -1,0 +1,11 @@
+group = 'tools'
+description = 'tools'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+dependencies {
+    compile 'com.google.guava:guava:15.0'
+    groovy 'org.codehaus.groovy:groovy-all:2.2.1'
+    compile project(':server')
+}
