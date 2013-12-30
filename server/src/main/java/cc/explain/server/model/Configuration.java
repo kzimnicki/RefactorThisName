@@ -38,6 +38,8 @@ public class Configuration extends AuditableEntityObject{
 
     private boolean isPhrasalVerbAdded = false;
 
+    private Language language = Language.en;
+
     @Enumerated(EnumType.STRING)
     private SubtitleProcessor subtitleProcessor = SubtitleProcessor.IN_TEXT;
 
@@ -95,5 +97,13 @@ public class Configuration extends AuditableEntityObject{
 
     public void setSubtitleProcessor(SubtitleProcessor subtitleProcessor) {
         this.subtitleProcessor = subtitleProcessor;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
     }
 }

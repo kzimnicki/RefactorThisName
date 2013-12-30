@@ -55,9 +55,11 @@ def parseWordFrequency(){
               }
 
     }
+    def index = 0 ;
    germanWords.each{
        key, value ->
            createInDatabase(value, key, Language.de, WordType.undefined)
+           println index++
    }
 }
 
