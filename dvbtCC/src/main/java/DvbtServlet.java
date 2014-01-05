@@ -13,12 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
-public class HelloServlet extends WebSocketServlet{
+public class DvbtServlet extends WebSocketServlet{
 
     private static final long serialVersionUID = -7289719281366784056L;
     public static String newLine = System.getProperty("line.separator");
@@ -29,6 +26,33 @@ public class HelloServlet extends WebSocketServlet{
     private final LuceneService luceneService = new LuceneService();
     private final RedisService  redisService = new RedisService();
     private Set<String> excludedWords;
+
+    private static final BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
+
+    public RedisService getRedisService(){
+        return redisService;
+    }
+
+
+    public void process(String subtitles, TailorSocket member) throws IOException {
+            List<String> words = luceneService.getGermanWords(excludedWords, subtitles);
+            String translateSubtitle = subtitles;
+            for(int i=0; i<words.size(); i++){
+                String word = words.get(i);
+                if(translateSubtitle.trim().startsWith(word)){
+                    System.err.println(word);
+                }
+//                                        String translation = redisService.getWithEngPrefix(word);
+                String translation = getRedisService().get(word);
+                if(translation == null){
+                    translation = getRedisService().get(word.toLowerCase());
+                }
+                if(translation != null && !org.apache.commons.lang3.StringUtils.equals(translation,word)){
+                    translateSubtitle = SubtitleUtils.replaceText(translateSubtitle, word, translation, "<font color='yellow'>(@@TRANSLATED_TEXT@@)</font>");
+                }
+            }
+            member.sendMessage(translateSubtitle);
+    }
 
     @Override
     public void init() throws ServletException {
@@ -42,53 +66,21 @@ public class HelloServlet extends WebSocketServlet{
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                BufferedReader br = VLC.get();
+                String value = "";
+                try {
+                     value = queue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 for(TailorSocket member : _members){
-                    System.out.println("Trying to send to Member!");
-                    if(member.isOpen()){
                         try {
-                            String line;
-                            while((line = br.readLine()) != null){
-                                System.out.println(line);
-                                String subtitles = "";
-                                if(line.length()> 74){
-                                    subtitles = line.substring(74);
-                                }
-
-                                System.out.println(subtitles.length());
-                                System.out.println(subtitles);
-                                if(line.contains("##CC##") && subtitles.length() > 2) {
-                                    System.out.println("Lucene Processing start");
-                                    List<String> words = luceneService.getGermanWords(excludedWords, subtitles);
-                                    System.out.println("Lucene Processing finish");
-                                    StringBuilder builder = new StringBuilder();
-                                    String translateSubtitle = subtitles;
-                                    for(int i=0; i<words.size(); i++){
-                                        String word = words.get(i);
-                                        if(translateSubtitle.trim().startsWith(word)){
-                                            System.err.println(word);
-                                        }
-                                        System.out.println(word);
-//                                        String translation = redisService.getWithEngPrefix(word);
-                                        String translation = redisService.get(word);
-                                        if(translation == null){
-//                                            translation = redisService.getWithEngPrefix(word.toLowerCase());
-                                              translation = redisService.get(word.toLowerCase());
-                                        }
-                                        if(translation != null && !org.apache.commons.lang3.StringUtils.equals(translation,word)){
-                                            translateSubtitle = SubtitleUtils.replaceText(translateSubtitle, word, translation, "<font color='yellow'>(@@TRANSLATED_TEXT@@)</font>");
-                                        }
-                                    }
-                                    member.sendMessage(translateSubtitle);
-                                }
-                            }
-                        } catch (IOException e) {
+                            process(value, member);
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
                 }
             }
-        }, 2, 200, TimeUnit.MILLISECONDS);
+        }, 2, 2, TimeUnit.MILLISECONDS);
 
 
 
@@ -98,6 +90,18 @@ public class HelloServlet extends WebSocketServlet{
                          HttpServletResponse response) throws ServletException, IOException {
         getServletContext().getNamedDispatcher("default").forward(request,
                 response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            String value = req.getParameter("v");
+            System.out.println(value);
+            queue.put(value);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public WebSocket doWebSocketConnect(HttpServletRequest request,
