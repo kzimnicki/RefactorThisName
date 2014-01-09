@@ -39,7 +39,11 @@ public class VLC {
                             subtitles = line.substring(74);
                         }
                         if(line.contains("##CC##")  && StringUtils.isNotBlank(subtitles)) {
-                            sendPost(String.format("http://localhost:8888/app/?v=%s", URLEncoder.encode(subtitles)));
+                            try{
+                                sendPost(String.format("http://localhost:8888/app/?v=%s", URLEncoder.encode(subtitles)));
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
                         }
                     }
     }
