@@ -1,3 +1,8 @@
+Pamieta o zmianie w Text service aby mial na uwadze ustawienia usera.
+Wyrzucic Wszystkie funkcje do jednego pliku
+
+
+
 Przed 3 releasem:
 - zablokowac button dopok nie nadejdzie odpowiedz na reset password
 - goes on = go on i wystepuje tak samo w linijce tej samej
