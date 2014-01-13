@@ -13,7 +13,7 @@ public class ServerTest {
 
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
-        handler.addServletWithMapping(HelloServlet.class, "/app/*");
+        handler.addServletWithMapping(DvbtServlet.class, "/app/*");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
