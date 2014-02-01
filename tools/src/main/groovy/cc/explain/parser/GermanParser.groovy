@@ -133,7 +133,7 @@ def createWordFamilyPlural(){
 
 
                 WordRelation wordRelation = new WordRelation();
-                println persistedRootWord.rootWord.id//zlego roota przypisuje!
+                println persistedRootWord.rootWord.id
                 wordRelation.setRootWord(persistedRootWord)
                 wordRelation.setWord(persistedWord)
                 try{
@@ -145,6 +145,87 @@ def createWordFamilyPlural(){
             }
         }
     }
+}
+
+def createWordFamilyAdjektive(){
+    def gradleScript = new File('/home/kz/Downloads/dewiktionary-20140104-pages-articles-multistream.xml')
+    def parseEnable = false
+    def rootWord = ''
+    def map = [:].withDefault {new HashSet()}
+    int i = 0
+    gradleScript.eachLine {
+        if(it.startsWith('|Positiv')){
+            parseEnable = true
+            rootWord = parseWikiLine(it)
+        }
+
+
+
+        if(parseEnable){
+            def family = parseWikiLine(it)
+            if(rootWord != null && family != null){
+                map[rootWord].add(family)
+            }
+
+            i++
+        }
+
+        if(3<=i){
+            parseEnable = false
+            i=0
+        }
+    }
+
+
+
+        map.each {
+            rootWordValue, value -> println "${rootWordValue}:${value}"
+
+                    value.each {
+                        def family = it
+
+                        if(rootWordValue == family){
+                            return;
+                        }
+                        List<Word> words = textDAO.findWord([rootWordValue], cc.explain.server.model.Language.de)
+                        def persistedWord = words.size() > 0 ? words.get(0) : null;
+                        println persistedWord
+                        if(persistedWord == null){
+                            return
+                        }
+                        List<RootWord> rootWords = textDAO.findRootWord([persistedWord]);
+                        RootWord persistedRootWord =  rootWords.size() > 0 ? rootWords.get(0) : null;
+                        if(persistedRootWord == null){
+                            persistedRootWord = new RootWord();
+                            persistedRootWord.setRootWord(persistedWord)
+                            commonDao.saveOrUpdate(persistedRootWord)
+                        }
+                        rootWords = textDAO.findRootWord([persistedWord]);
+                        persistedRootWord =  rootWords.size() > 0 ? rootWords.get(0) : null;
+
+                        words = textDAO.findWord([family], cc.explain.server.model.Language.de)
+                        persistedWord = words.size() > 0 ? words.get(0) : null;
+
+                        WordRelation wordRelation = new WordRelation();
+                        println persistedRootWord.rootWord.id
+                        wordRelation.setRootWord(persistedRootWord)
+                        wordRelation.setWord(persistedWord)
+                        try{
+                            commonDao.saveOrUpdate(wordRelation)
+                        }catch(Exception e){
+                            e.printStackTrace()
+                            //ignore
+                        }
+                    }
+        }
+
+
+
+//        }
+
+
+    println map.size()
+    println map;
 }
 
 
@@ -165,6 +246,7 @@ def parseWikiLine(def line) {
 def parser = new GermanParser()
 //parser.parse()
 parser.init()
-parser.createWordFamilyPlural()
+//parser.createWordFamilyPlural()
+parser.createWordFamilyAdjektive()
 //parser.parseWordFrequency()
 //parser.sqlTest()
