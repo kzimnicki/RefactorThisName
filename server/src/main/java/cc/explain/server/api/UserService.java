@@ -64,7 +64,7 @@ public class UserService {
     }
 
     public User getUserById(Long id){
-         User user = (User) commonDao.getByHQL("from User u where u.id = :id", "id", String.valueOf(id)).get(0);
+         User user = (User) commonDao.getByHQL("from User u where u.id = :id", "id", id).get(0);
         return user;
     }
 

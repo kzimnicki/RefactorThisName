@@ -3,6 +3,7 @@ package cc.explain.server.model;
 import com.google.common.base.Objects;
 
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
@@ -10,7 +11,7 @@ import javax.persistence.MappedSuperclass;
 public abstract class EntityObject{
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	public void setId(Long id) {

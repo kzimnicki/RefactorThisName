@@ -86,7 +86,7 @@ public class CommonDao extends HibernateDaoSupport {
 	}
 	public List getByHQL(String queryString, String paramName, Object value) {
         Query query = getSession().createQuery(queryString);
-        query.setString(paramName, (String) value);
+        query.setParameter(paramName, value);
         query.setCacheable(true);
         return  query.list();
 	}

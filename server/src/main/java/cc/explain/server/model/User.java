@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_data")
 public class User extends AuditableEntityObject {
 
     @Column(unique = true)

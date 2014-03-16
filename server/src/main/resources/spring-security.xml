@@ -45,8 +45,8 @@
     <authentication-manager alias="authenticationManager">
         <authentication-provider>
             <jdbc-user-service data-source-ref="dbDataSource"
-                               users-by-username-query="SELECT username, password, enabled FROM user WHERE username=?"
-                               authorities-by-username-query="SELECT username, role as authorities FROM user WHERE username=?"/>
+                               users-by-username-query="SELECT username, password, enabled FROM user_data WHERE username=?"
+                               authorities-by-username-query="SELECT username, role as authorities FROM user_data WHERE username=?"/>
         </authentication-provider>
     </authentication-manager>
 

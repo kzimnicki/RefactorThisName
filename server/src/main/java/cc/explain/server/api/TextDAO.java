@@ -23,7 +23,7 @@ public class TextDAO {
     public List<Word> findWordByWordValues(List<String> wordValues){
          return (List<Word>) commonDao.getByHQL("FROM Word w " +
                                                 "WHERE w.value IN :wordValues " +
-                                                "GROUP BY w.value", "wordValues",
+                                                "GROUP BY w.value, w.id", "wordValues",
                                                 wordValues);
     }
 

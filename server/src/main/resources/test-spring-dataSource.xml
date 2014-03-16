@@ -4,9 +4,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
    <bean id="dbDataSource" name="dateSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName"><value>com.mysql.jdbc.Driver</value></property>    
-        <property name="url" value="jdbc:mysql://localhost:3336/testenglishtranslator"/>
-        <property name="username" value="root"/>
+        <property name="driverClassName"><value>org.postgresql.Driver</value></property>
+        <property name="url" value="jdbc:postgresql://localhost:5432/explaincc"/>
+        <property name="username" value="explaincc"/>
         <property name="password" value="123456"/>
    </bean>
    

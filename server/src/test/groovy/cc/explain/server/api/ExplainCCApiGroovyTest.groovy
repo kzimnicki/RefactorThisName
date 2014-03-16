@@ -42,7 +42,7 @@ class ExplainCCApiGroovyTest extends Specification {
         commonDao.executeSQL("DELETE FROM user_includedwords");
         commonDao.executeSQL("DELETE FROM user_excludedwords");
         commonDao.executeSQL("DELETE FROM user_includedwords");
-        commonDao.executeSQL("DELETE FROM user");
+        commonDao.executeSQL("DELETE FROM user_data");
 
     }
 
