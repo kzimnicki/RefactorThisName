@@ -28,4 +28,4 @@ config/context.xml
 *.iws
 out/
 vagrant/precise32.box
-database/data/rootword_data.sql
+database/data/
