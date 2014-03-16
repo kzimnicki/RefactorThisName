@@ -27,3 +27,4 @@ config/context.xml
 *.ipr
 *.iws
 out/
+vagrant/precise32.box
