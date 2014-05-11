@@ -1,3 +1,8 @@
+Client migration:
+dodac type na passwordach bo na razie jest zadnego typu
+poprawic css i przesunac go troche w dol
+po wszystkim pozmieniac nazwe templatow tak aby odpowiadaly tym z tabow
+
 Przed 3 releasem:
 - zablokowac button dopok nie nadejdzie odpowiedz na reset password
 - goes on = go on i wystepuje tak samo w linijce tej samej

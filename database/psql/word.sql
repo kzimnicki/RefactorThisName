@@ -5,3 +5,4 @@ CREATE TABLE word (
   wordType int NOT NULL,
   UNIQUE (value,wordType)
 );
+CREATE INDEX word_value_idx ON word(value);

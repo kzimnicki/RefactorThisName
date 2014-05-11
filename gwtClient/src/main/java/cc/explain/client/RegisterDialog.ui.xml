@@ -3,37 +3,37 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
         >
 
-    <g:HTMLPanel styleName="row">
+    <div class="row">
             <div class="span8">
                 <form class="form-horizontal" action="">
                     <fieldset>
                         <legend>Register</legend>
                         <div class="control-group">
-                           <g:Label styleName="control-label">Email: </g:Label>
+                           <g:Label class="control-label">Email: </g:Label>
 
                             <div class="controls">
-                                <g:TextBox ui:field="username" styleName="input-xlarge focused" />
+                                <input ui:field="username" class="input-xlarge focused" />
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Password: </label>
 
                             <div class="controls">
-                                <g:PasswordTextBox ui:field="pass" styleName="input-xlarge focused"/>
+                                <g:PasswordTextBox ui:field="pass" class="input-xlarge focused"/>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label">Repeat Password: </label>
 
                             <div class="controls">
-                                <g:PasswordTextBox ui:field="repeatPass" styleName="input-xlarge focused"/>
+                                <g:PasswordTextBox ui:field="repeatPass" class="input-xlarge focused"/>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <g:Button ui:field="register" styleName="btn btn-primary">Register</g:Button>
+                            <button ui:field="register" class="btn btn-primary">Register</button>
                         </div>
                     </fieldset>
                 </form>
             </div>
-    </g:HTMLPanel>
+    </div>
 </ui:UiBinder> 

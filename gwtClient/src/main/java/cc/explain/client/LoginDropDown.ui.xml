@@ -4,30 +4,30 @@
         >
 
 
-    <g:HTMLPanel>
+    <div>
 
-        <g:Button ui:field="logout" styleName="btn btn-danger">Logout</g:Button>
+        <button ui:field="logout" class="btn btn-danger">Logout</button>
 
 
-        <g:HTMLPanel ui:field="loginDropDownArea" styleName="btn-group">
+        <div ui:field="loginDropDownArea" class="btn-group">
             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 Login <span class="caret"></span>
             </button>
             <g:FocusPanel ui:field="clickDiv">
-                <g:HTMLPanel>
+                <div>
                     <ul class="dropdown-menu">
                         <fieldset style="padding: 10px;">
-                            <g:TextBox ui:field="username" styleName="input"></g:TextBox>
-                            <g:PasswordTextBox ui:field="password" styleName="input"></g:PasswordTextBox>
-                            <div><g:Button ui:field="login" styleName="btn btn-primary btn-block">Log-In</g:Button></div><br/> <br/>
-                            <div><g:Button ui:field="register" styleName="btn btn-info btn-block">Register</g:Button></div><br/><br/>
-                            <div><g:Button ui:field="reset" styleName="btn btn-danger btn-block">Reset Password</g:Button></div>
+                            <input ui:field="username" class="input"></input>
+                            <g:PasswordTextBox ui:field="password" class="input"></g:PasswordTextBox>
+                            <div><button ui:field="login" class="btn btn-primary btn-block">Log-In</button></div><br/> <br/>
+                            <div><button ui:field="register" class="btn btn-info btn-block">Register</button></div><br/><br/>
+                            <div><button ui:field="reset" class="btn btn-danger btn-block">Reset Password</button></div>
                         </fieldset>
                     </ul>
-                </g:HTMLPanel>
+                </div>
             </g:FocusPanel>
-        </g:HTMLPanel>
-    </g:HTMLPanel>
+        </div>
+    </div>
 
 
 

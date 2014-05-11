@@ -1,9 +1,4 @@
-<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
-<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-             xmlns:g="urn:import:com.google.gwt.user.client.ui"
-        >
-
-    <g:HTMLPanel styleName="row">
+<div class="row">
 
 
         <div class="span8">
@@ -12,14 +7,14 @@
           <!--      <div id="drop_zone">Drop movie here</div>
                 <div id="video" style="text-align: center;font-weight: bolder;font-size: 22px;margin: 10px;">OR</div>-->
 
-                <g:HTMLPanel ui:field="tablePanel" styleName="span8">
+                <div ui:field="tablePanel" class="span8">
                     <table cellpadding="0" cellspacing="0" border="0"
                            class="table table-striped table-bordered dataTable"
                            id="words"></table>
-                </g:HTMLPanel>
+                </div>
 
                 <fieldset>
-                    <!--    <g:Label styleName="control-label">Text:</g:Label>
+                    <!--    <g:Label class="control-label">Text:</g:Label>
 
                    <div class="controls">-->
                     <g:TextArea name="textToTranslate" ui:field="textArea" height="280px" width="770px">
@@ -28,9 +23,9 @@
                     <!--</div>-->
 
                     <div class="form-actions">
-                        <g:Button ui:field="sendTextButton" styleName="btn btn-primary">Submit Text</g:Button>
-                        <g:Button ui:field="translateTextButton" styleName="btn btn-primary">Translate Text</g:Button>
-                        <g:Button ui:field="translateSubtitlesButton" styleName="btn btn-primary">Translate Subtitles </g:Button>
+                        <button ui:field="sendTextButton" class="btn btn-primary">Submit Text</button>
+                        <button ui:field="translateTextButton" class="btn btn-primary">Translate Text</button>
+                        <button ui:field="translateSubtitlesButton" class="btn btn-primary">Translate Subtitles </button>
                     </div>
                 </fieldset>
             </form>
@@ -38,5 +33,5 @@
 
         </div>
 
-    </g:HTMLPanel>
+    </div>
 </ui:UiBinder> 

@@ -1,0 +1,85 @@
+<div>
+
+    <div id="progressBar" class="darkenBackground hide">
+        <img style="top: 50%;" alt="loading..." src="img/loading.gif"/>
+    </div>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="#">explain.cc</a>
+
+                <div class="nav-collapse">
+
+
+                    <ul class="nav">
+                        <li>
+                            <g:Anchor ui:field="watch">
+                                <span>Home</span>
+                            </g:Anchor>
+                        </li>
+
+
+                        <li>
+                            <g:Anchor ui:field="excludeWords">
+                                <span>Known Words</span>
+                            </g:Anchor>
+                        </li>
+
+                        <li>
+                            <g:Anchor ui:field="includeWords">
+                                <span>Unknown Words</span>
+                            </g:Anchor>
+                        </li>
+
+                        <li>
+                            <g:Anchor ui:field="submitText">
+                                <span>Translate</span>
+                            </g:Anchor>
+                        </li>
+                        <li>
+                            <g:Anchor ui:field="options">
+                                <span>Options</span>
+                            </g:Anchor>
+                        </li>
+
+                        <li>
+                            <g:Anchor ui:field="contact">
+                                <span>About</span>
+                            </g:Anchor>
+                        </li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li>
+                            <w:LoginDropDown ui:field="loginDropDown"/>
+                        </li>
+                    </ul>
+
+
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <div>
+            <div id="POPUP" class="modal hide fade in" style="display: none;">
+                <div class="modal-header">
+                    <h3><label ui:field="popupTitle"/></h3>
+                </div>
+                <div ui:field="errorPanel" class="modal-body"/>
+                <div class="modal-footer">
+                    <a href="#" class="btn" onclick="$('#POPUP').hide();">Close</a>
+                </div>
+            </div>
+            <g:SimplePanel ui:field="container"/>
+        </div>
+    </div>
+</div>

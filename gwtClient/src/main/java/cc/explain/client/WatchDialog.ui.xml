@@ -3,7 +3,7 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
         >
 
-    <g:HTMLPanel styleName="row">
+    <div class="row">
         <div class="span10 well">
 
 
@@ -29,13 +29,13 @@
 
              <br />
             <div style="text-align: center;">
-                <g:Button ui:field="start" styleName="btn btn-success btn-large big-button">Get Started</g:Button>
-                <g:Button ui:field="more" styleName="btn btn-large big-button">Learn More</g:Button>
+                <button ui:field="start" class="btn btn-success btn-large big-button">Get Started</button>
+                <button ui:field="more" class="btn btn-large big-button">Learn More</button>
             </div>
 
         </div>
 
 
-    </g:HTMLPanel>
+    </div>
 
 </ui:UiBinder> 

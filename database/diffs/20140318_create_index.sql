@@ -1,0 +1,1 @@
+CREATE INDEX word_value_idx ON word(value);

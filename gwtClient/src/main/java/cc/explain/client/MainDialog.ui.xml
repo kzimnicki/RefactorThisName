@@ -6,7 +6,7 @@
 
     <!--<ui:style src="../BacklinkChecker.css" />-->
 
-    <g:HTMLPanel>
+    <div>
 
         <div id="progressBar" class="darkenBackground hide">
             <img style="top: 50%;" alt="loading..." src="img/loading.gif"/>
@@ -82,7 +82,7 @@
                     <div class="modal-header">
                         <h3><g:Label ui:field="popupTitle" /></h3>
                     </div>
-                    <g:HTMLPanel ui:field="errorPanel" styleName="modal-body"/>
+                    <div ui:field="errorPanel" class="modal-body"/>
                     <div class="modal-footer">
                         <a href="#" class="btn" onclick="$('#POPUP').hide();">Close</a>
                     </div>
@@ -90,6 +90,6 @@
                 <g:SimplePanel ui:field="container"/>
             </div>
         </div>
-    </g:HTMLPanel>
+    </div>
 
 </ui:UiBinder> 
