@@ -1,16 +1,31 @@
-group = 'dvbtCC'
-description = 'dvbtCC'
+group = 'dvbtcc'
+description = 'dvbtcc'
+version = 1.0
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'groovy'
-apply plugin: 'application'
+apply plugin:'application'
 
-mainClassName = System.getProperty('mainClass') // to run from command line
+mainClassName = 'ServerTest'
+
+
+
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    mavenRepo url: "http://repo.maven.apache.org/maven2"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'java'
+        }
+    }
+}
 
 dependencies {
-    compile 'redis.clients:jedis:2.2.1'
-    compile 'org.eclipse.jetty.aggregate:jetty-all:8.1.3.v20120416'
-    compile 'server:server:1.0@war'
-    compile 'com.google.guava:guava:15.0'
+    compile group: 'org.eclipse.jetty.aggregate', name: 'jetty-all', version:'8.1.3.v20120416'
+    compile group: 'com.google.guava', name: 'guava', version:'17.0'
 }
