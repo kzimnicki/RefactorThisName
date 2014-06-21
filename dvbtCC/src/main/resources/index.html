@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Tail-based by Web Sockets</title>
+    <title>CC</title>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script type='text/javascript'>
         if (!window.WebSocket)
@@ -41,11 +41,18 @@
                     spanText.className = 'text';
                     spanText.innerHTML = m.data;
                     var lineBreak = document.createElement('br');
-                    messageBox.empty()
+
+
+		     setTimeout(function() { 
+			messageBox.empty()
                     messageBox.append(spanText);
                     messageBox.append(lineBreak);
                     messageBox.scrollTop = messageBox.scrollHeight
                             - messageBox.clientHeight;
+
+
+			 }
+    			, 2000);
                 }
             },
 
@@ -64,8 +71,6 @@
         }
 
         div#messageBox {
-            clear: both;
-            overflow: auto;
             padding: 16px;
             color: white;
         }
@@ -79,23 +84,25 @@
             border-top: 0px
         }
 
-        div.hidden {
-            display: none;
-        }
+	span {
+	    top:50%;
+	}
 
         span.alert {
             font-style: italic;
         }
         span.text {
-            font-size: 25;
+            font-size: 6.0vw;
             font-family: sans-serif;
+	    display:table-cell;
+	    vertical-align: middle;
         }
     </style>
 </head>
 <body>
-<div id='messageBox' style="text-align: center"></div>
+<div id='messageBox' style="text-align: center; display: table; height: 95%; width: 95%"></div>
     <div id="control">
-        <input id='url' type='text' style="width: 350px; height: 40px; font-size:20px;" name='Connect' value="ws://192.168.2.108:8888/app/"/>
+        <input id='url' type='text' style="width: 350px; height: 40px; font-size:20px;" name='Connect' value="ws://explain.cc:8888/app/"/>
         <input id='connect' class='button' type='submit' name='Connect' style="height:40px; font-size:20px; " value='Connect' />
     </div>
 <script type='text/javascript'>
