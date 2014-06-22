@@ -29,3 +29,4 @@ config/context.xml
 out/
 vagrant/precise32.box
 database/data/
+jsClient/node_modules

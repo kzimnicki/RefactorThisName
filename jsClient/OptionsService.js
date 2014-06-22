@@ -6,6 +6,9 @@ module.factory('OptionsService', function($resource) {
         return {
             loadOptions: function() {
                 return optionsResource.get();
+            },
+            save: function(options){
+                options.$save();
             }
         };
     }

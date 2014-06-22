@@ -7,9 +7,9 @@
                     <label class="control-label">Words occurrence level: </label>
 
                     <div class="controls">
-                        <input class="input-mini focused"/>
+                        <input ng-model="options.max" class="input-mini focused"/>
                         <label class="help-inline">Rare words</label>
-                        <input type="range" class="input focused inline"/>
+                        <input ng-model="options.max" type="range" class="input focused inline"/>
                         <label class="help-inline">Common words</label>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
                     <label class="control-label">Subtitle template:</label>
 
                     <div class="controls">
-                        <input class="input span5 focused"/>
+                        <input ng-model="options.subtitleTemplate" class="input span5 focused"/>
                         <button class="btn">Preview</button>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                     <label class="control-label">Phrasal verbs:</label>
 
                     <div class="controls">
-                        <input type="checkbox" />
+                        <input ng-model="options.phrasalVerbAdded" type="checkbox" />
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
                     <label class="control-label">Phrasal verbs template:</label>
 
                     <div class="controls">
-                        <input  class="input span5 focused" text="" />
+                        <input ng-model="options.phrasalVerbTemplate"  class="input span5 focused" text="" />
                         <button class="btn">Preview</button>
                     </div>
                 </div>
@@ -43,16 +43,15 @@
                     <label class="control-label">Subtitle type:</label>
 
                     <div class="controls">
-                        <input type="radio" name="IN_TEXT">In Text</input>
-                        <input type="radio" name="ONLY_TRANSLATION">Only translation
-                        </input>
+                        <input type="radio" ng-click="changeSubtitleProcessor('IN_TEXT')" ng-checked="options.subtitleProcessor == 'IN_TEXT'" name="IN_TEXT">In Text</input>
+                        <input type="radio" ng-click="changeSubtitleProcessor('ONLY_TRANSLATION')" ng-checked="options.subtitleProcessor == 'ONLY_TRANSLATION'" name="ONLY_TRANSLATION">Only translation</input>
                     </div>
                 </div>
 
 
                 <div class="form-actions">
-                    <button ui:field="save" class="btn btn-primary">Save</button>
-                    <button ui:field="restore" class="btn">Restore default options</button>
+                    <button ng-click="save()" class="btn btn-primary">Save</button>
+                    <button ng-click="restoreDefaultOption()" class="btn">Restore default options</button>
                 </div>
             </fieldset>
         </form>

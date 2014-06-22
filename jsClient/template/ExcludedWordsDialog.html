@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="span10">
+        <button class="btn btn-info">Export all words to CSV format</button>
+        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered dataTable"
+               id="excludedWords">
+            <thead><tr role="row"><th class="sorting_asc" tabindex="0" rowspan="1" colspan="1" role="columnheader" aria-controls="excludedWords" style="width: 120px;" aria-sort="ascending" aria-label="Known Word: activate to sort column descending">Known Word</th><th class="sorting" tabindex="0" rowspan="1" colspan="1" role="columnheader" aria-controls="excludedWords" style="width: 235px;" aria-label="Word family: activate to sort column ascending">Word family</th><th class="sorting" tabindex="0" rowspan="1" colspan="1" role="columnheader" aria-controls="excludedWords" style="width: 73px;" aria-label="Popularity: activate to sort column ascending">Popularity</th><th class="sorting" tabindex="0" rowspan="1" colspan="1" role="columnheader" aria-controls="excludedWords" style="width: 121px;" aria-label="Date: activate to sort column ascending">Date</th><th>action</th></tr></thead>
+
+               </table>
+    </div>
+    <div id="csvPopup" class="white_content">
+        <div id="test" class="pull-right">
+            <button type="button" onclick="popup.hidePopupMessage();" class="btn btn-info"> X</button>
+        </div>
+        <textarea id="csvPopupPre" cols="3000" rows="15" style="width: 450px;"></textarea>
+    </div>
+</div>
