@@ -21,7 +21,7 @@
             },
 
             _onopen : function() {
-                server._send('websockets are open for communications!');
+                server._send('Loading...');
             },
 
             _send : function(message) {
@@ -36,23 +36,12 @@
 
             _onmessage : function(m) {
                 if (m.data) {
-                    var messageBox = $('#messageBox');
-                    var spanText = document.createElement('span');
-                    spanText.className = 'text';
-                    spanText.innerHTML = m.data;
-                    var lineBreak = document.createElement('br');
-
-
-		     setTimeout(function() { 
-			messageBox.empty()
-                    messageBox.append(spanText);
-                    messageBox.append(lineBreak);
-                    messageBox.scrollTop = messageBox.scrollHeight
-                            - messageBox.clientHeight;
-
-
-			 }
-    			, 2000);
+                    var data = JSON.parse(m.data);
+                    $('#line1').text('');
+                    $('#line2').text('');
+                    console.log(data.l2);
+                    $('#line1').text(data.l1);
+                    $('#line2').text(data.l2);
                 }
             },
 
@@ -60,57 +49,65 @@
                 this._ws = null;
             }
         };
+
+
     </script>
     <style type='text/css'>
         div {
-            border: 0px solid black;
+        border: 0px solid black;
         }
 
         body {
-            background-color: black;
+        background-color: black;
         }
 
         div#messageBox {
-            padding: 16px;
-            color: white;
+        padding: 16px;
+        color: white;
         }
 
         div#input {
-            clear: both;
-            width: 40em;
-            padding: 4px;
-            background-color: #e0e0e0;
-            border: 1px solid black;
-            border-top: 0px
+        clear: both;
+        width: 40em;
+        padding: 4px;
+        background-color: #e0e0e0;
+        border: 1px solid black;
+        border-top: 0px
         }
 
-	span {
-	    top:50%;
-	}
+        span {
+        top:50%;
+        }
 
         span.alert {
-            font-style: italic;
+        font-style: italic;
         }
         span.text {
             font-size: 6.0vw;
             font-family: sans-serif;
-	    display:table-cell;
-	    vertical-align: middle;
         }
     </style>
 </head>
 <body>
-<div id='messageBox' style="text-align: center; display: table; height: 95%; width: 95%"></div>
-    <div id="control">
-        <input id='url' type='text' style="width: 350px; height: 40px; font-size:20px;" name='Connect' value="ws://explain.cc:8888/app/"/>
-        <input id='connect' class='button' type='submit' name='Connect' style="height:40px; font-size:20px; " value='Connect' />
+    <div id='messageBox' style="text-align: center; display: table; height: 95%; width: 95%">
+        <div style=" display:table-cell;   vertical-align: middle;">
+            <span id="line1" class="text">1</span>
+            <br />
+            <span id="line2" class="text">2</span>
+        </div>
     </div>
+</div>
 <script type='text/javascript'>
-    document.getElementById('connect').onclick = function(event) {
-        server.connect(document.getElementById('url').value);
+        var loc = window.location, new_uri;
+        if (loc.protocol === "https:") {
+            new_uri = "wss:";
+        } else {
+            new_uri = "ws:";
+        }
+        new_uri += "//" + loc.host;
+        new_uri += loc.pathname + "app/";
+        server.connect(new_uri);
         $('#control').empty();
-        return false;
-    };
 </script>
 
 </body>

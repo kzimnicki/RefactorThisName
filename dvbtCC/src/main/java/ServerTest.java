@@ -17,10 +17,8 @@ public class ServerTest {
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
-//        resourceHandler.setWelcomeFiles(new String[]{"index.html"});
+        resourceHandler.setWelcomeFiles(new String[]{"src/main/resources/index.html"});
         resourceHandler.setResourceBase(".");
-
-
 
         HandlerCollection handlerList = new HandlerCollection();
         handlerList.setHandlers(new Handler[]{resourceHandler,handler});

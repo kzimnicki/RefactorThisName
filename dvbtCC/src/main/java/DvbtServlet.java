@@ -12,27 +12,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class DvbtServlet extends WebSocketServlet{
+public class DvbtServlet extends WebSocketServlet {
 
     private static final long serialVersionUID = -7289719281366784056L;
 
     private final Set<TailorSocket> _members = new CopyOnWriteArraySet<TailorSocket>();
     private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
-//    private final LuceneService luceneService = new LuceneService();
-//    private final RedisService  redisService = new RedisService();
-//    private Set<String> excludedWords;
-
     private static final BlockingQueue<String> queue = new LinkedBlockingQueue<String>();
 
-//    public RedisService getRedisService(){
-//        return redisService;
-//    }
-
-
     public void process(String subtitles, TailorSocket member) throws IOException {
-
-            member.sendMessage(subtitles);
+        member.sendMessage(subtitles);
     }
 
     @Override
@@ -43,20 +33,19 @@ public class DvbtServlet extends WebSocketServlet{
             public void run() {
                 String value = "";
                 try {
-                     value = queue.take();
+                    value = queue.take();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                for(TailorSocket member : _members){
-                        try {
-                            process(value, member);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                for (TailorSocket member : _members) {
+                    try {
+                        process(value, member);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }, 2, 2, java.util.concurrent.TimeUnit.MILLISECONDS);
-
 
 
     }
@@ -70,14 +59,23 @@ public class DvbtServlet extends WebSocketServlet{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            String value = req.getParameter("v");
-            System.out.println(value);
-            queue.put(value);
+            String line1 = req.getParameter("l1");
+            String line2 = req.getParameter("l2");
+            String timestamp = req.getParameter("t");
+            System.out.println(line1);
+            System.out.println(line2);
+            System.out.println(timestamp);
+            queue.put(createJsonString(line1, line2));
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+
+    private String createJsonString(String line1, String line2) {
+        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\"}", line1, line2);
+    }
+
 
     public WebSocket doWebSocketConnect(HttpServletRequest request,
                                         String protocol) {
@@ -93,12 +91,13 @@ public class DvbtServlet extends WebSocketServlet{
         }
 
         public void sendMessage(String data) throws IOException {
+            System.out.println(_members.size());
             _connection.sendMessage(data);
         }
 
         @Override
         public void onMessage(String data) {
-            System.out.println("Received: "+data);
+            System.out.println("Received: " + data);
         }
 
         public boolean isOpen() {
@@ -110,7 +109,7 @@ public class DvbtServlet extends WebSocketServlet{
             _members.add(this);
             _connection = connection;
             try {
-                connection.sendMessage("Server received Web Socket upgrade and added it to Receiver List.");
+                connection.sendMessage(createJsonString("Loading....", ""));
             } catch (IOException e) {
                 e.printStackTrace();
             }
