@@ -73,7 +73,7 @@ public class DvbtServlet extends WebSocketServlet {
     }
 
     private String createJsonString(String line1, String line2) {
-        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\"}", line1, line2);
+        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\"}", line1==null ? "":line1, line2 == null ? "": line2);
     }
 
 
