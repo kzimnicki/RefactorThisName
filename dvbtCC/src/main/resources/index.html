@@ -36,6 +36,7 @@
 
             _onmessage : function(m) {
                 if (m.data) {
+                    console.log(m.data)
                     var data = JSON.parse(m.data);
                     $('#line1').text('');
                     $('#line2').text('');
@@ -83,7 +84,7 @@
         font-style: italic;
         }
         span.text {
-            font-size: 6.0vw;
+            font-size: 5.5vw;
             font-family: sans-serif;
         }
     </style>
