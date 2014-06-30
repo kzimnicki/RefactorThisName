@@ -1,3 +1,5 @@
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketServlet;
 
@@ -65,15 +67,29 @@ public class DvbtServlet extends WebSocketServlet {
             System.out.println(line1);
             System.out.println(line2);
             System.out.println(timestamp);
-            queue.put(createJsonString(line1, line2));
+            String json = createJsonString(line1, line2);
+            System.out.println(json);
+            queue.put(json);
 
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private String createJsonString(String line1, String line2) {
-        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\"}", line1==null ? "":line1, line2 == null ? "": line2);
+        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\"}", escape(line1), escape(line2));
+    }
+
+    private String escape(String line) {
+        if (line==null){
+            return StringUtils.EMPTY;
+        }else {
+            String trim = line.trim();
+            if(trim.length() > 40){
+                trim = trim.substring(0,40);
+            }
+            return StringEscapeUtils.escapeJson(trim);
+        }
     }
 
 
