@@ -3,6 +3,15 @@
     <title>CC</title>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script type='text/javascript'>
+
+        var delay = 2000;
+
+        var changeDelay = function(){
+          delay = $('#delay').val();
+          console.log(delay);
+
+        };
+
         if (!window.WebSocket)
             alert("WebSocket not supported by this browser");
 
@@ -35,15 +44,18 @@
             },
 
             _onmessage : function(m) {
-                if (m.data) {
-                    console.log(m.data)
-                    var data = JSON.parse(m.data);
-                    $('#line1').text('');
-                    $('#line2').text('');
-                    console.log(data.l2);
-                    $('#line1').text(data.l1);
-                    $('#line2').text(data.l2);
-                }
+                var date = new Date();
+                console.log("before timeout", new Date());
+                setTimeout(function(){
+                    console.log("after timeout", new Date());
+                    if (m.data) {
+                        var data = JSON.parse(m.data);
+                        $('#line1').text('');
+                        $('#line2').text('');
+                        $('#line1').text(data.l1);
+                        $('#line2').text(data.l2);
+                    }
+                }, delay);
             },
 
             _onclose : function(m) {
@@ -97,6 +109,10 @@
             <span id="line2" class="text">2</span>
         </div>
     </div>
+    <div>
+        <button onclick="changeDelay()">Change time</button>
+        <input id="delay" value="2000">
+    </div>
 </div>
 <script type='text/javascript'>
         var loc = window.location, new_uri;
@@ -108,6 +124,7 @@
         new_uri += "//" + loc.host;
         new_uri += loc.pathname + "app/";
         server.connect(new_uri);
+        //server.connect('ws://explain.cc:8888/app');
         $('#control').empty();
 </script>
 
