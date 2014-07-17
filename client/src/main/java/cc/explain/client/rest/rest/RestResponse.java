@@ -1,16 +1,14 @@
-package cc.explain.server.rest;
+package cc.explain.client.rest.rest;
 
-import cc.explain.server.exception.TechnicalException;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.util.EntityUtils;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.apache.http.util.EntityUtils;
+
 public class RestResponse {
 
     private static final String EMPTY_STRING = "";
@@ -47,7 +45,7 @@ public class RestResponse {
         try {
             return response.getEntity().getContent();
         } catch (IOException e) {
-            throw new TechnicalException(e.getCause());
+            throw new RuntimeException(e.getCause());
         }
     }
 
@@ -70,7 +68,7 @@ public class RestResponse {
             EntityUtils.consume(response.getEntity());
             return builder.toString();
         } catch (IOException e) {
-            throw new TechnicalException(e.getCause());
+            throw new RuntimeException(e.getCause());
         }
     }
 }

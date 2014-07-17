@@ -1,27 +1,16 @@
 package cc.explain.server.api;
 
 import cc.explain.server.core.CommonDao;
-import cc.explain.server.core.NLPTask;
-import cc.explain.server.core.StanfordNLP;
 import cc.explain.server.core.WordType;
 import cc.explain.server.dto.WordDetailDTO;
-import cc.explain.server.exception.TechnicalException;
 import cc.explain.server.model.*;
-import com.google.common.base.Splitter;
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
-import edu.stanford.nlp.ling.HasWord;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.apache.commons.lang.time.DateUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class TextService {
 

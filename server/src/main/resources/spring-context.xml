@@ -73,7 +73,7 @@ http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
     <bean id="textService" class="cc.explain.server.api.TextService"/>
     <bean id="textDAO" class="cc.explain.server.api.TextDAO"/>
     <bean id="subtitleService" class="cc.explain.server.api.SubtitleService"/>
-    <bean id="luceneService" class="cc.explain.server.api.LuceneService" init-method="init"/>
+    <bean id="luceneService" class="cc.explain.lucene.LuceneService" init-method="init"/>
     <bean id="loginService" class="cc.explain.server.api.UserService"/>
     <bean id="translateService" class="cc.explain.server.api.TranslateService"/>
     <bean id="mailService" class="cc.explain.server.api.MailService"/>

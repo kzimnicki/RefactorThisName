@@ -1,27 +1,17 @@
-package cc.explain.server.rest;
+package cc.explain.client.rest.rest;
 
-import cc.explain.server.exception.TechnicalException;
-import cc.explain.server.utils.StringUtils;
 import com.google.gson.Gson;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.eclipse.core.filesystem.URIUtil;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import org.apache.http.message.BasicHttpResponse;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.commons.io.IOUtils;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.message.BasicHttpResponse;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * User: kzimnick
@@ -53,7 +43,7 @@ public class Rest {
         try {
             uriBuilder = new URIBuilder(url);
         } catch (URISyntaxException e) {
-            throw new TechnicalException(e);
+            throw new RuntimeException(e);
         }
         return this;
     }
@@ -77,9 +67,9 @@ public class Rest {
             client.getConnectionManager().shutdown();
             return parseResponse(content);
         } catch (IOException e) {
-           throw new TechnicalException(e);
+           throw new RuntimeException(e);
         } catch (URISyntaxException e) {
-             throw new TechnicalException(e);
+             throw new RuntimeException(e);
         }
     }
 

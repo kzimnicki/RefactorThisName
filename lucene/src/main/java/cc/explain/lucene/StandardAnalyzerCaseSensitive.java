@@ -1,4 +1,4 @@
-package cc.explain.server.core.lucene;
+package cc.explain.lucene;
 
 import org.apache.lucene.analysis.*;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;

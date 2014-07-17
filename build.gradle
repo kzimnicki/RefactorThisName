@@ -1,7 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
-apply plugin: 'war'
 apply plugin: 'tomcat'
 
 
@@ -42,7 +41,6 @@ allprojects  {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'war'
     apply plugin: 'tomcat'
     sourceCompatibility = 1.6
     targetCompatibility = 1.6

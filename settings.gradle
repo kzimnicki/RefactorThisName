@@ -3,4 +3,5 @@ include ':gwtClient', ':server' //, 'dvbtCC'
 
 project(':gwtClient').projectDir = "$rootDir/gwtClient" as File
 project(':server').projectDir = "$rootDir/server" as File
-//project(':dvbtCC').projectDir = "$rootDir/dvbtCC" as File
+//project(':dvbtCC').projectDir = "$rootDir/dvbtCC" as Fileinclude 'lucene'
+

@@ -1,13 +1,11 @@
-package cc.explain.server.rest;
+package cc.explain.client.rest.rest;
 
-import java.io.IOException;
-
-import cc.explain.server.exception.TechnicalException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicHttpResponse;
-import org.springframework.http.HttpStatus;
+
+import java.io.IOException;
 
 public class RestClient {
 
@@ -24,14 +22,11 @@ public class RestClient {
         RestResponse response = null;
         try {
             BasicHttpResponse apacheResponse = (BasicHttpResponse) defaultHttpClient.execute(request);
-           response = new RestResponse(apacheResponse, request, defaultHttpClient.getConnectionManager());
-            if(response.getStatusCode() != HttpStatus.OK.value()){
-                throw new TechnicalException("Subtitles not found.");
-            }
+            response = new RestResponse(apacheResponse, request, defaultHttpClient.getConnectionManager());
         } catch (ClientProtocolException e) {
-            throw new TechnicalException(e.getCause());
+            throw new RuntimeException(e.getCause());
         } catch (IOException e) {
-            throw new TechnicalException(e.getCause());
+            throw new RuntimeException(e.getCause());
         }
         return response;
     }

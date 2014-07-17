@@ -1,3 +1,7 @@
+import cc.explain.client.rest.rest.HttpMethod;
+import cc.explain.client.rest.rest.RestClient;
+import cc.explain.client.rest.rest.RestRequest;
+import cc.explain.lucene.LuceneService;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.websocket.WebSocket;
@@ -16,6 +20,9 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class DvbtServlet extends WebSocketServlet {
 
+    private RedisService redisService = new RedisService();
+    private LuceneService luceneService = new LuceneService();
+
     private static final long serialVersionUID = -7289719281366784056L;
 
     private final Set<TailorSocket> _members = new CopyOnWriteArraySet<TailorSocket>();
@@ -30,6 +37,8 @@ public class DvbtServlet extends WebSocketServlet {
     @Override
     public void init() throws ServletException {
         super.init();
+
+
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {

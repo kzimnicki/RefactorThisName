@@ -1,6 +1,5 @@
-package cc.explain.server.rest;
+package cc.explain.client.rest.rest;
 
-import cc.explain.server.exception.TechnicalException;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -25,7 +24,7 @@ public class RestRequest extends HttpEntityEnclosingRequestBase {
         try {
             builder = new URIBuilder(path);
         } catch (URISyntaxException e) {
-            throw new TechnicalException(e.getCause());
+            throw new RuntimeException(e.getCause());
         }
         setURI(build());
         return this;
@@ -35,7 +34,7 @@ public class RestRequest extends HttpEntityEnclosingRequestBase {
         try {
             return builder.build();
         } catch (URISyntaxException e) {
-            throw new TechnicalException(e.getCause());  //To change body of catch statement use File | Settings | File Templates.
+            throw new RuntimeException(e.getCause());  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 

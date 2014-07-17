@@ -1,4 +1,4 @@
-package cc.explain.server.rest;
+package cc.explain.client.rest.rest;
 
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
