@@ -1,0 +1,27 @@
+group = 'lucene'
+description = 'lucene'
+version = 1.0
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: "maven"
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    mavenRepo url: "http://repo.maven.apache.org/maven2"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'java'
+        }
+    }
+}
+
+dependencies {
+    compile group: 'org.apache.lucene', name: 'lucene-core', version:'3.0.3'
+    compile group: 'org.apache.lucene', name: 'lucene-snowball', version:'3.0.3'
+    compile group: 'commons-io', name: 'commons-io', version: '2.1'
+}
