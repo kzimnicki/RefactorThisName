@@ -45,9 +45,8 @@
 
             _onmessage : function(m) {
                 var date = new Date();
-                console.log("before timeout", new Date());
                 setTimeout(function(){
-                    console.log("after timeout", new Date());
+                    console.log(m.data);
                     if (m.data) {
                         var data = JSON.parse(m.data);
                         $('#line1').text('');

@@ -1,7 +1,14 @@
 import cc.explain.client.rest.rest.HttpMethod;
 import cc.explain.client.rest.rest.RestClient;
 import cc.explain.client.rest.rest.RestRequest;
+import cc.explain.client.rest.rest.RestResponse;
 import cc.explain.lucene.LuceneService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.websocket.WebSocket;
@@ -11,7 +18,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
+import java.lang.reflect.Type;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
@@ -22,6 +30,22 @@ public class DvbtServlet extends WebSocketServlet {
 
     private RedisService redisService = new RedisService();
     private LuceneService luceneService = new LuceneService();
+    private RestClient client = new RestClient();
+
+    private static Set<String> excludedWords = new HashSet<>();
+
+    private static final String URL1 =  "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
+    private static final String URL2 = "%27&To=%27en%27&From=%27de%27&$format=json";
+
+
+
+    {
+        try {
+            excludedWords.addAll(IOUtils.readLines(DvbtServlet.class.getResourceAsStream("excludeGermanWords1000.txt")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private static final long serialVersionUID = -7289719281366784056L;
 
@@ -37,8 +61,6 @@ public class DvbtServlet extends WebSocketServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-
-
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -76,7 +98,31 @@ public class DvbtServlet extends WebSocketServlet {
             System.out.println(line1);
             System.out.println(line2);
             System.out.println(timestamp);
-            String json = createJsonString(line1, line2);
+
+
+            Set<String> wordsToTranslate = new HashSet<>();
+            if (line1 != null ){
+                wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line1));
+            }
+
+            if (line2 != null ){
+                wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line2));
+            }
+
+            HashMap<String, String> translations = new HashMap<>();
+            for (String word: wordsToTranslate){
+
+                RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(URL1+ word+URL2);
+                restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
+                RestResponse response = client.execute(restRequest);
+
+                JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
+                String translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
+                translations.put(escape(word),escape(translation));
+            }
+
+
+            String json = createJsonString(line1, line2, translations);
             System.out.println(json);
             queue.put(json);
 
@@ -85,8 +131,12 @@ public class DvbtServlet extends WebSocketServlet {
         }
     }
 
-    private String createJsonString(String line1, String line2) {
-        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\"}", escape(line1), escape(line2));
+    private String createJsonString(String line1, String line2, Map<String, String> translations) {
+        System.out.println("test");
+        Type typeOfMap = new TypeToken<Map<String, String>>() {}.getType();
+        String asString = new Gson().toJson(translations, typeOfMap);
+        System.out.println(asString);
+        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\", \"translations\":%s}", escape(line1), escape(line2), asString);
     }
 
     private String escape(String line) {
@@ -134,7 +184,7 @@ public class DvbtServlet extends WebSocketServlet {
             _members.add(this);
             _connection = connection;
             try {
-                connection.sendMessage(createJsonString("Loading....", ""));
+                connection.sendMessage(createJsonString("Loading....", "",new HashMap<String, String>()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
