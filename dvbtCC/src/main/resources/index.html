@@ -49,6 +49,7 @@
                     console.log(m.data);
                     if (m.data) {
                         var data = JSON.parse(m.data);
+                        console.log(data);
                         $('#line1').text('');
                         $('#line2').text('');
                         $('#translations').text('');
@@ -58,7 +59,7 @@
                         var translationArray = []
                         for (var key in data.translations) {
                           if (data.translations.hasOwnProperty(key)) {
-                            translationArray.push(key + " = " + data.translations[key]);
+                            translationArray.push(JSON.parse('"'+key+'"') + " = " + data.translations[key]);
                           }
                         }
 

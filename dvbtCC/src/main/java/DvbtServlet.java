@@ -118,7 +118,9 @@ public class DvbtServlet extends WebSocketServlet {
 
                 JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
                 String translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
-                translations.put(escape(word),escape(translation));
+                if(!word.equals(translation)){
+                    translations.put(escape(word),escape(translation));
+                }
             }
 
 
