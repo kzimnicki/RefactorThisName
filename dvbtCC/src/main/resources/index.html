@@ -51,8 +51,19 @@
                         var data = JSON.parse(m.data);
                         $('#line1').text('');
                         $('#line2').text('');
+                        $('#translations').text('');
                         $('#line1').text(data.l1);
                         $('#line2').text(data.l2);
+
+                        var translationArray = []
+                        for (var key in data.translations) {
+                          if (data.translations.hasOwnProperty(key)) {
+                            translationArray.push(key + " = " + data.translations[key]);
+                          }
+                        }
+
+
+                        $('#translations').html(translationArray.join("<br/>"));
                     }
                 }, delay);
             },
@@ -91,12 +102,18 @@
         top:50%;
         }
 
+
+
         span.alert {
-        font-style: italic;
+            font-style: italic;
         }
         span.text {
             font-size: 5.5vw;
             font-family: sans-serif;
+        }
+
+        span.text.translations {
+            color: yellow;
         }
     </style>
 </head>
@@ -106,6 +123,8 @@
             <span id="line1" class="text">1</span>
             <br />
             <span id="line2" class="text">2</span>
+            <br />
+            <span id="translations" class="text translations"></span>
         </div>
     </div>
     <div>
