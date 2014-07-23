@@ -100,7 +100,7 @@ public class DvbtServlet extends WebSocketServlet {
 
             HashMap<String, String> translations = new HashMap<>();
 
-            if ("KEINE UT".equals(line1) && "KEINE UT".equals(line2)) {
+            if (!"KEINE UT".equals(line1) && !"KEINE UT".equals(line2)) {
 
 
                 Set<String> wordsToTranslate = new HashSet<>();
