@@ -34,9 +34,8 @@ public class DvbtServlet extends WebSocketServlet {
 
     private static Set<String> excludedWords = new HashSet<>();
 
-    private static final String URL1 =  "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
+    private static final String URL1 = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
     private static final String URL2 = "%27&To=%27en%27&From=%27de%27&$format=json";
-
 
 
     {
@@ -99,31 +98,34 @@ public class DvbtServlet extends WebSocketServlet {
             System.out.println(line2);
             System.out.println(timestamp);
 
-
-            Set<String> wordsToTranslate = new HashSet<>();
-            if (line1 != null ){
-                wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line1));
-            }
-
-            if (line2 != null ){
-                wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line2));
-            }
-
             HashMap<String, String> translations = new HashMap<>();
-            for (String word: wordsToTranslate){
 
-                RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(URL1+ word+URL2);
-                restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
-                RestResponse response = client.execute(restRequest);
+            if ("KEINE UT".equals(line1) && "KEINE UT".equals(line2)) {
 
-                JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
-                String translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
-                if(!word.equals(translation)){
-                    translations.put(escape(word),escape(translation));
+
+                Set<String> wordsToTranslate = new HashSet<>();
+                if (line1 != null) {
+                    wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line1));
                 }
+
+                if (line2 != null) {
+                    wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line2));
+                }
+
+                for (String word : wordsToTranslate) {
+
+                    RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(URL1 + word + URL2);
+                    restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
+                    RestResponse response = client.execute(restRequest);
+
+                    JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
+                    String translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
+                    if (!word.equals(translation)) {
+                        translations.put(escape(word), escape(translation));
+                    }
+                }
+
             }
-
-
             String json = createJsonString(line1, line2, translations);
             System.out.println(json);
             queue.put(json);
@@ -135,19 +137,20 @@ public class DvbtServlet extends WebSocketServlet {
 
     private String createJsonString(String line1, String line2, Map<String, String> translations) {
         System.out.println("test");
-        Type typeOfMap = new TypeToken<Map<String, String>>() {}.getType();
+        Type typeOfMap = new TypeToken<Map<String, String>>() {
+        }.getType();
         String asString = new Gson().toJson(translations, typeOfMap);
         System.out.println(asString);
         return String.format("{\"l1\": \"%s\", \"l2\":\"%s\", \"translations\":%s}", escape(line1), escape(line2), asString);
     }
 
     private String escape(String line) {
-        if (line==null){
+        if (line == null) {
             return StringUtils.EMPTY;
-        }else {
+        } else {
             String trim = line.trim();
-            if(trim.length() > 40){
-                trim = trim.substring(0,40);
+            if (trim.length() > 40) {
+                trim = trim.substring(0, 40);
             }
             return StringEscapeUtils.escapeJson(trim);
         }
@@ -186,7 +189,7 @@ public class DvbtServlet extends WebSocketServlet {
             _members.add(this);
             _connection = connection;
             try {
-                connection.sendMessage(createJsonString("Loading....", "",new HashMap<String, String>()));
+                connection.sendMessage(createJsonString("Loading....", "", new HashMap<String, String>()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
