@@ -121,7 +121,7 @@ public class DvbtServlet extends WebSocketServlet {
                     redisHit++;
                     String translation = redisService.getEnglishTranslationForGermanWord(word);
 
-                    System.out.println(String.format("Redis translation: %s", translation));
+                    System.out.println(String.format("Redis translation: '%s', for: '%s' ", translation, word));
 
                     if(translation == null){
                         translatorHit++;
