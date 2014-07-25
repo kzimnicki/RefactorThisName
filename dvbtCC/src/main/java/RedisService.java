@@ -1,35 +1,41 @@
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.common.io.Files;
+import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 public class RedisService {
 
     private Jedis jedis;
 
-    public void init(){
-        jedis = new Jedis("localhost");
-        jedis.connect();
+    public RedisService(){
+        init();
     }
 
-    void put (String key, String value){
+    public void init(){
+        jedis = new Jedis("localhost");
+        reconnect();
+    }
+
+    private void put (String key, String value){
+        reconnect();
         jedis.set(key, value);
     }
 
-    public String get(String key){
+    public void putGermanWordEnglishTranslation( String key, String value){
+        put(String.format("DE:%s", key), String.format("EN:%s", value));
+    }
+
+    public String getEnglishTranslationForGermanWord( String key){
+        return StringUtils.removeStart(get(String.format("DE:%s", key)), "EN:");
+    }
+
+    private String get(String key){
+        reconnect();
         return jedis.get(key);
     }
 
-    public String getWithEngPrefix(String key){
-        return jedis.get(String.format("EN:%s",key));
+    private void reconnect() {
+        if(!jedis.isConnected()){
+            jedis.connect();
+        }
     }
 
     public void release(){

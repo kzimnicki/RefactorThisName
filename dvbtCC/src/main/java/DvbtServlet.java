@@ -32,6 +32,10 @@ public class DvbtServlet extends WebSocketServlet {
     private LuceneService luceneService = new LuceneService();
     private RestClient client = new RestClient();
 
+    private static int redisHit = 0;
+    private static int translatorHit = 0;
+
+
     private static Set<String> excludedWords = new HashSet<>();
 
     private static final String URL1 = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
@@ -114,20 +118,34 @@ public class DvbtServlet extends WebSocketServlet {
 
                 for (String word : wordsToTranslate) {
 
-                    RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(URL1 + word + URL2);
-                    restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
-                    RestResponse response = client.execute(restRequest);
+                    redisHit++;
+                    String translation = redisService.getEnglishTranslationForGermanWord(word);
 
-                    JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
-                    String translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
+                    System.out.println(String.format("Redis translation: %s", translation));
+
+                    if(translation == null){
+                        translatorHit++;
+                        RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(URL1 + word + URL2);
+                        restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
+                        RestResponse response = client.execute(restRequest);
+
+                        JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
+                        translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
+                        redisService.putGermanWordEnglishTranslation(word, translation);
+                    }
+
                     if (!word.equals(translation)) {
                         translations.put(escape(word), escape(translation));
                     }
                 }
 
             }
+            System.out.println(String.format("Redis hits: %s, Translator hit: %s", redisHit, translatorHit));
+
             String json = createJsonString(line1, line2, translations);
+
             System.out.println(json);
+
             queue.put(json);
 
         } catch (Exception e) {

@@ -8,6 +8,9 @@ apply plugin:'application'
 
 mainClassName = 'ServerTest'
 
+apply plugin:'application'
+mainClassName = "ServerTest"
+
 repositories {
     mavenLocal()
     mavenCentral()
