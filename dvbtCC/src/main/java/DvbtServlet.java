@@ -146,6 +146,8 @@ public class DvbtServlet extends WebSocketServlet {
 
             System.out.println(json);
 
+            System.out.println(String.format("Number of users: %s", _members.size()));
+
             queue.put(json);
 
         } catch (Exception e) {
