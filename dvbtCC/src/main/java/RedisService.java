@@ -5,39 +5,26 @@ import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisService {
 
-    private JedisPool pool;
+    private static JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost", 6379, 2000);
 
-    public RedisService(){
-        pool = new JedisPool(new JedisPoolConfig(), "localhost");
-    }
-
-    private void put (String key, String value){
+    private void put(String key, String value) {
         Jedis jedis = pool.getResource();
-        try {
-            jedis.set(key, value);
-        } finally {
-            if (null != jedis) {
-                jedis.close();
-            }
-        }
+        jedis.set(key, value);
+        pool.returnResource(jedis);
     }
 
-    private String get(String key){
+    private String get(String key) {
         Jedis jedis = pool.getResource();
-        try {
-            return jedis.get(key);
-        } finally {
-            if (null != jedis) {
-                jedis.close();
-            }
-        }
+        String value = jedis.get(key);
+        pool.returnResource(jedis);
+        return value;
     }
 
-    public void putGermanWordEnglishTranslation( String key, String value){
+    public void putGermanWordEnglishTranslation(String key, String value) {
         put(String.format("DE:%s", key), String.format("EN:%s", value));
     }
 
-    public String getEnglishTranslationForGermanWord( String key){
+    public String getEnglishTranslationForGermanWord(String key) {
         return StringUtils.removeStart(get(String.format("DE:%s", key)), "EN:");
     }
 }

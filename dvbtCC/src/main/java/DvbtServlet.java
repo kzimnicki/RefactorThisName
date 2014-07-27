@@ -4,7 +4,6 @@ import cc.explain.client.rest.rest.RestRequest;
 import cc.explain.client.rest.rest.RestResponse;
 import cc.explain.lucene.LuceneService;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
