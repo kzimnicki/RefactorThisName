@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -149,6 +150,7 @@ public class DvbtServlet extends WebSocketServlet {
             System.out.println(String.format("Number of users: %s", _members.size()));
 
             queue.put(json);
+            System.out.println(new SimpleDateFormat("yyyyMMddhhmmssS").format(new Date()));
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -32,5 +32,5 @@ dependencies {
     compile 'lucene:lucene:1.0'
     compile 'client:client:1.2'
     compile 'com.google.code.gson:gson:2.2.4'
-    compile 'redis.clients:jedis:2.2.1'
+    compile 'redis.clients:jedis:2.4.2'
 }

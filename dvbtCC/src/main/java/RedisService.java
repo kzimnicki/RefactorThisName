@@ -1,22 +1,36 @@
 import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisService {
 
-    private Jedis jedis;
+    private JedisPool pool;
 
     public RedisService(){
-        init();
-    }
-
-    public void init(){
-        jedis = new Jedis("localhost");
-        reconnect();
+        pool = new JedisPool(new JedisPoolConfig(), "localhost");
     }
 
     private void put (String key, String value){
-        reconnect();
-        jedis.set(key, value);
+        Jedis jedis = pool.getResource();
+        try {
+            jedis.set(key, value);
+        } finally {
+            if (null != jedis) {
+                jedis.close();
+            }
+        }
+    }
+
+    private String get(String key){
+        Jedis jedis = pool.getResource();
+        try {
+            return jedis.get(key);
+        } finally {
+            if (null != jedis) {
+                jedis.close();
+            }
+        }
     }
 
     public void putGermanWordEnglishTranslation( String key, String value){
@@ -25,20 +39,5 @@ public class RedisService {
 
     public String getEnglishTranslationForGermanWord( String key){
         return StringUtils.removeStart(get(String.format("DE:%s", key)), "EN:");
-    }
-
-    private String get(String key){
-        reconnect();
-        return jedis.get(key);
-    }
-
-    private void reconnect() {
-        if(!jedis.isConnected()){
-            jedis.connect();
-        }
-    }
-
-    public void release(){
-        jedis.disconnect();
     }
 }
