@@ -30,35 +30,40 @@
             <form class="userform">
                 <h2>Options</h2>
 
-                <label for="delay">Delay:</label>
-                <input type="range" name="delay" id="delay" min="0" max="100" value="50" data-show-value="true" data-highlight="true" data-popup-enabled="true">
+                <label for="delay">Delay in seconds:</label>
+                <input type="range" name="delay" id="delay" min="0" max="100" value="2" data-show-value="true" data-highlight="true" data-popup-enabled="true">
+
+                <br />    <br />
 
                 <div class="switch">
-                    <label for="cc">Closed Captions</label>
+                    <label for="cc">Closed Captions: </label>
                     <select name="cc" id="cc" data-role="slider">
                         <option value="off">Off</option>
                         <option value="on">On</option>
                     </select>
+
+
+                    <label for="cc">Size: </label>
+                    <input type="range" name="cc-size" id="cc-size" min="0" max="100" value="2" data-show-value="true" data-highlight="true" data-popup-enabled="true">
                 </div>
 
+                <br />     <br />
+
                 <div class="switch">
-                    <label for="translations">Translations</label>
+                    <label for="translations">Translations: </label>
                     <select name="translations" id="translations" data-role="slider">
                         <option value="off">Off</option>
                         <option value="on">On</option>
                     </select>
+
+                    <label for="cc">Size: </label>
+                    <input type="range" name="translations-size" id="translations-size" min="0" max="100" value="2" data-show-value="true" data-highlight="true" data-popup-enabled="true">
+
                 </div>
 
+
             </form>
-
-
-
-
         </div>
-
-
     </div>
-
-
 </body>
 </html>
