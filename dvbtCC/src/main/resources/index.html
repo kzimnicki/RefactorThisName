@@ -1,7 +1,19 @@
+<!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CC</title>
-    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+    <script id="panel-init">
+		$(function() {
+			$( "body>[data-role='panel']" ).panel();
+		});
+	</script>
+
+
     <script type='text/javascript'>
 
         var delay = 2000;
@@ -52,7 +64,7 @@
                         console.log(data);
                         $('#line1').text('');
                         $('#line2').text('');
-                        $('#translations').text('');
+                        $('#cc-translation').text('');
                         $('#line1').text(data.l1);
                         $('#line2').text(data.l2);
 
@@ -64,7 +76,7 @@
                         }
 
 
-                        $('#translations').html(translationArray.join("<br/>"));
+                        $('#cc-translation').html(translationArray.join("<br/>"));
                     }
                 }, delay);
             },
@@ -106,46 +118,99 @@
 
 
         span.alert {
-            font-style: italic;
+        font-style: italic;
         }
         span.text {
-            font-size: 5.5vw;
-            font-family: sans-serif;
+        font-size: 5.5vw;
+        font-family: sans-serif;
         }
 
         span.text.translations {
-            color: yellow;
+        color: yellow;
         }
     </style>
+
 </head>
-<body>
-    <div id='messageBox' style="text-align: center; display: table; height: 95%; width: 95%">
-        <div style=" display:table-cell;   vertical-align: middle;">
-            <span id="line1" class="text">1</span>
-            <br />
-            <span id="line2" class="text">2</span>
-            <br />
-            <span id="translations" class="text translations"></span>
+<body >
+<div id="page" data-role="page" data-quicklinks="true" style="background: #000000">
+
+
+    <div role="main" class="ui-content jqm-content jqm-fullwidth" style="background: #000000">
+        <a href="#leftpanel3" class="ui-btn-left ui-icon-bars ui-btn-icon-notext"></a>
+
+        <div id='messageBox' style="text-align: center; display: table; height: 95%; width: 95%">
+            <div style=" display:table-cell;   vertical-align: middle;">
+                <span id="line1" class="text">1</span>
+                <br />
+                <span id="line2" class="text">2</span>
+                <br />
+                <span id="cc-translation" class="text translations"></span>
+            </div>
         </div>
+
     </div>
-    <div>
-        <button onclick="changeDelay()">Change time</button>
-        <input id="delay" value="2000">
+
+
+    <div data-role="panel" id="leftpanel3" data-position="left" data-display="overlay" data-theme="b">
+        <a data-rel="close" class="ui-btn-right ui-icon-delete ui-btn-icon-notext"></a>
+
+        <form class="userform">
+            <h2>Options</h2>
+
+            <label for="delay">Delay:</label>
+            <input type="range" name="delay" id="delay" min="0" max="100" value="50" data-show-value="true" data-highlight="true" data-popup-enabled="true">
+
+            <div class="switch">
+                <label for="cc">Closed Captions</label>
+                <select name="cc" id="cc" data-role="slider">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+            </div>
+
+            <div class="switch">
+                <label for="translations">Translations</label>
+                <select name="translations" id="translations" data-role="slider">
+                    <option value="off">Off</option>
+                    <option value="on">On</option>
+                </select>
+            </div>
+
+        </form>
     </div>
 </div>
-<script type='text/javascript'>
-        var loc = window.location, new_uri;
-        if (loc.protocol === "https:") {
-            new_uri = "wss:";
-        } else {
-            new_uri = "ws:";
-        }
-        new_uri += "//" + loc.host;
-        new_uri += loc.pathname + "app/";
-        server.connect(new_uri);
-        //server.connect('ws://explain.cc:8888/app');
-        $('#control').empty();
-</script>
 
+<script>
+            $( document ).one( "pagecreate", "#page", function() {
+                $('#delay').change(function() {
+                    console.log('change');
+                    console.log($("#delay").val());
+                });
+
+                $('#cc').change(function() {
+                    console.log('change');
+                    console.log($("#cc").val());
+                });
+
+                $('#translations').change(function() {
+                    console.log('change');
+                    console.log($("#translations").val());
+                });
+
+
+                 var loc = window.location, new_uri;
+                if (loc.protocol === "https:") {
+                    new_uri = "wss:";
+                } else {
+                    new_uri = "ws:";
+                }
+                new_uri += "//" + loc.host;
+                new_uri += loc.pathname + "app/";
+                server.connect(new_uri);
+                //server.connect('ws://explain.cc:8888/app');
+                $('#control').empty();
+
+            });
+    </script>
 </body>
 </html>
