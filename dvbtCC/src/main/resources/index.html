@@ -69,8 +69,8 @@
         <form class="userform">
             <h2>Options</h2>
 
-            <label for="delay">Delay:</label>
-            <input type="range" name="delay" id="delay" min="0" max="100" value="50" data-show-value="true"
+            <label for="delay">Delay in seconds:</label>
+            <input type="range" name="delay" id="delay" min="0" max="100" value="3" data-show-value="true"
                    data-highlight="true" data-popup-enabled="true">
 
             <div class="switch">
@@ -168,9 +168,7 @@
         });
 
         $('#translations').change(function () {
-            console.log($('#cc-translation'));
-            if($("#cc-translation").val() === 'off'){
-                console.log($("#cc-translation").val());
+            if($('#translations').val() === 'off'){
                 $('#cc-translation').hide();
             } else {
                 $('#cc-translation').show();
@@ -186,8 +184,8 @@
         }
         new_uri += "//" + loc.host;
         new_uri += loc.pathname + "app/";
-        server.connect(new_uri);
-//        server.connect('ws://explain.cc:8888/app');
+//        server.connect(new_uri);
+        server.connect('ws://explain.cc:8888/app');
         $('#control').empty();
     });
 </script>
