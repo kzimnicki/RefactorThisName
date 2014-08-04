@@ -100,6 +100,30 @@
         if (!window.WebSocket)
             alert("WebSocket not supported by this browser");
 
+        var createCircularBuffer = function(length){
+
+            var pointer = 0, buffer = [];
+
+            return {
+                get  : function(){return buffer;},
+                push : function(item){
+                    buffer[pointer] = item;
+                    pointer = (length + pointer +1) % length;
+                }
+            };
+        };
+
+        var circularBuffer = createCircularBuffer(5);
+
+        circularBuffer.push('abc1');
+        circularBuffer.push('abc2');
+        circularBuffer.push('abc3');
+        circularBuffer.push('abc4');
+        circularBuffer.push('abc5');
+        circularBuffer.push('abc6');
+
+        console.log(circularBuffer.get());
+
         var server = {
             connect: function (url) {
                 this._ws = new WebSocket(url);
