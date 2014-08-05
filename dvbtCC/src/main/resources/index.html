@@ -97,6 +97,10 @@
     $(document).one("pagecreate", "#page", function () {
         var delay = 2000;
 
+        var speedCounterStartDate = new Date().getTime();
+        var ccCounter = 0;
+
+
         if (!window.WebSocket)
             alert("WebSocket not supported by this browser");
 
@@ -160,6 +164,12 @@
             },
 
             _onmessage: function (m) {
+                if (++ccCounter === 5){
+                   console.log('Speed: ', (new Date().getTime() - speedCounterStartDate)/1000);
+                   speedCounterStartDate = new Date().getTime();
+                    ccCounter = 0;
+                }
+
                 setTimeout(function () {
                     console.log(m.data);
                     if (m.data) {
@@ -174,7 +184,7 @@
 
 
                         for(var i=0; i<circularBuffer.get().length; i++){
-                            circularBuffer.get()[i].color = colorLuminance(circularBuffer.get()[i].color, -0.3);
+                            circularBuffer.get()[i].color = colorLuminance(circularBuffer.get()[i].color, -0.4);
                         }
 
 
@@ -241,7 +251,7 @@
         }
         new_uri += "//" + loc.host;
         new_uri += loc.pathname + "app/";
-//        server.connect(new_uri);
+       //server.connect(new_uri);
         server.connect('ws://explain.cc:8888/app');
         $('#control').empty();
     });
