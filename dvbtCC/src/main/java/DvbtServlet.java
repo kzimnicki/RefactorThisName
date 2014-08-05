@@ -134,10 +134,11 @@ public class DvbtServlet extends WebSocketServlet {
                         redisService.putGermanWordEnglishTranslation(word, translation);
                     }
 
-                    if (LevenshteinDistance.distance(word, translation) > 1) {
+                    int distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(translation));
+                    if ((word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2)) {
                         translations.put(escape(word), escape(translation));
                     } else {
-                        System.out.println(String.format("LevenshteinDistance: %s - %s", word, translation));
+                        System.out.println(String.format(" > > >LevenshteinDistance: %s - %s", word, translation));
                     }
                 }
 
