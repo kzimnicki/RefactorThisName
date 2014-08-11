@@ -41,6 +41,18 @@
         span.text.translations {
             color: yellow;
         }
+
+        .transition {
+            color: yellow;
+            opacity: 1;
+        }
+        .show {
+            opacity: 0.1;
+            transition: opacity 2s linear;
+            -ms-transition: opacity 2s linear;
+            -moz-transition: opacity 2s linear;
+            -webkit-transition: opacity 2s linear;
+        }
     </style>
 
 </head>
@@ -57,7 +69,15 @@
                 <br/>
                 <span id="line2" class="text"></span>
                 <br/>
-                <span id="cc-translation" class="text translations"></span>
+                <span id="cc-translation" class="text translations">
+                    <div id="translation-1"></div>
+                    <div id="translation-2"></div>
+                    <div id="translation-3"></div>
+                    <div id="translation-4"></div>
+                    <div id="translation-5"></div>
+                    <div id="translation-6"></div>
+
+                </span>
             </div>
         </div>
 
@@ -100,34 +120,12 @@
 
         var speedCounterStartDate = new Date().getTime();
         var ccCounter = 0;
+        var pointer = 0;
+        var length = 6;
 
 
         if (!window.WebSocket)
             alert("WebSocket not supported by this browser");
-
-        var createCircularBuffer = function(length){
-
-            var pointer = 0, buffer = [];
-
-            return {
-                get  : function(){return buffer;},
-                push : function(item){
-                    buffer[pointer] = item;
-                    pointer = (length + pointer +1) % length;
-                }
-            };
-        };
-
-        var circularBuffer = createCircularBuffer(6);
-
-        var colors = ['#FFFF00','#999900','#003300','#000000'];
-
-        function getColors(index){
-            if(colors.length < index){
-                return colors[colors.length-1];
-            }
-            return colors[index];
-        }
 
         var server = {
             connect: function (url) {
@@ -155,7 +153,7 @@
                 if (++ccCounter === 5){
                    console.log('Speed: ', (new Date().getTime() - speedCounterStartDate)/1000);
                    speedCounterStartDate = new Date().getTime();
-                    ccCounter = 0;
+                   ccCounter = 0;
                 }
 
                 setTimeout(function () {
@@ -165,35 +163,41 @@
                         console.log(data);
                         $('#line1').text('');
                         $('#line2').text('');
-                        $('#cc-translation').text('');
+//                        $('#cc-translation').text('');
                         $('#line1').text(data.l1);
                         $('#line2').text(data.l2);
-
-
-
-                        for(var i=0; i<circularBuffer.get().length; i++){
-                            circularBuffer.get()[i].colorIndex = circularBuffer.get()[i].colorIndex + 1;
-                        }
 
 
                         for (var key in data.translations) {
                             if (data.translations.hasOwnProperty(key)) {
                                 var jsonData = {
                                     word : JSON.parse('"' + key + '"'),
-                                    translation: data.translations[key],
-                                    colorIndex: 0
+                                    translation: data.translations[key]
                                 };
-                                circularBuffer.push(jsonData);
+
+                                pointer = (length+pointer)%length;
+
+                                console.log(Math.floor(pointer));
+                                console.log($('#translation-'+Math.round(pointer)));
+                                $('#translation-'+Math.round(pointer)).text(jsonData.word+' = '+jsonData.translation)
+                                pointer++;
                             }
                         }
 
-                        console.log(circularBuffer.get());
-
-                        for(var i=0; i<circularBuffer.get().length; i++){
-                            var data = circularBuffer.get()[i];
-                            console.log(data);
-                            $('#cc-translation').append('<div style="color:'+getColors(data.colorIndex)+';">'+data.word+' = '+data.translation+'</div>');
-                        }
+//                        for(var i=0; i<circularBuffer.get().length; i++){
+//                            var data = circularBuffer.get()[i];
+//                            console.log(data);
+//                            var object = $('<div class="transition">'+data.word+' = '+data.translation+'</div>');
+//                            console.log(object);
+//                            $('#cc-translation').append(object);
+//
+//                            setTimeout(function(){
+//                                        console.log('added');
+//                                        object.addClass('show');
+//                                    }
+//                                    , 100);
+//
+//                        }
 
 
                     }
