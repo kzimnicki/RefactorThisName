@@ -70,12 +70,12 @@
                 <span id="line2" class="text"></span>
                 <br/>
                 <span id="cc-translation" class="text translations">
+                    <div id="translation-0"></div>
                     <div id="translation-1"></div>
                     <div id="translation-2"></div>
                     <div id="translation-3"></div>
                     <div id="translation-4"></div>
                     <div id="translation-5"></div>
-                    <div id="translation-6"></div>
 
                 </span>
             </div>
@@ -120,7 +120,7 @@
 
         var speedCounterStartDate = new Date().getTime();
         var ccCounter = 0;
-        var pointer = 0;
+        var pointer = -1;
         var length = 6;
 
 
@@ -168,37 +168,40 @@
                         $('#line2').text(data.l2);
 
 
-                        for (var key in data.translations) {
-                            if (data.translations.hasOwnProperty(key)) {
+
+
+                        var displayData = [];
+                        $.each(data.translations, function(key){
                                 var jsonData = {
                                     word : JSON.parse('"' + key + '"'),
-                                    translation: data.translations[key]
+                                    translation: data.translations[key],
+                                    pointer : pointer
                                 };
+                                pointer = (length+pointer+1)%length;
+                                displayData.push(jsonData);
+                                console.log(Math.round(pointer));
 
-                                pointer = (length+pointer +1)%length;
+                        });
 
-                                console.log(Math.floor(pointer));
-                                var object = $('#translation-' + Math.round(pointer));
-                                console.log(object);
-                                object.text(jsonData.word+' = '+jsonData.translation);
-                                object.animate({opacity: 0.0}, 5000, 'linear');
-                            }
+
+
+                        var display = function(displayData, i){
+                            console.log(displayData);
+                            var object = $('#translation-' + Math.round(displayData[i].pointer));
+                            object.text(displayData[i].word+' = '+displayData[i].translation);
+                            object.animate({opacity: 1.0}, 500, function(){
+                                    object.animate({opacity: 0.2}, 5000, 'linear');
+                                    if(displayData.length > i){
+                                        display(displayData, ++i);
+                                    }
+                            });
                         }
 
-//                        for(var i=0; i<circularBuffer.get().length; i++){
-//                            var data = circularBuffer.get()[i];
-//                            console.log(data);
-//                            var object = $('<div class="transition">'+data.word+' = '+data.translation+'</div>');
-//                            console.log(object);
-//                            $('#cc-translation').append(object);
-//
-//                            setTimeout(function(){
-//                                        console.log('added');
-//                                        object.addClass('show');
-//                                    }
-//                                    , 100);
-//
-//                        }
+                        if(displayData.length > 0){
+                            display(displayData, 0);
+                        }
+
+
 
 
                     }
