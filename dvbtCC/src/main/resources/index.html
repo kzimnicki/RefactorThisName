@@ -175,12 +175,13 @@
                                     translation: data.translations[key]
                                 };
 
-                                pointer = (length+pointer)%length;
+                                pointer = (length+pointer +1)%length;
 
                                 console.log(Math.floor(pointer));
-                                console.log($('#translation-'+Math.round(pointer)));
-                                $('#translation-'+Math.round(pointer)).text(jsonData.word+' = '+jsonData.translation)
-                                pointer++;
+                                var object = $('#translation-' + Math.round(pointer));
+                                console.log(object);
+                                object.text(jsonData.word+' = '+jsonData.translation);
+                                object.animate({opacity: 0.0}, 5000, 'linear');
                             }
                         }
 
