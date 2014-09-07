@@ -25,7 +25,7 @@ public class RedisService {
     }
 
     public void putGermanWordPolishTranslation(String key, String value) {
-        put(String.format("DE:%s", key), String.format("PL:%s", value));
+        put(String.format("DE:%s", key), String.format("DEPL:%s", value));
     }
 
     public String getEnglishTranslationForGermanWord(String key) {
@@ -33,6 +33,6 @@ public class RedisService {
     }
 
     public String getPolishTranslationForGermanWord(String key) {
-        return StringUtils.removeStart(get(String.format("DE:%s", key)), "PL:");
+        return StringUtils.removeStart(get(String.format("DEPL:%s", key)), "DEPL:");
     }
 }
