@@ -24,7 +24,15 @@ public class RedisService {
         put(String.format("DE:%s", key), String.format("EN:%s", value));
     }
 
+    public void putGermanWordPolishTranslation(String key, String value) {
+        put(String.format("DE:%s", key), String.format("PL:%s", value));
+    }
+
     public String getEnglishTranslationForGermanWord(String key) {
+        return StringUtils.removeStart(get(String.format("DE:%s", key)), "EN:");
+    }
+
+    public String getPolishTranslationForGermanWord(String key) {
         return StringUtils.removeStart(get(String.format("DE:%s", key)), "EN:");
     }
 }

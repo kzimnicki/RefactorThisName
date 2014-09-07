@@ -38,8 +38,11 @@ public class DvbtServlet extends WebSocketServlet {
 
     private static Set<String> excludedWords = new HashSet<>();
 
-    private static final String URL1 = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
-    private static final String URL2 = "%27&To=%27en%27&From=%27de%27&$format=json";
+    private static final String EN_URL1 = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
+    private static final String EN_URL2 = "%27&To=%27en%27&From=%27de%27&$format=json";
+
+    private static final String PL_URL1 = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
+    private static final String PL_URL2 = "%27&To=%27pl%27&From=%27de%27&$format=json";
 
 
     {
@@ -103,6 +106,7 @@ public class DvbtServlet extends WebSocketServlet {
             System.out.println(timestamp);
 
             HashMap<String, String> translations = new HashMap<>();
+            HashMap<String, String> plTranslations = new HashMap<>();
 
             if (!"KEINE UT".equals(line1) && !"KEINE UT".equals(line2)) {
 
@@ -125,27 +129,37 @@ public class DvbtServlet extends WebSocketServlet {
 
                     if(translation == null){
                         translatorHit++;
-                        RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(URL1 + word + URL2);
-                        restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
-                        RestResponse response = client.execute(restRequest);
-
-                        JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
-                        translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
+                        translation = translate(word, EN_URL1, EN_URL2);
                         redisService.putGermanWordEnglishTranslation(word, translation);
+                    }
+
+                    String plTranslation =  redisService.getPolishTranslationForGermanWord(word);
+
+                    if(translation == null){
+                        translatorHit++;
+                        plTranslation = translate(word, PL_URL1, PL_URL2);
+                        redisService.putGermanWordPolishTranslation(word, plTranslation);
                     }
 
                     int distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(translation));
                     if ((word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2)) {
                         translations.put(escape(word), escape(translation));
                     } else {
-                        System.out.println(String.format(" > > >LevenshteinDistance: %s - %s", word, translation));
+                        System.out.println(String.format(" > > > EN LevenshteinDistance: %s - %s", word, translation));
+                    }
+
+                    distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(plTranslation));
+                    if ((word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2)) {
+                        plTranslations.put(escape(word), escape(plTranslation));
+                    } else {
+                        System.out.println(String.format(" > > > PL LevenshteinDistance: %s - %s", word, plTranslation));
                     }
                 }
 
             }
             System.out.println(String.format("Redis hits: %s, Translator hit: %s", redisHit, translatorHit));
 
-            String json = createJsonString(line1, line2, translations);
+            String json = createJsonString(line1, line2, translations, plTranslations);
 
             System.out.println(json);
 
@@ -159,13 +173,23 @@ public class DvbtServlet extends WebSocketServlet {
         }
     }
 
-    private String createJsonString(String line1, String line2, Map<String, String> translations) {
+    private String translate(String word, String enUrl1, String enUrl2) throws IOException {
+        String translation;RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(enUrl1 + word + enUrl2);
+        restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
+        RestResponse response = client.execute(restRequest);
+
+        JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
+        translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
+        return translation;
+    }
+
+    private String createJsonString(String line1, String line2, Map<String, String> translations, HashMap<String, String> plTranslations) {
         System.out.println("test");
-        Type typeOfMap = new TypeToken<Map<String, String>>() {
-        }.getType();
-        String asString = new Gson().toJson(translations, typeOfMap);
+        Type typeOfMap = new TypeToken<Map<String, String>>() {}.getType();
+        String enTranslationsString = new Gson().toJson(translations, typeOfMap);
+        String plTranslationsString = new Gson().toJson(plTranslations, typeOfMap);
         System.out.println(asString);
-        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\", \"translations\":%s}", escape(line1), escape(line2), asString);
+        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\", \"EN\":%s, \"PL\": %s}", escape(line1), escape(line2), enTranslationsString, plTranslationsString);
     }
 
     private String escape(String line) {
@@ -213,7 +237,7 @@ public class DvbtServlet extends WebSocketServlet {
             _members.add(this);
             _connection = connection;
             try {
-                connection.sendMessage(createJsonString("Loading....", "", new HashMap<String, String>()));
+                connection.sendMessage(createJsonString("Loading....", "", new HashMap<String, String>(), plTranslations));
             } catch (IOException e) {
                 e.printStackTrace();
             }
