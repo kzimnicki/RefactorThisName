@@ -135,7 +135,7 @@ public class DvbtServlet extends WebSocketServlet {
 
                     String plTranslation =  redisService.getPolishTranslationForGermanWord(word);
 
-                    if(translation == null){
+                    if(plTranslation == null){
                         translatorHit++;
                         plTranslation = translate(word, PL_URL1, PL_URL2);
                         redisService.putGermanWordPolishTranslation(word, plTranslation);
