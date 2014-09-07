@@ -174,6 +174,7 @@ public class DvbtServlet extends WebSocketServlet {
     }
 
     private String translate(String word, String enUrl1, String enUrl2) throws IOException {
+        System.out.println(enUrl2);
         String translation;RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(enUrl1 + word + enUrl2);
         restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
         RestResponse response = client.execute(restRequest);

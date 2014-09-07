@@ -33,6 +33,6 @@ public class RedisService {
     }
 
     public String getPolishTranslationForGermanWord(String key) {
-        return StringUtils.removeStart(get(String.format("DE:%s", key)), "EN:");
+        return StringUtils.removeStart(get(String.format("DE:%s", key)), "PL:");
     }
 }
