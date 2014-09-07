@@ -188,7 +188,6 @@ public class DvbtServlet extends WebSocketServlet {
         Type typeOfMap = new TypeToken<Map<String, String>>() {}.getType();
         String enTranslationsString = new Gson().toJson(translations, typeOfMap);
         String plTranslationsString = new Gson().toJson(plTranslations, typeOfMap);
-        System.out.println(asString);
         return String.format("{\"l1\": \"%s\", \"l2\":\"%s\", \"EN\":%s, \"PL\": %s}", escape(line1), escape(line2), enTranslationsString, plTranslationsString);
     }
 
@@ -237,7 +236,7 @@ public class DvbtServlet extends WebSocketServlet {
             _members.add(this);
             _connection = connection;
             try {
-                connection.sendMessage(createJsonString("Loading....", "", new HashMap<String, String>(), plTranslations));
+                connection.sendMessage(createJsonString("Loading....", "", new HashMap<String, String>(), new HashMap<String, String>()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
