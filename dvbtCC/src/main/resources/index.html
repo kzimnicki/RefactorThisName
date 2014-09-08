@@ -122,6 +122,7 @@
         var ccCounter = 0;
         var pointer = -1;
         var length = 6;
+        var language = 'PL';
 
 
         if (!window.WebSocket)
@@ -170,10 +171,10 @@
 
 
                         var displayData = [];
-                        $.each(data.translations, function(key){
+                        $.each(data[language], function(key){
                                 var jsonData = {
                                     word : JSON.parse('"' + key + '"'),
-                                    translation: data.translations[key],
+                                    translation: JSON.parse('"' + data[language][key] + '"'),
                                     pointer : pointer
                                 };
                                 pointer = (length+pointer+1)%length;
