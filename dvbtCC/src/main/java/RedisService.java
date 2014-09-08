@@ -21,18 +21,18 @@ public class RedisService {
     }
 
     public void putGermanWordEnglishTranslation(String key, String value) {
-        put(String.format("DE:%s", key), String.format("EN:%s", value));
-    }
-
-    public void putGermanWordPolishTranslation(String key, String value) {
-        put(String.format("DE:%s", key), String.format("DEPL:%s", value));
+        put(String.format("DE:%s", key), value);
     }
 
     public String getEnglishTranslationForGermanWord(String key) {
-        return StringUtils.removeStart(get(String.format("DE:%s", key)), "EN:");
+        return get(String.format("DE:%s", key));
+    }
+
+    public void putGermanWordPolishTranslation(String key, String value) {
+        put(String.format("DEPL:%s", key), value);
     }
 
     public String getPolishTranslationForGermanWord(String key) {
-        return StringUtils.removeStart(get(String.format("DEPL:%s", key)), "DEPL:");
+        return get(String.format("DEPL:%s", key));
     }
 }
