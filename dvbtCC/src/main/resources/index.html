@@ -20,13 +20,29 @@
         }
 
         body {
-            background-color: black;
+            background-color: #000000;
         }
+
+
 
         div#messageBox {
             padding: 16px;
             color: white;
+            text-align: center;
+            display: table;
+            height: 95%;
+            width: 95%
         }
+
+        .messageBoxContent {
+            display:table-cell;
+            vertical-align: middle;
+        }
+
+        .black {
+            background-color: #000000;
+        }
+
 
         span {
             top: 50%;
@@ -41,30 +57,16 @@
         span.text.translations {
             color: yellow;
         }
-
-        .transition {
-            color: yellow;
-            opacity: 1;
-        }
-        .show {
-            opacity: 0.1;
-            transition: opacity 2s linear;
-            -ms-transition: opacity 2s linear;
-            -moz-transition: opacity 2s linear;
-            -webkit-transition: opacity 2s linear;
-        }
     </style>
 
 </head>
 <body>
-<div id="page" data-role="page" data-quicklinks="true" style="background: #000000">
-
-
-    <div role="main" class="ui-content jqm-content jqm-fullwidth" style="background: #000000">
+<div id="page" data-role="page" data-quicklinks="true" class="black">
+    <div role="main" class="ui-content jqm-content jqm-fullwidth black">
         <a href="#leftpanel3" class="ui-btn-left ui-icon-bars ui-btn-icon-notext"></a>
 
-        <div id='messageBox' style="text-align: center; display: table; height: 95%; width: 95%">
-            <div style=" display:table-cell;   vertical-align: middle;">
+        <div id="messageBox">
+            <div class="messageBoxContent">
                 <span id="line1" class="text">Connecting...</span>
                 <br/>
                 <span id="line2" class="text"></span>
@@ -91,7 +93,7 @@
             <h2>Options</h2>
 
             <label for="delay">Delay in seconds:</label>
-            <input type="range" name="delay" id="delay" min="0" max="100" value="3" data-show-value="true"
+            <input type="range" name="delay" id="delay" min="0" max="10" value="4" data-show-value="true"
                    data-highlight="true" data-popup-enabled="true">
 
             <div class="switch">
@@ -110,14 +112,21 @@
                 </select>
             </div>
 
+            <div class="switch">
+                <label for="language" class="select">Language</label>
+                <select name="language" id="language">
+                    <option value="PL">Polish</option>
+                    <option value="EN">English</option>
+                </select>
+            </div>
+
         </form>
     </div>
 </div>
 
 <script>
     $(document).one("pagecreate", "#page", function () {
-        var delay = 2000;
-
+        var delayInMillis = 4000;
         var speedCounterStartDate = new Date().getTime();
         var ccCounter = 0;
         var pointer = -1;
@@ -127,6 +136,53 @@
 
         if (!window.WebSocket)
             alert("WebSocket not supported by this browser");
+
+
+        function createDisplayData(data){
+            var displayData = [];
+            $.each(data[language], function(key){
+                var jsonData = {
+                    word : JSON.parse('"' + key + '"'),
+                    translation: JSON.parse('"' + data[language][key] + '"'),
+                    pointer : pointer
+                };
+                pointer = (length+pointer+1)%length;
+                displayData.push(jsonData);
+            });
+            return displayData;
+        }
+
+        function showTranslations(displayData){
+            var display = function(displayData, i){
+                var object = $('#translation-' + Math.round(displayData[i].pointer));
+                object.text(displayData[i].word+' = '+displayData[i].translation);
+                object.animate({opacity: 1.0}, 700, function(){
+                    object.animate({opacity: 0.2}, 5000, 'linear');
+                    if(displayData.length - 1 > i){
+                        display(displayData, ++i);
+                    }
+                });
+            }
+
+            if(displayData.length > 0){
+                display(displayData, 0);
+            }
+        }
+
+        function prepareCCHtml(data){
+            $('#line1').text('');
+            $('#line2').text('');
+            $('#line1').text(data.l1);
+            $('#line2').text(data.l2);
+        }
+
+        function speedCounter(){
+            if (++ccCounter === 5){
+                console.log('Speed: ', (new Date().getTime() - speedCounterStartDate)/1000);
+                speedCounterStartDate = new Date().getTime();
+                ccCounter = 0;
+            }
+        }
 
         var server = {
             connect: function (url) {
@@ -151,58 +207,15 @@
             },
 
             _onmessage: function (m) {
-                if (++ccCounter === 5){
-                   console.log('Speed: ', (new Date().getTime() - speedCounterStartDate)/1000);
-                   speedCounterStartDate = new Date().getTime();
-                   ccCounter = 0;
-                }
-
+                speedCounter();
                 setTimeout(function () {
-                    console.log(m.data);
                     if (m.data) {
                         var data = JSON.parse(m.data);
-                        console.log(data);
-                        $('#line1').text('');
-                        $('#line2').text('');
-                        $('#line1').text(data.l1);
-                        $('#line2').text(data.l2);
-
-
-
-
-                        var displayData = [];
-                        $.each(data[language], function(key){
-                                var jsonData = {
-                                    word : JSON.parse('"' + key + '"'),
-                                    translation: JSON.parse('"' + data[language][key] + '"'),
-                                    pointer : pointer
-                                };
-                                pointer = (length+pointer+1)%length;
-                                displayData.push(jsonData);
-
-
-                        });
-
-                        var display = function(displayData, i){
-                            var object = $('#translation-' + Math.round(displayData[i].pointer));
-                            object.text(displayData[i].word+' = '+displayData[i].translation);
-                            object.animate({opacity: 1.0}, 700, function(){
-                                    object.animate({opacity: 0.2}, 5000, 'linear');
-                                    if(displayData.length - 1 > i){
-                                        display(displayData, ++i);
-                                    }
-                            });
-                        }
-
-                        if(displayData.length > 0){
-                            display(displayData, 0);
-                        }
-
-
-
-
+                        prepareCCHtml(data);
+                        var displayData = createDisplayData(data);
+                        showTranslations(displayData);
                     }
-                }, delay);
+                }, delayInMillis);
             },
 
             _onclose: function () {
@@ -212,12 +225,10 @@
 
 
         $('#delay').change(function () {
-            console.log('change');
-            console.log($("#delay").val());
+            delayInMillis = $("#delay").val() * 1000;
         });
 
         $('#cc').change(function () {
-            console.log('change');
             if($("#cc").val() === 'off'){
                 $('#line1').hide();
                 $('#line2').hide();
@@ -233,6 +244,10 @@
             } else {
                 $('#cc-translation').show();
             }
+        });
+
+        $('#language').change(function () {
+            language = $('#language').val();
         });
 
 
