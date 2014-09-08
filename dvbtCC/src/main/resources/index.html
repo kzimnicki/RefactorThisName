@@ -129,7 +129,7 @@
         var delayInMillis = 4000;
         var speedCounterStartDate = new Date().getTime();
         var ccCounter = 0;
-        var pointer = -1;
+        var pointer = 1;
         var length = 6;
         var language = 'PL';
 
@@ -147,12 +147,14 @@
                     pointer : pointer
                 };
                 pointer = (length+pointer+1)%length;
+                console.log('Pointer: ', pointer);
                 displayData.push(jsonData);
             });
             return displayData;
         }
 
         function showTranslations(displayData){
+            console.log(displayData);
             var display = function(displayData, i){
                 var object = $('#translation-' + Math.round(displayData[i].pointer));
                 object.text(displayData[i].word+' = '+displayData[i].translation);
