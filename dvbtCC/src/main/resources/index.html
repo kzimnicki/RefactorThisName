@@ -186,9 +186,14 @@
             }
         }
 
+
+
         var server = {
-            connect: function (url) {
-                this._ws = new WebSocket(url);
+
+
+            connect: function () {
+
+                this._ws = new WebSocket('ws://explain.cc:8888/app');
                 this._ws.onopen = this._onopen;
                 this._ws.onmessage = this._onmessage;
                 this._ws.onclose = this._onclose;
@@ -221,6 +226,22 @@
             },
 
             _onclose: function () {
+//                console.log("disconnected");
+//                console.log('This: ',this);
+//                var websocket = this;
+//                var interval = setInterval(function(){
+//                    if(websocket.readyState === 3){
+//                        console.log('Connecting...', websocket.readyState);
+//                        console.log(websocket);
+//                        websocket.readyState = WebSocket.CONNECTING;
+//                        server.connect();
+//                        console.log('Connecting...', websocket.readyState);
+//                    } else {
+//                        console.log('Finishing reconecction');
+//                        clearInterval(interval);
+//                    }
+//
+//                }, 5000);
                 this._ws = null;
             }
         };
@@ -252,18 +273,9 @@
             language = $('#language').val();
         });
 
+        server.connect();
 
-        var loc = window.location, new_uri;
-        if (loc.protocol === "https:") {
-            new_uri = "wss:";
-        } else {
-            new_uri = "ws:";
-        }
-        new_uri += "//" + loc.host;
-        new_uri += loc.pathname + "app/";
-       //server.connect(new_uri);
-        server.connect('ws://explain.cc:8888/app');
-        $('#control').empty();
+
     });
 </script>
 </body>
