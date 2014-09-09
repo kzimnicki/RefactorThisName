@@ -20,19 +20,11 @@ public class RedisService {
         return value;
     }
 
-    public void putGermanWordEnglishTranslation(String key, String value) {
-        put(String.format("DE:%s", key), value);
+    public void puTranslation(String languagePrefix, String key, String value) {
+        put(String.format("%s:%s",languagePrefix,  key), value);
     }
 
-    public String getEnglishTranslationForGermanWord(String key) {
-        return get(String.format("DE:%s", key));
-    }
-
-    public void putGermanWordPolishTranslation(String key, String value) {
-        put(String.format("DEPL:%s", key), value);
-    }
-
-    public String getPolishTranslationForGermanWord(String key) {
-        return get(String.format("DEPL:%s", key));
+    public String getTranslation(String languagePrefix, String key) {
+        return get(String.format("%s:%s", languagePrefix, key));
     }
 }

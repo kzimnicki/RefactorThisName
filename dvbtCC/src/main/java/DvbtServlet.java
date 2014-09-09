@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
@@ -28,6 +29,13 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class DvbtServlet extends WebSocketServlet {
 
+    private static final String DE_EN = "DEEN";
+    private static final String DE_PL = "DEPL";
+    private static final String EMPTY_STRING = "";
+    private static final String PARAM_LINE_1 = "l1";
+    private static final String PARAM_LINE_2 = "l2";
+    private static final String PARAM_TIMESTAMP = "t";
+    private static final String NO_CC = "KEINE UT";
     private RedisService redisService = new RedisService();
     private LuceneService luceneService = new LuceneService();
     private RestClient client = new RestClient();
@@ -38,12 +46,7 @@ public class DvbtServlet extends WebSocketServlet {
 
     private static Set<String> excludedWords = new HashSet<>();
 
-    private static final String EN_URL1 = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
-    private static final String EN_URL2 = "%27&To=%27en%27&From=%27de%27&$format=json";
-
-    private static final String PL_URL1 = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27";
-    private static final String PL_URL2 = "%27&To=%27pl%27&From=%27de%27&$format=json";
-
+    private static final String URL_PATTERN = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27%27&To=%27{1}%27&From=%27{0}%27&$format=json";
 
     {
         try {
@@ -70,7 +73,7 @@ public class DvbtServlet extends WebSocketServlet {
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                String value = "";
+                String value = EMPTY_STRING;
                 try {
                     value = queue.take();
                 } catch (InterruptedException e) {
@@ -98,9 +101,9 @@ public class DvbtServlet extends WebSocketServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            String line1 = req.getParameter("l1");
-            String line2 = req.getParameter("l2");
-            String timestamp = req.getParameter("t");
+            String line1 = req.getParameter(PARAM_LINE_1);
+            String line2 = req.getParameter(PARAM_LINE_2);
+            String timestamp = req.getParameter(PARAM_TIMESTAMP);
             System.out.println(line1);
             System.out.println(line2);
             System.out.println(timestamp);
@@ -108,52 +111,21 @@ public class DvbtServlet extends WebSocketServlet {
             HashMap<String, String> translations = new HashMap<>();
             HashMap<String, String> plTranslations = new HashMap<>();
 
-            if (!"KEINE UT".equals(line1) && !"KEINE UT".equals(line2)) {
+            if (!NO_CC.equals(line1.trim()) && !NO_CC.equals(line2.trim())) {
 
 
-                Set<String> wordsToTranslate = new HashSet<>();
-                if (line1 != null) {
-                    wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line1));
-                }
-
-                if (line2 != null) {
-                    wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line2));
-                }
+                LinkedHashSet<String> wordsToTranslate = new LinkedHashSet<>();
+                getWords(line1, wordsToTranslate);
+                getWords(line2, wordsToTranslate);
 
                 for (String word : wordsToTranslate) {
 
                     redisHit++;
-                    String translation = redisService.getEnglishTranslationForGermanWord(word);
+                    String translation = getTranslation(DE_EN,"de", "en", word);
+                    String plTranslation = getTranslation(DE_PL,"de", "pl", word);
 
-                    System.out.println(String.format("Redis translation: '%s', for: '%s' ", translation, word));
-
-                    if(translation == null){
-                        translatorHit++;
-                        translation = translate(word, EN_URL1, EN_URL2);
-                        redisService.putGermanWordEnglishTranslation(word, translation);
-                    }
-
-                    String plTranslation =  redisService.getPolishTranslationForGermanWord(word);
-
-                    if(plTranslation == null){
-                        translatorHit++;
-                        plTranslation = translate(word, PL_URL1, PL_URL2);
-                        redisService.putGermanWordPolishTranslation(word, plTranslation);
-                    }
-
-                    int distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(translation));
-                    if ((word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2)) {
-                        translations.put(escape(word), escape(translation));
-                    } else {
-                        System.out.println(String.format(" > > > EN LevenshteinDistance: %s - %s", word, translation));
-                    }
-
-                    distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(plTranslation));
-                    if ((word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2)) {
-                        plTranslations.put(escape(word), escape(plTranslation));
-                    } else {
-                        System.out.println(String.format(" > > > PL LevenshteinDistance: %s - %s", word, plTranslation));
-                    }
+                    filterTranslations(translations, word, translation);
+                    filterTranslations(plTranslations, word, plTranslation);
                 }
 
             }
@@ -173,9 +145,35 @@ public class DvbtServlet extends WebSocketServlet {
         }
     }
 
-    private String translate(String word, String enUrl1, String enUrl2) throws IOException {
-        System.out.println(enUrl2);
-        String translation;RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(enUrl1 + word + enUrl2);
+    private void getWords(final String line1, final LinkedHashSet<String> wordsToTranslate) throws IOException {
+        if (line1 != null) {
+            wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line1));
+        }
+    }
+
+    private String getTranslation(String languagegPrefix, String from, String to, String word) throws IOException {
+        String translation = redisService.getTranslation(languagegPrefix, word);
+        System.out.println(String.format("Redis translation: '%s', for: '%s' ", translation, word));
+        if(translation == null){
+            translatorHit++;
+            translation = translate(word, MessageFormat.format(URL_PATTERN, from, to));
+            redisService.puTranslation(languagegPrefix, word, translation);
+        }
+        return translation;
+    }
+
+    private void filterTranslations(final HashMap<String, String> translations, final String word, final String translation) {
+        int distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(translation));
+        if ((word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2)) {
+            translations.put(escape(word), escape(translation));
+        } else {
+            System.out.println(String.format(" > > > LevenshteinDistance: %s - %s", word, translation));
+        }
+    }
+
+    private String translate(String word, String url) throws IOException {
+        String translation;
+        RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(url);
         restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
         RestResponse response = client.execute(restRequest);
 
