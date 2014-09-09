@@ -46,7 +46,7 @@ public class DvbtServlet extends WebSocketServlet {
 
     private static Set<String> excludedWords = new HashSet<>();
 
-    private static final String URL_PATTERN = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27%27&To=%27{1}%27&From=%27{0}%27&$format=json";
+    private static final String URL_PATTERN = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27{2}%27&To=%27{1}%27&From=%27{0}%27&$format=json";
 
     {
         try {
@@ -156,7 +156,7 @@ public class DvbtServlet extends WebSocketServlet {
         System.out.println(String.format("Redis translation: '%s', for: '%s' ", translation, word));
         if(translation == null){
             translatorHit++;
-            translation = translate(word, MessageFormat.format(URL_PATTERN, from, to));
+            translation = executeUrl(MessageFormat.format(URL_PATTERN, from, to, word));
             redisService.puTranslation(languagegPrefix, word, translation);
         }
         return translation;
@@ -171,7 +171,7 @@ public class DvbtServlet extends WebSocketServlet {
         }
     }
 
-    private String translate(String word, String url) throws IOException {
+    private String executeUrl(String url) throws IOException {
         String translation;
         RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(url);
         restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
