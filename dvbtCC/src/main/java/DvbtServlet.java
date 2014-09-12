@@ -73,19 +73,28 @@ public class DvbtServlet extends WebSocketServlet {
         executor.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
-                String value = EMPTY_STRING;
                 try {
-                    value = queue.take();
+                    String value = queue.poll(3, TimeUnit.SECONDS);
+
+                    if(value == null) {
+                        System.out.println("Just heartbeat...");
+                        value = "OK";
+                    }
+
+                    for (TailorSocket member : _members) {
+                        try {
+                            process(value, member);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                for (TailorSocket member : _members) {
-                    try {
-                        process(value, member);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+
+
+
+
             }
         }, 2, 2, java.util.concurrent.TimeUnit.MILLISECONDS);
 
