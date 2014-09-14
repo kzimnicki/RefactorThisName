@@ -132,7 +132,7 @@
         var pointer = 1;
         var length = 6;
         var language = 'PL';
-
+        var lastMessageTimestamp = new Date().getTime();
 
         if (!window.WebSocket)
             alert("WebSocket not supported by this browser");
@@ -186,13 +186,9 @@
             }
         }
 
-
-
         var server = {
 
-
             connect: function () {
-
                 this._ws = new WebSocket('ws://explain.cc:8888/app');
                 this._ws.onopen = this._onopen;
                 this._ws.onmessage = this._onmessage;
@@ -217,10 +213,15 @@
                 speedCounter();
                 setTimeout(function () {
                     if (m.data) {
-                        var data = JSON.parse(m.data);
-                        prepareCCHtml(data);
-                        var displayData = createDisplayData(data);
-                        showTranslations(displayData);
+                        lastMessageTimestamp = new Date().getTime();
+                        if(m.data === 'OK'){
+                            console.log('heartbeat');
+                        } else {
+                            var data = JSON.parse(m.data);
+                            prepareCCHtml(data);
+                            var displayData = createDisplayData(data);
+                            showTranslations(displayData);
+                        }
                     }
                 }, delayInMillis);
             },
@@ -258,6 +259,19 @@
         });
 
         server.connect();
+
+         setInterval(function(){
+                    if (new Date().getTime() - lastMessageTimestamp > 5000){
+                        console.log('reconnecting...');
+                        console.log('readyState: ', server._ws.readyState);
+                        if(server._ws.readyState === 3 ||  server._ws.readyState === 2){
+                            console.log('connecting...');
+                            server.connect();
+                        } else {
+                            server._ws.close();
+                        }
+                    }
+                    }, 2000);
 
 
     });
