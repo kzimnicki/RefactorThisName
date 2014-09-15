@@ -127,8 +127,10 @@
 <script>
     $(document).one("pagecreate", "#page", function () {
         var delayInMillis = 4000;
-        var speedCounterStartDate = new Date().getTime();
+        var ccCounterStartDate = new Date().getTime();
+        var wordsCounterStartDate = new Date().getTime();
         var ccCounter = 0;
+        var wordsCounter = 0;
         var pointer = 1;
         var length = 6;
         var language = 'PL';
@@ -178,11 +180,19 @@
             $('#line2').text(data.l2);
         }
 
-        function speedCounter(){
+        function speedCounter(data){
+            var time = new Date().getTime();
             if (++ccCounter === 5){
-                console.log('Speed: ', (new Date().getTime() - speedCounterStartDate)/1000);
-                speedCounterStartDate = new Date().getTime();
+                console.log('CC counter: : ', (time - ccCounterStartDate)/1000);
+                ccCounterStartDate = time;
                 ccCounter = 0;
+            }
+
+            wordsCounter += Object.keys(data[language]).length;
+            if((time - wordsCounterStartDate)/1000 > 60){
+                console.log('Words: ',wordsCounter , ' in one minute');
+                wordsCounterStartDate = time;
+                wordsCounter = 0;
             }
         }
 
@@ -210,7 +220,7 @@
             },
 
             _onmessage: function (m) {
-                speedCounter();
+
                 setTimeout(function () {
                     if (m.data) {
                         lastMessageTimestamp = new Date().getTime();
@@ -218,6 +228,7 @@
                             console.log('heartbeat');
                         } else {
                             var data = JSON.parse(m.data);
+                            speedCounter(data);
                             prepareCCHtml(data);
                             var displayData = createDisplayData(data);
                             showTranslations(displayData);
