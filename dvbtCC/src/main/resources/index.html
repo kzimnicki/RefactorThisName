@@ -245,6 +245,7 @@
 
         $('#delay').change(function () {
             delayInMillis = $("#delay").val() * 1000;
+            localStorage.setItem('delay', $("#delay").val());
         });
 
         $('#cc').change(function () {
@@ -255,21 +256,44 @@
                 $('#line1').show();
                 $('#line2').show();
             }
+            localStorage.setItem('cc',$("#cc").val());
         });
 
         $('#translations').change(function () {
             if($('#translations').val() === 'off'){
                 $('#cc-translation').hide();
+
             } else {
                 $('#cc-translation').show();
             }
+            localStorage.setItem('translations',$('#translations').val());
         });
 
         $('#language').change(function () {
             language = $('#language').val();
+            localStorage.setItem('language',language);
         });
 
+        function init(){
+            setOption('language');
+            setOption('cc');
+            setOption('delay');
+            setOption('translations');
+        }
+
+        function setOption(key){
+            var value = localStorage.getItem(key);
+            console.log(key, value);
+            if(value){
+                $('#'+key).val(value);
+                $('#'+key).change();
+            }
+        }
+
         server.connect();
+
+        init();
+
 
          setInterval(function(){
                     if (new Date().getTime() - lastMessageTimestamp > 5000){
