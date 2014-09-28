@@ -133,7 +133,7 @@
         var wordsCounter = 0;
         var pointer = 1;
         var length = 6;
-        var language = 'PL';
+        var language = 'EN';
         var lastMessageTimestamp = new Date().getTime();
 
         if (!window.WebSocket)
@@ -221,7 +221,7 @@
 
             _onmessage: function (m) {
 
-                setTimeout(function () {
+
                     if (m.data) {
                         lastMessageTimestamp = new Date().getTime();
                         if(m.data === 'OK'){
@@ -229,12 +229,14 @@
                         } else {
                             var data = JSON.parse(m.data);
                             speedCounter(data);
-                            prepareCCHtml(data);
-                            var displayData = createDisplayData(data);
-                            showTranslations(displayData);
+                            setTimeout(function () {
+                                    prepareCCHtml(data);
+                                    var displayData = createDisplayData(data);
+                                    showTranslations(displayData);
+                                }, delayInMillis);
                         }
                     }
-                }, delayInMillis);
+
             },
 
             _onclose: function () {
