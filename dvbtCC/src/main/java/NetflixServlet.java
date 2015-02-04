@@ -61,7 +61,7 @@ public class NetflixServlet extends HttpServlet {
     String json = servlet.createJsonString(text, null, translations, plTranslations, false);
 
 
-    response.setContentType("text/html");
+    response.setContentType("application/json");
     response.setStatus(HttpServletResponse.SC_OK);
         System.out.println(translations);
         response.getWriter().println(json);
