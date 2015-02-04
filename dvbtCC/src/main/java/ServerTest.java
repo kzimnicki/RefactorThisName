@@ -14,6 +14,7 @@ public class ServerTest {
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
         handler.addServletWithMapping(DvbtServlet.class, "/app/*");
+        handler.addServletWithMapping(NetflixServlet.class, "/netflix/*");
 
         ResourceHandler resourceHandler = new ResourceHandler();
         resourceHandler.setDirectoriesListed(true);
