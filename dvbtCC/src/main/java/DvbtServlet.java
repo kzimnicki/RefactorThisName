@@ -3,6 +3,9 @@ import cc.explain.client.rest.rest.RestClient;
 import cc.explain.client.rest.rest.RestRequest;
 import cc.explain.client.rest.rest.RestResponse;
 import cc.explain.lucene.LuceneService;
+import cc.explain.netflix.redis.Language;
+import cc.explain.netflix.CacheService;
+import cc.explain.netflix.redis.JedisCacheServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -36,9 +39,8 @@ public class DvbtServlet extends WebSocketServlet {
     private static final String PARAM_LINE_2 = "l2";
     private static final String PARAM_TIMESTAMP = "t";
     private static final String NO_CC = "KEINE UT";
-    private RedisService redisService = new RedisService();
+    private CacheService cacheService = new JedisCacheServiceImpl();
     private LuceneService luceneService = new LuceneService();
-    private RestClient client = new RestClient();
 
     private static int redisHit = 0;
     private static int translatorHit = 0;
@@ -46,7 +48,7 @@ public class DvbtServlet extends WebSocketServlet {
 
     private static Set<String> excludedWords = new HashSet<>();
 
-    private static final String URL_PATTERN = "https://api.datamarket.azure.com/Bing/MicrosoftTranslator/v1/Translate?Text=%27{2}%27&To=%27{1}%27&From=%27{0}%27&$format=json";
+
 
     {
         try {
@@ -129,25 +131,25 @@ public class DvbtServlet extends WebSocketServlet {
 
                 for (String word : wordsToTranslate) {
 
-                    redisHit++;
-                    String translation = getTranslation(DE_EN,"de", "en", word);
-                    String plTranslation = getTranslation(DE_PL,"de", "pl", word);
+//                    redisHit++;
+//                    String translation = getTranslation(Language.de, Language.en, word);
+//                    String plTranslation = getTranslation(Language.de, Language.pl, word);
 
-                    filterTranslations(translations, word, translation, true);
-                    filterTranslations(plTranslations, word, plTranslation, true);
+//                    filterTranslations(translations, word, translation, true);
+//                    filterTranslations(plTranslations, word, plTranslation, true);
                 }
 
             }
             System.out.println(String.format("Redis hits: %s, Translator hit: %s", redisHit, translatorHit));
 
-            String json = createJsonString(line1, line2, translations, plTranslations, true);
-
-            System.out.println(json);
-
-            System.out.println(String.format("Number of users: %s", _members.size()));
-
-            queue.put(json);
-            System.out.println(new SimpleDateFormat("yyyyMMddhhmmssS").format(new Date()));
+//            String json = createJsonString(line1, line2, translations, plTranslations, true);
+//
+//            System.out.println(json);
+//
+//            System.out.println(String.format("Number of users: %s", _members.size()));
+//
+//            queue.put(json);
+//            System.out.println(new SimpleDateFormat("yyyyMMddhhmmssS").format(new Date()));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,59 +157,7 @@ public class DvbtServlet extends WebSocketServlet {
     }
 
     public void getWords(final String line1, final LinkedHashSet<String> wordsToTranslate) throws IOException {
-        if (line1 != null) {
-            wordsToTranslate.addAll(luceneService.getGermanWords(excludedWords, line1));
-        }
-    }
 
-    public String getTranslation(String languagegPrefix, String from, String to, String word) throws IOException {
-        String translation = redisService.getTranslation(languagegPrefix, word);
-        System.out.println(String.format("Redis translation: '%s', for: '%s' ", translation, word));
-        if(translation == null){
-            translatorHit++;
-            translation = executeUrl(MessageFormat.format(URL_PATTERN, from, to, word));
-            redisService.puTranslation(languagegPrefix, word, translation);
-        }
-        return translation;
-    }
-
-    public void filterTranslations(final HashMap<String, String> translations, final String word, final String translation, boolean trimLine) {
-        int distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(translation));
-        if ((word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2)) {
-            translations.put(escape(word, trimLine), escape(translation, trimLine));
-        } else {
-            System.out.println(String.format(" > > > LevenshteinDistance: %s - %s", word, translation));
-        }
-    }
-
-    public String executeUrl(String url) throws IOException {
-        String translation;
-        RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(url);
-        restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
-        RestResponse response = client.execute(restRequest);
-
-        JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
-        translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
-        return translation;
-    }
-
-    public String createJsonString(String line1, String line2, Map<String, String> translations, HashMap<String, String> plTranslations, boolean trim) {
-        Type typeOfMap = new TypeToken<Map<String, String>>() {}.getType();
-        String enTranslationsString = new Gson().toJson(translations, typeOfMap);
-        String plTranslationsString = new Gson().toJson(plTranslations, typeOfMap);
-        return String.format("{\"l1\": \"%s\", \"l2\":\"%s\", \"EN\":%s, \"PL\": %s}", escape(line1, trim), escape(line2, trim), enTranslationsString, plTranslationsString);
-    }
-
-    private String escape(String line, boolean trimLine) {
-        if (line == null) {
-            return StringUtils.EMPTY;
-        } else {
-            String trim = line.trim();
-            if (trimLine && trim.length() > 40) {
-                trim = trim.substring(0, 40);
-            }
-            return StringEscapeUtils.escapeJson(trim);
-        }
     }
 
 
@@ -242,11 +192,11 @@ public class DvbtServlet extends WebSocketServlet {
         public void onOpen(Connection connection) {
             _members.add(this);
             _connection = connection;
-            try {
-                connection.sendMessage(createJsonString("Loading....", "", new HashMap<String, String>(), new HashMap<String, String>(), true));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            try {
+////                connection.sendMessage(createJsonString("Loading....", "", new HashMap<String, String>(), new HashMap<String, String>(), true));
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 }

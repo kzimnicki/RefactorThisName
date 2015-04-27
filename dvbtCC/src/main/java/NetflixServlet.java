@@ -1,70 +1,75 @@
-import cc.explain.client.rest.rest.HttpMethod;
-import cc.explain.client.rest.rest.RestClient;
-import cc.explain.client.rest.rest.RestRequest;
-import cc.explain.client.rest.rest.RestResponse;
-import cc.explain.lucene.LuceneService;
+import cc.explain.netflix.TextService;
+import cc.explain.netflix.TranslationService;
+import cc.explain.netflix.redis.Language;
+import cc.explain.netflix.redis.RedissonCacheServiceImpl;
+import cc.explain.netflix.CacheService;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketServlet;
 
-import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class NetflixServlet extends HttpServlet {
 
     private static final long serialVersionUID = -6154475799000019575L;
 
-    private DvbtServlet servlet = new DvbtServlet();
+    private TextService textService = new TextService();
 
+    private TranslationService translationService = new TranslationService();
 
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException,
             IOException {
 
+        String text = request.getParameter("text");
+        Language from = Language.valueOf(request.getParameter("from"));
+        Language to = Language.valueOf(request.getParameter("to"));
 
-        String text = request.getParameter("t");
+        if (StringUtils.isBlank(text) || StringUtils.length(text) > 1000) {
+            LOG(String.format("Text not supported: [%s]", text));
+            return;
+        }
 
-        HashMap<String, String> translations = new HashMap<>();
-        HashMap<String, String> plTranslations = new HashMap<>();
+        Set<String> words = textService.getWords(text, from);
+        Map<String, String> translationMapping = Maps.newHashMap();
 
+        for (String word : words) {
+            String translation = translationService.translate(from, to, word);
 
-        LinkedHashSet<String> wordsToTranslate = new LinkedHashSet<>();
-        servlet.getWords(text, wordsToTranslate);
-
-        for (String word : wordsToTranslate) {
-
-            String translation = servlet.getTranslation(servlet.DE_EN, "de", "en", word);
-            String plTranslation = servlet.getTranslation(servlet.DE_PL,"de", "pl", word);
-
-            servlet.filterTranslations(translations, word, translation, false);
-            servlet.filterTranslations(plTranslations, word, plTranslation, false);
+            if (!textService.areSimilar(word, translation)) {
+                translationMapping.put(word, translation);
+            }
         }
 
 
-    String json = servlet.createJsonString(text, null, translations, plTranslations, false);
+        String json = createJsonString(translationMapping);
 
 
-    response.setContentType("application/json");
-    response.setStatus(HttpServletResponse.SC_OK);
-        System.out.println(translations);
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
+        LOG(String.valueOf(translationMapping));
+        LOG(json);
         response.getWriter().println(json);
-}
+    }
+
+    private static void LOG(String text) {
+        System.out.println("LOG: " + text);
+    }
+
+    public String createJsonString(Map<String, String> translations) {
+        Type typeOfMap = new TypeToken<Map<String, String>>() {
+        }.getType();
+        String json = new Gson().toJson(translations, typeOfMap);
+        return String.format("{\"translation\": \"%s\"}",json);
+    }
 
 }

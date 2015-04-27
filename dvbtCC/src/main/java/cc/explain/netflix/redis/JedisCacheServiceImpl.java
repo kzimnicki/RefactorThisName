@@ -1,9 +1,11 @@
-import org.apache.commons.lang3.StringUtils;
+package cc.explain.netflix.redis;
+
+import cc.explain.netflix.CacheService;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
-public class RedisService {
+public class JedisCacheServiceImpl implements CacheService {
 
     private static JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost", 6379, 2000);
 
@@ -20,11 +22,13 @@ public class RedisService {
         return value;
     }
 
-    public void puTranslation(String languagePrefix, String key, String value) {
-        put(String.format("%s:%s",languagePrefix,  key), value);
+    @Override
+    public void put(Language from, Language to, String key, String value) {
+        put(String.format("%s%s:%s",from, to,  key), value);
     }
 
-    public String getTranslation(String languagePrefix, String key) {
-        return get(String.format("%s:%s", languagePrefix, key));
+    @Override
+    public String get(Language from, Language to, String key) {
+        return get(String.format("%s%s:%s", from, to, key));
     }
 }
