@@ -6,19 +6,15 @@ import cc.explain.client.rest.rest.RestRequest;
 import cc.explain.client.rest.rest.RestResponse;
 import cc.explain.netflix.redis.Language;
 import cc.explain.netflix.redis.RedissonCacheServiceImpl;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -42,13 +38,22 @@ public class TranslationService {
     }
 
     public String executeUrl(String url) throws IOException {
-        String translation;
-        RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(url);
-        restRequest.addHeader("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=");
-        RestResponse response = client.execute(restRequest);
+        String translation = StringUtils.EMPTY;
+//        RestRequest restRequest = new RestRequest(HttpMethod.GET).setUrl(url);
+//        restRequest.addHeader();
+//        RestResponse response = client.execute(restRequest);
 
-        JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
-        translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
+        try {
+            System.out.println("translate");
+            System.out.println(url);
+            System.out.println(Unirest.get(url).header("Authorization", "Basic ZXhwbGFpbmNjQG91dGxvb2suY29tOktqaUUwM0tUUmJOeUhHcG5JdFVKbXNuWFhCWWVpUGh3N2hKUnN6RVBIc3M=").asJson().getBody());
+        } catch (UnirestException e) {
+            e.printStackTrace();
+        }
+
+
+//        JsonObject json = new JsonParser().parse(IOUtils.toString(response.getContent())).getAsJsonObject();
+//        translation = json.get("d").getAsJsonObject().get("results").getAsJsonArray().get(0).getAsJsonObject().get("Text").getAsString();
         return translation;
     }
 }

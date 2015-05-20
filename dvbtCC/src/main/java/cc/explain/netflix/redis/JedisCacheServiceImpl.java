@@ -5,6 +5,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
+import java.util.Optional;
+
 public class JedisCacheServiceImpl implements CacheService {
 
     private static JedisPool pool = new JedisPool(new JedisPoolConfig(), "localhost", 6379, 2000);
@@ -28,7 +30,12 @@ public class JedisCacheServiceImpl implements CacheService {
     }
 
     @Override
-    public String get(Language from, Language to, String key) {
-        return get(String.format("%s%s:%s", from, to, key));
+    public Optional<String> get(Language from, Language to, String key) {
+        return Optional.ofNullable(get(String.format("%s%s:%s", from, to, key)));
+    }
+
+    @Override
+    public void clear() {
+        //do nothing
     }
 }

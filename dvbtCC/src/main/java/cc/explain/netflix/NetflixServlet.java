@@ -1,11 +1,10 @@
-import cc.explain.netflix.TextService;
-import cc.explain.netflix.TranslationService;
+package cc.explain.netflix;
+
 import cc.explain.netflix.redis.Language;
-import cc.explain.netflix.redis.RedissonCacheServiceImpl;
-import cc.explain.netflix.CacheService;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,10 +24,8 @@ public class NetflixServlet extends HttpServlet {
 
     private TranslationService translationService = new TranslationService();
 
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response) throws ServletException,
-            IOException {
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("test");
         String text = request.getParameter("text");
         Language from = Language.valueOf(request.getParameter("from"));
         Language to = Language.valueOf(request.getParameter("to"));
@@ -38,6 +34,10 @@ public class NetflixServlet extends HttpServlet {
             LOG(String.format("Text not supported: [%s]", text));
             return;
         }
+
+
+
+
 
         Set<String> words = textService.getWords(text, from);
         Map<String, String> translationMapping = Maps.newHashMap();
@@ -69,7 +69,7 @@ public class NetflixServlet extends HttpServlet {
         Type typeOfMap = new TypeToken<Map<String, String>>() {
         }.getType();
         String json = new Gson().toJson(translations, typeOfMap);
-        return String.format("{\"translation\": \"%s\"}",json);
+        return String.format("{\"translation\": \"%s\"}", json);
     }
 
 }

@@ -5,6 +5,7 @@ import org.redisson.Config;
 import org.redisson.Redisson;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class RedissonCacheServiceImpl implements CacheService {
 
@@ -24,8 +25,13 @@ public class RedissonCacheServiceImpl implements CacheService {
     }
 
     @Override
-    public String get(Language from, Language to, String key) {
-        return getMap(from, to).get(key);
+    public Optional<String> get(Language from, Language to, String key) {
+        return Optional.ofNullable(getMap(from, to).get(key));
+    }
+
+    @Override
+    public void clear() {
+        redisson.flushdb();
     }
 
     private Map<String,String> getMap(Language from , Language to){
