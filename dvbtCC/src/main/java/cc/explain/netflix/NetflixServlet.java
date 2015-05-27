@@ -45,7 +45,7 @@ public class NetflixServlet extends HttpServlet {
         for (String word : words) {
             String translation = translationService.translate(from, to, word);
 
-            if (!textService.areSimilar(word, translation)) {
+            if (textService.areNotSimilar(word, translation)) {
                 translationMapping.put(word, translation);
             }
         }

@@ -22,12 +22,8 @@ public class NetflixServletTest {
 
     @Test
     public void testDoGet() throws Exception {
-
         new RedissonCacheServiceImpl().clear();
-        String body = Unirest.get("http://localhost:8888/netflix/?text=car&from=en&to=pl")
-//                .queryString("name", "Mark")
-//                .field("last", "Polo")
-                .asString().getBody();
+        String body = Unirest.get("http://localhost:8888/netflix/?text=car&from=en&to=pl").asString().getBody();
         System.out.println(body);
     }
 }

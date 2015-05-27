@@ -65,7 +65,7 @@ public class TextService {
     }
 
 
-    public boolean areSimilar(final String word, final String translation) {
+    public boolean areNotSimilar(final String word, final String translation) {
         int distance = LevenshteinDistance.distance(StringUtils.lowerCase(word), StringUtils.lowerCase(translation));
         return (word.length() <5 && distance > 1) || (word.length() >= 5 && distance > 2);
     }
