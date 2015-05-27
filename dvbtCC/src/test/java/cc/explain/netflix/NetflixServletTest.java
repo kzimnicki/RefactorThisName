@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+
 public class NetflixServletTest {
 
     private Bootstrap bootstrap = new Bootstrap()   ;
@@ -24,6 +26,6 @@ public class NetflixServletTest {
     public void testDoGet() throws Exception {
         new RedissonCacheServiceImpl().clear();
         String body = Unirest.get("http://localhost:8888/netflix/?text=car&from=en&to=pl").asString().getBody();
-        System.out.println(body);
+        assertEquals(body, "{\"translation\": \"{\"car\":\"samochód\"}\"}\n");
     }
 }

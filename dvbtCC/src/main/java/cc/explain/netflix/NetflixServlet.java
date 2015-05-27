@@ -4,7 +4,6 @@ import cc.explain.netflix.redis.Language;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.ServletException;
@@ -25,7 +24,6 @@ public class NetflixServlet extends HttpServlet {
     private TranslationService translationService = new TranslationService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("test");
         String text = request.getParameter("text");
         Language from = Language.valueOf(request.getParameter("from"));
         Language to = Language.valueOf(request.getParameter("to"));
@@ -34,10 +32,6 @@ public class NetflixServlet extends HttpServlet {
             LOG(String.format("Text not supported: [%s]", text));
             return;
         }
-
-
-
-
 
         Set<String> words = textService.getWords(text, from);
         Map<String, String> translationMapping = Maps.newHashMap();
@@ -50,9 +44,7 @@ public class NetflixServlet extends HttpServlet {
             }
         }
 
-
         String json = createJsonString(translationMapping);
-
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_OK);
